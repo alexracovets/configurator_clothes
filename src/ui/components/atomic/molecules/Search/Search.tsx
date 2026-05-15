@@ -82,10 +82,9 @@ const Search = () => {
           placeholder="Type to search"
           value={value}
           aria-label="Search"
-          aria-hidden={!isOpen}
+          inert={!isOpen}
           onBlur={handleBlur}
           data-active={isOpen}
-          tabIndex={isOpen ? 0 : -1}
           onChange={(e) => setValue(e.target.value)}
         />
       </Flex>
