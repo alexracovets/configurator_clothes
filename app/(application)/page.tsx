@@ -1,7 +1,5 @@
-import { Header } from "@organisms";
+import { HomeTemplate } from "@templates";
 
 export default function Home() {
-  return (
-    <Header />
-  );
+  return <HomeTemplate />;
 }

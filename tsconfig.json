@@ -1,11 +1,7 @@
 {
   "compilerOptions": {
     "target": "ES2017",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -23,48 +19,21 @@
       }
     ],
     "paths": {
-      "@/*": [
-        "./*"
-      ],
-      "@styles/*": [
-        "./src/ui/styles/*"
-      ],
-      "@types": [
-        "./src/ui/types"
-      ],
-      "@atoms": [
-        "./src/ui/components/atomic/atoms"
-      ],
-      "@atoms/*": [
-        "./src/ui/components/atomic/atoms/*"
-      ],
-      "@molecules": [
-        "./src/ui/components/atomic/molecules"
-      ],
-      "@molecules/*": [
-        "./src/ui/components/atomic/molecules/*"
-      ],
-      "@organisms": [
-        "./src/ui/components/atomic/organisms"
-      ],
-      "@organisms/*": [
-        "./src/ui/components/atomic/organisms/*"
-      ],
-      "@templates": [
-        "./src/ui/components/atomic/templates"
-      ],
-      "@templates/*": [
-        "./src/ui/components/atomic/templates/*"
-      ],
-      "@store": [
-        "./src/store"
-      ],
-      "@utils/*": [
-        "./src/ui/utils/*"
-      ],
-      "@fonts": [
-        "./src/fonts"
-      ]
+      "@/*": ["./*"],
+      "@styles/*": ["./src/ui/styles/*"],
+      "@types": ["./src/ui/types"],
+      "@atoms": ["./src/ui/components/atomic/atoms"],
+      "@atoms/*": ["./src/ui/components/atomic/atoms/*"],
+      "@molecules": ["./src/ui/components/atomic/molecules"],
+      "@molecules/*": ["./src/ui/components/atomic/molecules/*"],
+      "@organisms": ["./src/ui/components/atomic/organisms"],
+      "@organisms/*": ["./src/ui/components/atomic/organisms/*"],
+      "@templates": ["./src/ui/components/atomic/templates"],
+      "@templates/*": ["./src/ui/components/atomic/templates/*"],
+      "@shared": ["./src/ui/components/shared"],
+      "@store": ["./src/store"],
+      "@utils": ["./src/utils"],
+      "@fonts": ["./src/fonts"]
     }
   },
   "include": [
@@ -75,7 +44,5 @@
     ".next/dev/types/**/*.ts",
     "**/*.mts"
   ],
-  "exclude": [
-    "node_modules"
-  ]
+  "exclude": ["node_modules"]
 }
