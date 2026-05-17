@@ -16,7 +16,7 @@ const AsideConfigurator = () => {
   };
 
   return (
-    <aside className="min-h-0">
+    <aside className="min-h-0 relative z-1">
       <Flex className="flex-col items-start">
         <AsideName name={data.name} min_buy={data.min_buy} id={data.id} />
         <AsidePrice

@@ -3,12 +3,16 @@
 import { Footer, Header } from "@organisms";
 import type { ChildrenType } from "@types";
 
-const MainTemplate = ({ children }: ChildrenType) => {
+interface MainTemplateProps extends ChildrenType {
+  hideFooter?: boolean;
+}
+
+const MainTemplate = ({ children, hideFooter = false }: MainTemplateProps) => {
   return (
     <>
       <Header />
       {children}
-      <Footer />
+      {!hideFooter && <Footer />}
     </>
   );
 };
