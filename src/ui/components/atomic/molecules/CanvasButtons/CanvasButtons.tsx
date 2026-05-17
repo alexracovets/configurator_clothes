@@ -4,8 +4,8 @@ import { ImArrowLeft, ImArrowRight } from "react-icons/im";
 import { LuCircleMinus, LuCirclePlus } from "react-icons/lu";
 import { useRef } from "react";
 
-import { cameraBridge } from "../../CanvasControl/ViewControls";
-import { Button } from "../../../../atoms";
+import { cameraBridge } from "../../organisms/ConfiguratorCanvas/CanvasControl/ViewControls";
+import { Button } from "../../atoms";
 
 const HOLD_DELAY_MS = 300;
 
