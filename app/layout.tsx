@@ -20,9 +20,7 @@ const RootLayout = ({ children }: ChildrenType) => {
         geist.variable,
       )}
     >
-      <body className="grid grid-cols-1 grid-rows-[auto_1fr_auto] min-h-screen">
-        {children}
-      </body>
+      <body className="min-h-screen">{children}</body>
     </html>
   );
 };

@@ -3,17 +3,13 @@
 import { Footer, Header } from "@organisms";
 import type { ChildrenType } from "@types";
 
-interface MainTemplateProps extends ChildrenType {
-  hideFooter?: boolean;
-}
-
-const MainTemplate = ({ children, hideFooter = false }: MainTemplateProps) => {
+const MainTemplate = ({ children }: ChildrenType) => {
   return (
-    <>
+    <div className="grid grid-cols-1 grid-rows-[auto_1fr_auto] min-h-screen">
       <Header />
       {children}
-      {!hideFooter && <Footer />}
-    </>
+      <Footer />
+    </div>
   );
 };
 

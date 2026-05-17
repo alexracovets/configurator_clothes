@@ -1,9 +1,11 @@
 "use client";
 
-import { Center, OrbitControls } from "@react-three/drei";
+import { Center } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 
 import { LoadModel } from "./LoadModel";
+import { ViewControls } from "./ViewControls";
+import { CanvasButtons } from "./CanvasButtons";
 
 const ConfiguratorCanvas = () => {
   return (
@@ -19,16 +21,12 @@ const ConfiguratorCanvas = () => {
         dpr={[1, 2]}
       >
         <ambientLight intensity={1} />
+        <ViewControls />
         <Center position={[0, 0, 0]}>
-          <OrbitControls
-            enablePan={false}
-            minDistance={0.5}
-            maxDistance={3}
-            makeDefault
-          />
           <LoadModel />
         </Center>
       </Canvas>
+      <CanvasButtons />
     </div>
   );
 };
