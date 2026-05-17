@@ -30,6 +30,8 @@ const CanvasButtons = () => {
   return (
     <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex items-center gap-3 pointer-events-auto">
       <Button
+        variant="ghost"
+        size="icon"
         onMouseDown={() => handleRotateStart(-1)}
         onMouseUp={handleRotateEnd}
         onMouseLeave={handleRotateEnd}
@@ -38,18 +40,24 @@ const CanvasButtons = () => {
         <ImArrowLeft className="w-[25px] h-[25px] text-primary-10" />
       </Button>
       <Button
+        variant="ghost"
+        size="icon"
         onClick={() => cameraBridge.zoom(-1)}
         className="hover:scale-[1.1] transition-all duration-200 ease-in"
       >
         <LuCircleMinus className="size-6 text-primary-10" />
       </Button>
       <Button
+        variant="ghost"
+        size="icon"
         onClick={() => cameraBridge.zoom(1)}
         className="hover:scale-[1.1] transition-all duration-200 ease-in"
       >
         <LuCirclePlus className="size-6 text-primary-10" />
       </Button>
       <Button
+        variant="ghost"
+        size="icon"
         onMouseDown={() => handleRotateStart(1)}
         onMouseUp={handleRotateEnd}
         onMouseLeave={handleRotateEnd}

@@ -16,17 +16,17 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "",
+        default: "flex items-center justify-center font-semibold bg-primary-button hover:bg-primary-button/80",
         outline: "",
         secondary: "",
-        ghost: "hover:border-border",
+        ghost: "bg-white hover:border-border",
         destructive: "",
         link: "",
       },
       size: {
         default: "",
         xs: "",
-        sm: "",
+        sm: "py-3 px-4 text-4 leading-4 rounded-[8px] gap-2",
         lg: "",
         icon: "p-1 rounded-sm",
         "icon-xs": "",
