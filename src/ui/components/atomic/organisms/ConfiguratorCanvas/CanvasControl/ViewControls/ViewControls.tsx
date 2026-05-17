@@ -4,6 +4,8 @@ import { OrbitControls } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import { useRef, type ComponentRef } from "react";
 
+import { orbitFlag } from "./orbitFlag";
+
 const MIN_DISTANCE = 0.5;
 const MAX_DISTANCE = 3;
 const ROTATE_STEP = Math.PI / 8;
@@ -12,7 +14,7 @@ const LERP = 0.1;
 const SNAP_THRESHOLD = 0.001;
 const HOLD_SPEED = 0.025;
 
-export const cameraBridge = {
+const cameraBridge = {
   rotate: (_dir: 1 | -1) => {},
   zoom: (_dir: 1 | -1) => {},
   startRotate: (_dir: 1 | -1) => {},
@@ -87,6 +89,7 @@ const ViewControls = () => {
       needsUpdate = true;
     }
 
+    if (orbitRef.current) orbitRef.current.enabled = orbitFlag.enabled;
     if (needsUpdate) orbitRef.current.update();
   });
 
@@ -135,4 +138,4 @@ const ViewControls = () => {
   );
 };
 
-export { ViewControls };
+export { ViewControls, cameraBridge };

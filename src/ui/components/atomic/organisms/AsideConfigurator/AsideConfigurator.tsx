@@ -1,7 +1,8 @@
 "use client";
 
-import { Flex, Grid, Text } from "@atoms";
+import { Flex } from "@atoms";
 
+import { orbitFlag } from "../ConfiguratorCanvas/CanvasControl/ViewControls/orbitFlag";
 import { AsidePrice } from "./AsidePrice";
 import { AsideName } from "./AsideName";
 
@@ -14,9 +15,16 @@ const AsideConfigurator = () => {
     price: 100,
     id: 0,
   };
-
   return (
-    <aside className="min-h-0 relative z-1">
+    <aside
+      className="absolute left-0 top-0 h-full w-[334px] min-h-0 z-1 pointer-events-auto"
+      onPointerEnter={() => {
+        orbitFlag.enabled = false;
+      }}
+      onPointerLeave={() => {
+        orbitFlag.enabled = true;
+      }}
+    >
       <Flex className="flex-col items-start">
         <AsideName name={data.name} min_buy={data.min_buy} id={data.id} />
         <AsidePrice

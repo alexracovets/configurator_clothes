@@ -1,15 +1,15 @@
 "use client";
 
-import { Center } from "@react-three/drei";
+import { Center, Html } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 
+import { CanvasInterface } from "./CanvasInterface";
+import { CanvasControl } from "./CanvasControl";
 import { LoadModel } from "./LoadModel";
-import { ViewControls } from "./ViewControls";
-import { CanvasButtons } from "./CanvasButtons";
 
 const ConfiguratorCanvas = () => {
   return (
-    <div className="relative w-full h-full">
+    <div className="w-full h-full">
       <Canvas
         camera={{ position: [0, 0, 3], fov: 45 }}
         style={{ width: "100%", height: "100%" }}
@@ -20,13 +20,12 @@ const ConfiguratorCanvas = () => {
         }}
         dpr={[1, 2]}
       >
-        <ambientLight intensity={1} />
-        <ViewControls />
+        <CanvasControl />
         <Center position={[0, 0, 0]}>
           <LoadModel />
         </Center>
+        <CanvasInterface />
       </Canvas>
-      <CanvasButtons />
     </div>
   );
 };

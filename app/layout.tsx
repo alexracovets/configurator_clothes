@@ -20,7 +20,7 @@ const RootLayout = ({ children }: ChildrenType) => {
         geist.variable,
       )}
     >
-      <body className="min-h-screen">{children}</body>
+      <body className="h-full">{children}</body>
     </html>
   );
 };
