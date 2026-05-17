@@ -1,15 +1,9 @@
-import { Footer, Header } from "@organisms";
+import { MainTemplate } from "@templates";
 
 import type { ChildrenType } from "@types";
 
 const FrontEndLayout = ({ children }: ChildrenType) => {
-  return (
-    <>
-      <Header />
-      {children}
-      <Footer />
-    </>
-  )
+  return <MainTemplate>{children}</MainTemplate>;
 };
 
 export default FrontEndLayout;

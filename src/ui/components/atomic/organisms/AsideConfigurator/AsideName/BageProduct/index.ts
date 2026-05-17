@@ -1,0 +1,1 @@
+export { BageProduct } from "./BageProduct";

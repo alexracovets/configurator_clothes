@@ -1,0 +1,1 @@
+export { ConfiguratorPage } from "./ConfiguratorPage";

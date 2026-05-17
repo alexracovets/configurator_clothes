@@ -6,4 +6,5 @@ export { Button } from "./Button";
 export { Logo } from "./Logo";
 export { Flex } from "./Flex";
 export { Grid } from "./Grid";
+export { Text } from "./Text";
 export { Box } from "./Box";

@@ -40,6 +40,8 @@ const AtomImage = ({
   height,
   unoptimized = true,
 }: AtomImageProps) => {
+  const hasDimensions = width != null && height != null;
+
   const imageElement = (
     <Image
       src={src || ""}
@@ -47,11 +49,15 @@ const AtomImage = ({
       priority={priority}
       sizes="100%"
       loading="eager"
-      {...(noCover ? { width, height } : { fill: true })}
+      {...(noCover
+        ? hasDimensions
+          ? { width, height }
+          : {}
+        : { fill: true })}
       className={cn(
         !noCover ? "object-cover" : "object-contain",
+        noCover && !hasDimensions && variantAtomImage({ variant }),
         noCover && className,
-        noCover && variantAtomImage({ variant }),
       )}
       unoptimized={unoptimized}
     />

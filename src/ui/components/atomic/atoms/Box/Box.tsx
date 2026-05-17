@@ -11,6 +11,7 @@ const variantBox = cva("block", {
     variant: {
       default: "",
       header: "bg-white py-5",
+      footer: "bg-white py-15",
     },
   },
   defaultVariants: {

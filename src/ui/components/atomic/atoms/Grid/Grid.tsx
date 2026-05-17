@@ -11,6 +11,8 @@ const variantGrid = cva("grid", {
     variant: {
       default: "",
       header: "grid-cols-[1fr_auto_1fr] items-center",
+      configurator: "grid-cols-[334px_1fr_253px]",
+      configurator_price: "grid-cols-[auto_auto] items-center gap-3",
     },
   },
   defaultVariants: {
