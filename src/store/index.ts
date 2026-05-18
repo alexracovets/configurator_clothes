@@ -40,6 +40,10 @@ interface ConfiguratorStore {
     setColorForSelected: (color: string) => void;
     setPatternForSelected: (url: string) => void;
     setPartColor: (part: ShirtPart, color: string) => void;
+    currentStep: number;
+    setStep: (index: number) => void;
+    prevStep: () => void;
+    nextStep: () => void;
 }
 
 const DEFAULT_COLOR = "#898989";
@@ -97,4 +101,9 @@ export const useConfiguratorStore = create<ConfiguratorStore>((set) => ({
         set((state) => ({
             partColors: { ...state.partColors, [part]: color },
         })),
+
+    currentStep: 0,
+    setStep: (index) => set({ currentStep: index }),
+    prevStep: () => set((state) => ({ currentStep: Math.max(0, state.currentStep - 1) })),
+    nextStep: () => set((state) => ({ currentStep: Math.min(5, state.currentStep + 1) })),
 }));

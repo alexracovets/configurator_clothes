@@ -2,6 +2,8 @@
 
 import { Fragment } from "react";
 
+import { useSlidingIndicator } from "@hooks";
+import { useConfiguratorStore } from "@store";
 import { MenuStepSeparator } from "./MenuStepSeparator";
 import { Flex, Text } from "@atoms";
 
@@ -33,19 +35,40 @@ const steps = [
 ];
 
 const MenuStepBuy = () => {
+  const { currentStep, setStep } = useConfiguratorStore();
+  const { wrapperRef, getItemRef, indicator } =
+    useSlidingIndicator(currentStep);
+
   return (
-    <Flex className="gap-3 pt-2" asChild>
-      <ul>
-        {steps.map((step, index) => (
-          <Fragment key={step.value}>
-            {index > 0 && <MenuStepSeparator />}
-            <Text variant="menu_step_buy" asChild>
-              <li>{step.name}</li>
-            </Text>
-          </Fragment>
-        ))}
-      </ul>
-    </Flex>
+    <div ref={wrapperRef} className="relative w-fit pt-2">
+      <Flex className="gap-3" asChild>
+        <ul>
+          {steps.map((step, index) => (
+            <Fragment key={step.value}>
+              {index > 0 && (
+                <MenuStepSeparator isActive={index <= currentStep} />
+              )}
+              <li ref={getItemRef(index)} onClick={() => setStep(index)}>
+                <Text
+                  data-active={index <= currentStep}
+                  variant="menu_step_buy"
+                  asChild
+                >
+                  <span>{step.name}</span>
+                </Text>
+              </li>
+            </Fragment>
+          ))}
+        </ul>
+      </Flex>
+      <Text
+        variant="menu_step_buy_line"
+        asChild
+        style={{ left: indicator.left, width: indicator.width }}
+      >
+        <span />
+      </Text>
+    </div>
   );
 };
 

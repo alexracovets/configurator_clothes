@@ -13,7 +13,16 @@ const variantText = cva("font-inter font-[400] leading-none", {
       whatsapp_badge: "text-[14px] leading-[24px] text-white font-medium",
       product_name: "text-[32px] leading-[1] font-[600] tracking-[-1px]",
       product_price: "text-[32px] leading-[39px] font-semibold tracking-[-1px]",
-      menu_step_buy: "text-[22px] text-gray-10 leading-[22px] font-semibold uppercase",
+      menu_step_buy: cn(
+        "relative text-[22px] text-gray-10 leading-[27px] font-semibold uppercase overflow-hidden cursor-pointer",
+        "data-[active=true]:text-default",
+        "transition-all duration-300 ease-in-out",
+      ),
+      menu_step_buy_line: cn(
+        "absolute bottom-0 left-0 h-[4px] pointer-events-none",
+        "bg-linear-to-r from-[#ECD187] via-[#CC2967] to-[#030102]",
+        "transition-[left,width] duration-300 ease-in-out",
+      ),
     },
   },
   defaultVariants: {

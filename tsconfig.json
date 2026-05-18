@@ -30,7 +30,8 @@
       "@shared": ["./src/ui/components/shared"],
       "@store": ["./src/store"],
       "@utils": ["./src/utils"],
-      "@fonts": ["./src/fonts"]
+      "@fonts": ["./src/fonts"],
+      "@hooks": ["./src/hooks"]
     }
   },
   "include": [

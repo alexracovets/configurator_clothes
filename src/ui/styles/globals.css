@@ -21,7 +21,8 @@ body,
   --color-primary-10: #4b5563;
   --color-border: #d1d5db;
   --color-gray: #6b7280;
-  --color-gray-10: #71717A;
+  --color-gray-10: #71717A; 
+  --color-gradient-primary: linear-gradient(to right, #ECD187, #CC2967, #030102);
 }
 
 a {
