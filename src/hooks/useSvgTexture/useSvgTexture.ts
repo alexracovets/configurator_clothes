@@ -3,6 +3,9 @@
 import { useEffect, useState } from "react";
 import * as THREE from "three";
 
+const SVG_RENDER_WIDTH = 4096;
+const SVG_RENDER_HEIGHT = 2048;
+
 export function useSvgTexture(url: string): THREE.Texture | null {
   const [texture, setTexture] = useState<THREE.Texture | null>(null);
 
@@ -11,20 +14,45 @@ export function useSvgTexture(url: string): THREE.Texture | null {
       setTexture(null);
       return;
     }
-    const img = new Image();
-    img.onload = () => {
-      const canvas = document.createElement("canvas");
-      canvas.width = img.width || 1024;
-      canvas.height = img.height || 1024;
-      const ctx = canvas.getContext("2d")!;
-      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-      const tex = new THREE.CanvasTexture(canvas);
-      tex.wrapS = THREE.RepeatWrapping;
-      tex.wrapT = THREE.RepeatWrapping;
-      tex.needsUpdate = true;
-      setTexture(tex);
+
+    let cancelled = false;
+
+    fetch(url)
+      .then((r) => r.text())
+      .then((svgText) => {
+        if (cancelled) return;
+
+        const blob = new Blob([svgText], { type: "image/svg+xml" });
+        const objectUrl = URL.createObjectURL(blob);
+
+        const img = new Image(SVG_RENDER_WIDTH, SVG_RENDER_HEIGHT);
+        img.onload = () => {
+          if (cancelled) {
+            URL.revokeObjectURL(objectUrl);
+            return;
+          }
+          const canvas = document.createElement("canvas");
+          canvas.width = SVG_RENDER_WIDTH;
+          canvas.height = SVG_RENDER_HEIGHT;
+          const ctx = canvas.getContext("2d")!;
+          ctx.translate(SVG_RENDER_WIDTH, 0);
+          ctx.scale(-1, 1); 
+          ctx.drawImage(img, 0, 0, SVG_RENDER_WIDTH, SVG_RENDER_HEIGHT);
+          URL.revokeObjectURL(objectUrl);
+
+          const tex = new THREE.CanvasTexture(canvas);
+          tex.wrapS = THREE.ClampToEdgeWrapping;
+          tex.wrapT = THREE.ClampToEdgeWrapping;
+          tex.flipY = false;
+          tex.needsUpdate = true;
+          setTexture(tex);
+        };
+        img.src = objectUrl;
+      });
+
+    return () => {
+      cancelled = true;
     };
-    img.src = url;
   }, [url]);
 
   return texture;

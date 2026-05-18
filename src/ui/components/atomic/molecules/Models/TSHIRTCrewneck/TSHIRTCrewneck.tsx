@@ -8,6 +8,7 @@ import * as THREE from "three";
 import { useColorStore, usePatternStore } from "@store";
 import type { ShirtPart } from "@store";
 import { PatternLayer } from "../PatternLayer";
+import { useSvgTexture } from "@hooks";
 
 interface CrewneckGLTF {
   nodes: Record<string, THREE.Mesh>;
@@ -33,13 +34,13 @@ function ShirtMesh({
   geometry,
   baseMaterial,
   baseColor,
-  patternUrl,
+  texture,
   patternOpacity,
 }: {
   geometry: THREE.BufferGeometry;
   baseMaterial: THREE.MeshStandardMaterial;
   baseColor: string;
-  patternUrl: string;
+  texture: THREE.Texture | null;
   patternOpacity: number;
 }) {
   const mat = useMemo(() => {
@@ -51,10 +52,10 @@ function ShirtMesh({
   return (
     <>
       <mesh geometry={geometry} material={mat} />
-      {patternUrl && (
+      {texture && (
         <PatternLayer
           geometry={geometry}
-          patternUrl={patternUrl}
+          texture={texture}
           patternOpacity={patternOpacity}
         />
       )}
@@ -67,6 +68,10 @@ export function TSHIRTCrewneck(props: ThreeElements["group"]) {
   const { partColors } = useColorStore();
   const { partPatterns, patternOpacity } = usePatternStore();
 
+  // Один патерн для всієї моделі — беремо з front (всі частини однакові)
+  const patternUrl = (partPatterns as Record<string, string>)["front"] || "";
+  const texture = useSvgTexture(patternUrl);
+
   return (
     <group {...props} dispose={null}>
       {PART_MESHES.map(({ node, part }) => (
@@ -75,7 +80,7 @@ export function TSHIRTCrewneck(props: ThreeElements["group"]) {
           geometry={nodes[node].geometry}
           baseMaterial={materials.crewneck_front}
           baseColor={(partColors as Record<string, string>)[part]}
-          patternUrl={(partPatterns as Record<string, string>)[part]}
+          texture={texture}
           patternOpacity={patternOpacity}
         />
       ))}

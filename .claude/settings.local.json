@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(Get-ChildItem -Path \"d:\\\\work\\\\configurators\\\\configurator_clothes\" -Directory)",
+      "Bash(Select-Object Name)",
+      "Bash(node -e ' *)"
+    ]
+  }
+}

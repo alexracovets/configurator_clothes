@@ -3,23 +3,18 @@
 import { useMemo } from "react";
 import * as THREE from "three";
 
-import { useSvgTexture } from "@hooks";
-
 interface PatternLayerProps {
   geometry: THREE.BufferGeometry;
-  patternUrl: string;
+  texture: THREE.Texture;
   patternOpacity: number;
 }
 
 export function PatternLayer({
   geometry,
-  patternUrl,
+  texture,
   patternOpacity,
 }: PatternLayerProps) {
-  const texture = useSvgTexture(patternUrl);
-
   const mat = useMemo(() => {
-    if (!texture) return null;
     return new THREE.MeshStandardMaterial({
       map: texture,
       transparent: true,
@@ -28,8 +23,6 @@ export function PatternLayer({
       blending: THREE.NormalBlending,
     });
   }, [texture, patternOpacity]);
-
-  if (!mat) return null;
 
   return <mesh geometry={geometry} material={mat} renderOrder={1} />;
 }
