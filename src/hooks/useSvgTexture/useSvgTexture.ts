@@ -35,8 +35,6 @@ export function useSvgTexture(url: string): THREE.Texture | null {
           canvas.width = SVG_RENDER_WIDTH;
           canvas.height = SVG_RENDER_HEIGHT;
           const ctx = canvas.getContext("2d")!;
-          ctx.translate(SVG_RENDER_WIDTH, 0);
-          ctx.scale(-1, 1); 
           ctx.drawImage(img, 0, 0, SVG_RENDER_WIDTH, SVG_RENDER_HEIGHT);
           URL.revokeObjectURL(objectUrl);
 
