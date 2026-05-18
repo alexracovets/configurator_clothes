@@ -2,11 +2,11 @@
 
 import { IoMdUndo, IoMdRedo } from "react-icons/io";
 
-import { useConfiguratorStore } from "@store";
+import { useStepsStore } from "@store";
 import { Flex, Button } from "@atoms";
 
 const StepControl = () => {
-  const { currentStep, prevStep, nextStep } = useConfiguratorStore();
+  const { currentStep, prevStep, nextStep } = useStepsStore();
 
   return (
     <Flex className="absolute right-0 top-0 h-full w-[253px] pointer-events-auto items-start justify-between">

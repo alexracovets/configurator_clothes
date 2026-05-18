@@ -1,0 +1,65 @@
+import { create } from "zustand";
+
+import type { ShirtPart, PartPatterns } from "../types";
+import { useSelectionStore } from "../useSelectionStore";
+
+export interface PatternItem {
+  id: string;
+  label: string;
+  url: string;
+}
+
+export const SHIRT_PARTS: { key: ShirtPart; label: string }[] = [
+  { key: "front", label: "Front" },
+  { key: "back", label: "Back" },
+  { key: "sleeve_left", label: "Left sleeve" },
+  { key: "sleeve_right", label: "Right sleeve" },
+  { key: "collar", label: "Collar" },
+];
+
+export const PATTERNS: PatternItem[] = [
+  { id: "none", label: "No pattern", url: "" },
+  {
+    id: "design_0",
+    label: "Design 0",
+    url: "/models/crewneck/designs/design_0.svg",
+  },
+];
+
+interface PatternStore {
+  partPatterns: PartPatterns;
+  patternOpacity: number;
+  setPatternForSelected: (url: string) => void;
+  setPatternForAll: (url: string) => void;
+  setPatternOpacity: (value: number) => void;
+}
+
+export const usePatternStore = create<PatternStore>((set) => ({
+  partPatterns: {
+    front: "",
+    back: "",
+    sleeve_left: "",
+    sleeve_right: "",
+    collar: "",
+  },
+  patternOpacity: 0.8,
+
+  setPatternForSelected: (url) =>
+    set((state) => {
+      const { selectedParts } = useSelectionStore.getState();
+      const updates: Partial<PartPatterns> = {};
+      selectedParts.forEach((p) => {
+        updates[p] = url;
+      });
+      return { partPatterns: { ...state.partPatterns, ...updates } };
+    }),
+
+  setPatternForAll: (url) =>
+    set((state) => ({
+      partPatterns: Object.fromEntries(
+        Object.keys(state.partPatterns).map((k) => [k, url]),
+      ) as PartPatterns,
+    })),
+
+  setPatternOpacity: (value) => set({ patternOpacity: value }),
+}));

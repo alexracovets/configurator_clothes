@@ -1,12 +1,25 @@
 "use client";
 
 import { Flex } from "@atoms";
+import { useStepsStore } from "@store";
 
 import { orbitFlag } from "../ConfiguratorCanvas/CanvasControl/ViewControls/orbitFlag";
 import { AsidePrice } from "./AsidePrice";
 import { AsideName } from "./AsideName";
+import { StepDesign } from "./steps";
+
+const STEP_PANELS = [
+  StepDesign,
+  null, // StepColor
+  null, // StepShading
+  null, // StepName
+  null, // StepNumber
+  null, // StepLogo
+];
 
 const AsideConfigurator = () => {
+  const { currentStep } = useStepsStore();
+
   const data = {
     name: "Maglia Federer",
     min_buy: 5,
@@ -15,6 +28,9 @@ const AsideConfigurator = () => {
     price: 100,
     id: 0,
   };
+
+  const StepPanel = STEP_PANELS[currentStep];
+
   return (
     <aside
       className="absolute left-0 top-0 h-full w-[334px] min-h-0 z-1 pointer-events-auto"
@@ -32,6 +48,7 @@ const AsideConfigurator = () => {
           bounus_count={data.bounus_count}
           bonus_discount={data.bonus_discount}
         />
+        {StepPanel && <StepPanel />}
       </Flex>
     </aside>
   );

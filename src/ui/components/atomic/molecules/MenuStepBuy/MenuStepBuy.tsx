@@ -3,7 +3,7 @@
 import { Fragment } from "react";
 
 import { useSlidingIndicator } from "@hooks";
-import { useConfiguratorStore } from "@store";
+import { useStepsStore } from "@store";
 import { MenuStepSeparator } from "./MenuStepSeparator";
 import { Flex, Text } from "@atoms";
 
@@ -35,7 +35,7 @@ const steps = [
 ];
 
 const MenuStepBuy = () => {
-  const { currentStep, setStep } = useConfiguratorStore();
+  const { currentStep, setStep } = useStepsStore();
   const { wrapperRef, getItemRef, indicator } =
     useSlidingIndicator(currentStep);
 
