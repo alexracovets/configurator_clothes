@@ -6,4 +6,6 @@ export { StepControl } from "./StepControl";
 export { UserBar } from "./UserBar";
 export { Search } from "./Search";
 export { Auth } from "./Auth";
-export * from "./Models";
+
+export * from "./ConfiguratorsSteps";
+export * from "./Models"; 

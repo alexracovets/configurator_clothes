@@ -1,7 +1,8 @@
 "use client";
 
 import { usePatternStore, PATTERNS } from "@store";
-import { Flex, Text } from "@atoms";
+import { Flex, Text, AtomImage, Button } from "@atoms";
+import { cn } from "@utils";
 
 const StepDesign = () => {
   const { partPatterns, patternOpacity, setPatternForAll, setPatternOpacity } =
@@ -10,32 +11,41 @@ const StepDesign = () => {
   const activePatterUrl = partPatterns.front;
 
   return (
-    <Flex className="flex-col gap-4 w-full pt-3">
-      <div className="grid grid-cols-3 gap-2">
+    <Flex variant="step_design">
+      <div className="grid grid-cols-5 gap-2 w-full">
         {PATTERNS.map((pattern) => {
           const isActive = activePatterUrl === pattern.url;
           return (
-            <button
+            <Button
               key={pattern.id}
               onClick={() => setPatternForAll(pattern.url)}
-              className={`
-                relative aspect-square rounded border-2 overflow-hidden bg-[#e5e7eb] transition-colors
-                ${isActive ? "border-black" : "border-transparent hover:border-gray-400"}
-              `}
               title={pattern.label}
+              className="w-full overflow-hidden rounded-[8px] p-0"
             >
               {pattern.url ? (
-                <img
+                <AtomImage
                   src={pattern.url}
                   alt={pattern.label}
-                  className="w-full h-full object-cover"
+                  variant="steps"
+                  data-active={isActive}
                 />
               ) : (
-                <Flex className="w-full h-full items-center justify-center">
-                  <Text className="text-xs text-gray-500">Nessuno</Text>
+                <Flex
+                  className={cn(
+                    "w-full h-[80px] flex-col gap-1 items-center justify-center",
+                    "border-2 rounded-[8px]",
+                    isActive ? "border-black" : "border-transparent",
+                    "bg-gray-100",
+                  )}
+                >
+                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-gray-400">
+                    <circle cx="10" cy="10" r="8" />
+                    <line x1="4" y1="4" x2="16" y2="16" />
+                  </svg>
+                  <Text className="text-[10px] text-gray-400 leading-none">Nessuno</Text>
                 </Flex>
               )}
-            </button>
+            </Button>
           );
         })}
       </div>

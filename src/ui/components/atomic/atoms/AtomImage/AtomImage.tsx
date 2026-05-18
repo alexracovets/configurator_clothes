@@ -1,7 +1,7 @@
 "use client";
 
 import { cva, VariantProps } from "class-variance-authority";
-import Image from "next/image";
+import Image, { ImageProps } from "next/image";
 
 import type { ChildrenType } from "@types";
 import { cn } from "@utils";
@@ -10,6 +10,10 @@ const variantAtomImage = cva("", {
   variants: {
     variant: {
       default: "w-auto h-auto",
+      steps: cn(
+        "w-full h-[80px] border-2 border-transparent rounded-[8px] overflow-hidden",
+        "data-[active=true]:border-black",
+      ),
     },
   },
   defaultVariants: {
@@ -17,16 +21,16 @@ const variantAtomImage = cva("", {
   },
 });
 
-interface AtomImageProps extends ChildrenType {
+interface AtomImageProps extends ChildrenType, ImageProps {
   src: string;
   alt: string;
   variant?: VariantProps<typeof variantAtomImage>["variant"];
-  noCover?: boolean;
   priority?: boolean;
   className?: string;
   width?: number;
   height?: number;
   unoptimized?: boolean;
+  "data-active"?: boolean;
 }
 
 const AtomImage = ({
@@ -35,12 +39,14 @@ const AtomImage = ({
   variant = "default",
   priority = false,
   className,
-  noCover = true,
   width,
   height,
   unoptimized = true,
+  "data-active": dataActive,
+  ...props
 }: AtomImageProps) => {
   const hasDimensions = width != null && height != null;
+  const useFill = !hasDimensions;
 
   const imageElement = (
     <Image
@@ -49,29 +55,25 @@ const AtomImage = ({
       priority={priority}
       sizes="100%"
       loading="eager"
-      {...(noCover
-        ? hasDimensions
-          ? { width, height }
-          : {}
-        : { fill: true })}
-      className={cn(
-        !noCover ? "object-cover" : "object-contain",
-        noCover && !hasDimensions && variantAtomImage({ variant }),
-        noCover && className,
-      )}
+      {...(hasDimensions ? { width, height } : { fill: true })}
+      className={cn("object-cover", !useFill && className)}
       unoptimized={unoptimized}
+      {...props}
     />
   );
 
-  if (noCover) {
-    return imageElement;
+  if (useFill) {
+    return (
+      <div
+        data-active={dataActive}
+        className={cn("relative", variantAtomImage({ variant }), className)}
+      >
+        {imageElement}
+      </div>
+    );
   }
 
-  return (
-    <div className={cn("relative", variantAtomImage({ variant }), className)}>
-      {imageElement}
-    </div>
-  );
+  return imageElement;
 };
 
 export { AtomImage, variantAtomImage };
