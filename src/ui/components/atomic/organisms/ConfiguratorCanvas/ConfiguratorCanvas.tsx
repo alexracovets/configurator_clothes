@@ -2,6 +2,7 @@
 
 import { Center, Html } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
+import * as THREE from "three";
 
 import { CanvasInterface } from "./CanvasInterface";
 import { CanvasControl } from "./CanvasControl";
@@ -17,6 +18,8 @@ const ConfiguratorCanvas = () => {
           antialias: true,
           powerPreference: "high-performance",
           stencil: true,
+          toneMapping: THREE.ACESFilmicToneMapping,
+          toneMappingExposure: 1.2,
         }}
         dpr={[1, 2]}
       >
