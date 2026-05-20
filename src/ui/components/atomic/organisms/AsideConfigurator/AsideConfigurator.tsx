@@ -27,6 +27,7 @@ const AsideConfigurator = () => {
   return (
     <Flex variant="aside_configurator" asChild>
       <aside
+        style={{ maxHeight: "calc(100vh - 180px)" }}
         onPointerEnter={() => (orbitFlag.enabled = false)}
         onPointerLeave={() => (orbitFlag.enabled = true)}
       >
@@ -39,7 +40,7 @@ const AsideConfigurator = () => {
           />
         </Flex>
         {StepPanel && (
-          <div className="w-full flex-1 overflow-y-auto pr-1">
+          <div className="w-full overflow-y-scroll pr-1">
             <StepPanel />
           </div>
         )}

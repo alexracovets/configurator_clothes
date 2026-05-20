@@ -99,6 +99,8 @@ function ShirtMesh({
     m.map = null;
     m.transparent = false;
     m.opacity = 1;
+    m.roughness = 0.85;
+    m.metalness = 0.0;
     m.needsUpdate = true;
     return m;
   }, [baseMaterial, baseColor]);
@@ -107,11 +109,16 @@ function ShirtMesh({
 
   const gradientMat = useMemo(() => {
     if (!gradientTexture) return null;
-    return new THREE.MeshBasicMaterial({
+    return new THREE.MeshStandardMaterial({
       map: gradientTexture,
       transparent: true,
       depthWrite: false,
       depthTest: true,
+      roughness: 0.85,
+      metalness: 0.0,
+      polygonOffset: true,
+      polygonOffsetFactor: -1,
+      polygonOffsetUnits: -1,
     });
   }, [gradientTexture]);
 

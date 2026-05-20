@@ -23,6 +23,8 @@ export function PatternLayer({
       opacity: patternOpacity,
       depthWrite: false,
       blending: THREE.NormalBlending,
+      roughness: 0.85,
+      metalness: 0.0,
       polygonOffset: true,
       polygonOffsetFactor: -1,
       polygonOffsetUnits: -1,
