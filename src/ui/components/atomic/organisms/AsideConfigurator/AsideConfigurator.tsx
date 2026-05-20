@@ -6,9 +6,9 @@ import { useStepsStore } from "@store";
 import { orbitFlag } from "../ConfiguratorCanvas/CanvasControl/ViewControls/orbitFlag";
 import { AsidePrice } from "./AsidePrice";
 import { AsideName } from "./AsideName";
-import { StepDesign } from "@molecules";
+import { StepDesign, StepColor, StepSfumatura } from "@molecules";
 
-const STEP_PANELS = [StepDesign, null, null, null, null, null];
+const STEP_PANELS = [StepDesign, StepColor, StepSfumatura, null, null, null];
 
 const AsideConfigurator = () => {
   const { currentStep } = useStepsStore();
@@ -30,7 +30,7 @@ const AsideConfigurator = () => {
         onPointerEnter={() => (orbitFlag.enabled = false)}
         onPointerLeave={() => (orbitFlag.enabled = true)}
       >
-        <Flex className="flex-col items-start">
+        <Flex className="flex-col items-start shrink-0">
           <AsideName name={data.name} min_buy={data.min_buy} id={data.id} />
           <AsidePrice
             price={data.price}
@@ -38,7 +38,11 @@ const AsideConfigurator = () => {
             bonus_discount={data.bonus_discount}
           />
         </Flex>
-        {StepPanel && <StepPanel />}
+        {StepPanel && (
+          <div className="w-full flex-1 overflow-y-auto pr-1">
+            <StepPanel />
+          </div>
+        )}
       </aside>
     </Flex>
   );

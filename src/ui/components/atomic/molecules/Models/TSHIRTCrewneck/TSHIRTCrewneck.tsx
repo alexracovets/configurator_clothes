@@ -5,8 +5,8 @@ import { ThreeElements } from "@react-three/fiber";
 import { useGLTF } from "@react-three/drei";
 import * as THREE from "three";
 
-import { useColorStore, usePatternStore } from "@store";
-import type { ShirtPart } from "@store";
+import { useColorStore, usePatternStore, useGradientStore } from "@store";
+import type { ShirtPart, PartGradient } from "@store";
 import { PatternLayer } from "../PatternLayer";
 import { useSvgTexture } from "@hooks";
 
@@ -30,33 +30,103 @@ const PART_MESHES: { node: string; part: ShirtPart }[] = [
   { node: "crewneck_collar",       part: "collar" },
 ];
 
+function useGradientTexture(gradient: PartGradient, baseColor: string): THREE.CanvasTexture | null {
+  return useMemo(() => {
+    if (!gradient.enabled) return null;
+
+    const size = 512;
+    const canvas = document.createElement("canvas");
+    canvas.width = size;
+    canvas.height = size;
+    const ctx = canvas.getContext("2d")!;
+
+    const cx = size / 2;
+    const cy = size / 2;
+    const rad = (gradient.rotation * Math.PI) / 180;
+    const dx = Math.cos(rad) * size;
+    const dy = Math.sin(rad) * size;
+
+    const grad = ctx.createLinearGradient(
+      cx - dx / 2, cy - dy / 2,
+      cx + dx / 2, cy + dy / 2,
+    );
+
+    const mid = gradient.position / 100;
+    const half = (gradient.softness / 100) * 0.5;
+    const start = Math.max(0, mid - half);
+    const end = Math.min(1, Math.max(mid + half, start + 0.001));
+    const a = gradient.opacity / 100;
+
+    const c2 = new THREE.Color(gradient.color2);
+    const r = Math.round(c2.r * 255);
+    const g = Math.round(c2.g * 255);
+    const b = Math.round(c2.b * 255);
+
+    grad.addColorStop(0,     `rgba(${r},${g},${b},0)`);
+    grad.addColorStop(start, `rgba(${r},${g},${b},0)`);
+    grad.addColorStop(end,   `rgba(${r},${g},${b},${a})`);
+    grad.addColorStop(1,     `rgba(${r},${g},${b},${a})`);
+
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, size, size);
+
+    const tex = new THREE.CanvasTexture(canvas);
+    tex.needsUpdate = true;
+    return tex;
+  }, [gradient, baseColor]);
+}
+
 function ShirtMesh({
   geometry,
   baseMaterial,
   baseColor,
   texture,
   patternOpacity,
+  patternColor,
+  gradient,
 }: {
   geometry: THREE.BufferGeometry;
   baseMaterial: THREE.MeshStandardMaterial;
   baseColor: string;
   texture: THREE.Texture | null;
   patternOpacity: number;
+  patternColor: string;
+  gradient: PartGradient;
 }) {
   const mat = useMemo(() => {
     const m = baseMaterial.clone();
     m.color.set(baseColor);
+    m.map = null;
+    m.transparent = false;
+    m.opacity = 1;
+    m.needsUpdate = true;
     return m;
   }, [baseMaterial, baseColor]);
 
+  const gradientTexture = useGradientTexture(gradient, baseColor);
+
+  const gradientMat = useMemo(() => {
+    if (!gradientTexture) return null;
+    return new THREE.MeshBasicMaterial({
+      map: gradientTexture,
+      transparent: true,
+      depthWrite: false,
+      depthTest: true,
+    });
+  }, [gradientTexture]);
+
   return (
     <>
-      <mesh geometry={geometry} material={mat} />
+      <mesh geometry={geometry} material={mat} renderOrder={0} />
+      {gradientMat && (
+        <mesh geometry={geometry} material={gradientMat} renderOrder={1} />
+      )}
       {texture && (
         <PatternLayer
           geometry={geometry}
           texture={texture}
           patternOpacity={patternOpacity}
+          patternColor={patternColor}
         />
       )}
     </>
@@ -66,9 +136,9 @@ function ShirtMesh({
 export function TSHIRTCrewneck(props: ThreeElements["group"]) {
   const { nodes, materials } = useGLTF(MODEL_PATH) as unknown as CrewneckGLTF;
   const { partColors } = useColorStore();
-  const { partPatterns, patternOpacity } = usePatternStore();
+  const { partPatterns, patternOpacity, patternColor } = usePatternStore();
+  const { partGradients } = useGradientStore();
 
-  // Один патерн для всієї моделі — беремо з front (всі частини однакові)
   const patternUrl = (partPatterns as Record<string, string>)["front"] || "";
   const texture = useSvgTexture(patternUrl);
 
@@ -82,6 +152,8 @@ export function TSHIRTCrewneck(props: ThreeElements["group"]) {
           baseColor={(partColors as Record<string, string>)[part]}
           texture={texture}
           patternOpacity={patternOpacity}
+          patternColor={patternColor}
+          gradient={partGradients[part]}
         />
       ))}
       <mesh geometry={nodes.Mesh002.geometry}   material={materials.crewneck_inside} />

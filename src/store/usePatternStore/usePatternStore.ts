@@ -29,9 +29,11 @@ export const PATTERNS: PatternItem[] = [
 interface PatternStore {
   partPatterns: PartPatterns;
   patternOpacity: number;
+  patternColor: string;
   setPatternForSelected: (url: string) => void;
   setPatternForAll: (url: string) => void;
   setPatternOpacity: (value: number) => void;
+  setPatternColor: (color: string) => void;
 }
 
 export const usePatternStore = create<PatternStore>((set) => ({
@@ -43,6 +45,7 @@ export const usePatternStore = create<PatternStore>((set) => ({
     collar: "",
   },
   patternOpacity: 0.8,
+  patternColor: "#000000",
 
   setPatternForSelected: (url) =>
     set((state) => {
@@ -62,4 +65,5 @@ export const usePatternStore = create<PatternStore>((set) => ({
     })),
 
   setPatternOpacity: (value) => set({ patternOpacity: value }),
+  setPatternColor: (color) => set({ patternColor: color }),
 }));

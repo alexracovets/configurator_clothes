@@ -3,10 +3,17 @@
 import { usePatternStore, PATTERNS } from "@store";
 import { Flex, Text, AtomImage, Button } from "@atoms";
 import { cn } from "@utils";
+import { ColorSwatches } from "../ColorSwatches";
 
 const StepDesign = () => {
-  const { partPatterns, patternOpacity, setPatternForAll, setPatternOpacity } =
-    usePatternStore();
+  const {
+    partPatterns,
+    patternOpacity,
+    patternColor,
+    setPatternForAll,
+    setPatternOpacity,
+    setPatternColor,
+  } = usePatternStore();
 
   const activePatterUrl = partPatterns.front;
 
@@ -51,21 +58,31 @@ const StepDesign = () => {
       </div>
 
       {activePatterUrl && (
-        <Flex className="flex-col gap-2 w-full">
-          <Text className="text-sm font-medium text-gray-700">Trasparenza</Text>
-          <input
-            type="range"
-            min={0}
-            max={100}
-            value={Math.round(patternOpacity * 100)}
-            onChange={(e) => setPatternOpacity(Number(e.target.value) / 100)}
-            className="w-full accent-black"
-          />
-          <Flex className="justify-between">
-            <Text className="text-xs text-gray-400">0%</Text>
-            <Text className="text-xs text-gray-400">100%</Text>
+        <>
+          <Flex className="flex-col gap-2 w-full">
+            <Text className="text-sm font-medium text-gray-700">Colore design</Text>
+            <ColorSwatches
+              activeColor={patternColor}
+              onSelect={setPatternColor}
+            />
           </Flex>
-        </Flex>
+
+          <Flex className="flex-col gap-2 w-full">
+            <Text className="text-sm font-medium text-gray-700">Trasparenza</Text>
+            <input
+              type="range"
+              min={0}
+              max={100}
+              value={Math.round(patternOpacity * 100)}
+              onChange={(e) => setPatternOpacity(Number(e.target.value) / 100)}
+              className="w-full accent-black"
+            />
+            <Flex className="justify-between">
+              <Text className="text-xs text-gray-400">0%</Text>
+              <Text className="text-xs text-gray-400">100%</Text>
+            </Flex>
+          </Flex>
+        </>
       )}
     </Flex>
   );

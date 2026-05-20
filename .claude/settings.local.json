@@ -3,7 +3,8 @@
     "allow": [
       "Bash(Get-ChildItem -Path \"d:\\\\work\\\\configurators\\\\configurator_clothes\" -Directory)",
       "Bash(Select-Object Name)",
-      "Bash(node -e ' *)"
+      "Bash(node -e ' *)",
+      "Bash(Get-ChildItem -Path \"d:\\\\work\\\\configurators\\\\configurator_clothes\\\\src\\\\ui\\\\components\\\\atomic\\\\molecules\\\\ConfiguratorsSteps\" -Recurse)"
     ]
   }
 }

@@ -18,7 +18,7 @@ const variantFlex = cva("flex w-fit items-center justify-center", {
       user_bar: "justify-end gap-3 w-full",
       step_design: "flex-col gap-7 w-full",
       aside_configurator:
-        "flex flex-col items-start justify-start w-[334px] h-full gap-12",
+        "flex flex-col items-start justify-start w-[334px] h-full gap-12 overflow-hidden",
     },
   },
   defaultVariants: {

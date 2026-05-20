@@ -7,22 +7,29 @@ interface PatternLayerProps {
   geometry: THREE.BufferGeometry;
   texture: THREE.Texture;
   patternOpacity: number;
+  patternColor: string;
 }
 
 export function PatternLayer({
   geometry,
   texture,
   patternOpacity,
+  patternColor,
 }: PatternLayerProps) {
   const mat = useMemo(() => {
-    return new THREE.MeshStandardMaterial({
+    const m = new THREE.MeshStandardMaterial({
       map: texture,
       transparent: true,
       opacity: patternOpacity,
       depthWrite: false,
       blending: THREE.NormalBlending,
+      polygonOffset: true,
+      polygonOffsetFactor: -1,
+      polygonOffsetUnits: -1,
     });
-  }, [texture, patternOpacity]);
+    m.color.set(patternColor);
+    return m;
+  }, [texture, patternOpacity, patternColor]);
 
-  return <mesh geometry={geometry} material={mat} renderOrder={1} />;
+  return <mesh geometry={geometry} material={mat} renderOrder={2} />;
 }
