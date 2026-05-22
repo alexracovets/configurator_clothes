@@ -1,9 +1,9 @@
 "use client";
 
-import { TSHIRTCrewneck } from "@molecules";
+import { PDRTest } from "@molecules";
 
 const LoadModel = () => {
-  return <TSHIRTCrewneck />;
+  return <PDRTest />;
 };
 
 export { LoadModel };

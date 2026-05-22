@@ -17,7 +17,7 @@ const variantGrid = cva("grid", {
         "grid-cols-[repeat(auto-fill,minmax(55px,1fr))] gap-2 w-full",
       aside_configurator: cn(
         "grid-rows-[auto_1fr] w-full max-w-[354px] h-[100vh] rounded-[10px]",
-        "p-[10px] translate-y-[-10px] translate-x-[-10px] max-h-[calc(100vh-180px)] backdrop-blur-sm",
+        "p-[10px] translate-y-[-10px] translate-x-[-10px] max-h-[calc(100vh-180px)]",
       ),
     },
   },
