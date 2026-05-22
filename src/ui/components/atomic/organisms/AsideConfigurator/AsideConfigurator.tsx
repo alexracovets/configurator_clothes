@@ -1,12 +1,13 @@
 "use client";
 
-import { Flex, Grid } from "@atoms";
-import { ScrollArea } from "@shared";
-import { useStepsStore } from "@store";
-
+import { StepDesign, StepColor, StepSfumatura } from "@molecules";
 import { AsidePrice } from "./AsidePrice";
 import { AsideName } from "./AsideName";
-import { StepDesign, StepColor, StepSfumatura } from "@molecules";
+import { Flex, Grid } from "@atoms";
+import { ScrollArea } from "@shared";
+
+import { useStepsStore } from "@store";
+import { orbitFlag } from "@utils";
 
 const STEP_PANELS = [StepDesign, StepColor, StepSfumatura, null, null, null];
 
@@ -25,15 +26,11 @@ const AsideConfigurator = () => {
   const StepPanel = STEP_PANELS[currentStep];
 
   return (
-    <Grid
-      variant="aside_configurator"
-      asChild
-      onPointerDown={(e) => e.stopPropagation()}
-      onPointerMove={(e) => e.stopPropagation()}
-      onPointerUp={(e) => e.stopPropagation()}
-      onWheel={(e) => e.stopPropagation()}
-    >
-      <aside>
+    <Grid variant="aside_configurator" asChild>
+      <aside
+        onPointerEnter={() => (orbitFlag.enabled = false)}
+        onPointerLeave={() => (orbitFlag.enabled = true)}
+      >
         <Flex className="flex-col items-start shrink-0">
           <AsideName name={data.name} min_buy={data.min_buy} id={data.id} />
           <AsidePrice

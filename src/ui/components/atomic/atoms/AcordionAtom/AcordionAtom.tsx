@@ -12,7 +12,7 @@ import { cn } from "@utils";
 const accordionItemVariants = cva("", {
   variants: {
     variant: {
-      default: "border-b border-border last:border-b-0",
+      default: "border-b border-border",
     },
   },
   defaultVariants: {

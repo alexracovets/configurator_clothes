@@ -1,6 +1,5 @@
 "use client";
 
-import { useEffect } from "react";
 import { useGradientStore, useColorStore, SHIRT_PARTS } from "@store";
 import type { ShirtPart } from "@store";
 import { Flex, Text, AcordionAtom } from "@atoms";
@@ -17,14 +16,6 @@ const PART_LABELS: Record<ShirtPart, string> = {
 const StepSfumatura = () => {
   const { partGradients, setPartGradient } = useGradientStore();
   const { partColors } = useColorStore();
-
-  useEffect(() => {
-    const id = setTimeout(
-      () => window.dispatchEvent(new Event("resize", { bubbles: false })),
-      300,
-    );
-    return () => clearTimeout(id);
-  }, []);
 
   const items = SHIRT_PARTS.map(({ key }) => {
     const gradient = partGradients[key];

@@ -1,8 +1,10 @@
 "use client";
 
 import { OrbitControls } from "@react-three/drei";
-import { useFrame } from "@react-three/fiber";
 import { useRef, type ComponentRef } from "react";
+import { useFrame } from "@react-three/fiber";
+
+import { orbitFlag } from "@utils";
 
 const MIN_DISTANCE = 0.5;
 const MAX_DISTANCE = 3;
@@ -30,6 +32,7 @@ const ViewControls = () => {
 
   useFrame(() => {
     if (!orbitRef.current) return;
+    orbitRef.current.enabled = orbitFlag.enabled;
     const { object: camera, target } = orbitRef.current;
     const anim = animRef.current;
     let needsUpdate = false;

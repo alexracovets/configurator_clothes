@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useMemo } from "react";
 import { OverlayScrollbars } from "overlayscrollbars";
 import "overlayscrollbars/overlayscrollbars.css";
 
@@ -12,18 +12,39 @@ interface ScrollAreaProps {
 }
 
 function ScrollArea({ children, className }: ScrollAreaProps) {
-  const rootRef = useRef<HTMLDivElement>(null);
+  const targetRef = useRef<HTMLDivElement>(null);
+  const viewportRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
+  const instanceRef = useRef<OverlayScrollbars | null>(null);
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [hasVerticalScroll, setHasVerticalScroll] = useState(false);
 
+  const refresh = useMemo(
+    () => () => {
+      if (timerRef.current) clearTimeout(timerRef.current);
+      timerRef.current = setTimeout(() => {
+        if (!instanceRef.current) return;
+        instanceRef.current.update(true);
+        const hasScroll = instanceRef.current.state().overflowAmount.y > 0;
+        if (!hasScroll) {
+          setHasVerticalScroll(false);
+        } else {
+          setTimeout(() => setHasVerticalScroll(true), 50);
+        }
+      }, 300);
+    },
+    [],
+  );
+
   useEffect(() => {
-    if (!rootRef.current || !contentRef.current) return;
+    if (!targetRef.current || !viewportRef.current || !contentRef.current)
+      return;
 
     const instance = OverlayScrollbars(
       {
-        target: rootRef.current,
+        target: targetRef.current,
         elements: {
-          viewport: rootRef.current,
+          viewport: viewportRef.current,
           content: contentRef.current,
         },
       },
@@ -33,37 +54,38 @@ function ScrollArea({ children, className }: ScrollAreaProps) {
           visibility: "auto",
         },
       },
-      {
-        scroll: (_, event) => {
-          const state = instance.state();
-          setHasVerticalScroll(state.overflowAmount.y > 0);
-        },
-      },
     );
 
-    const checkOverflow = () => {
-      const state = instance.state();
-      setHasVerticalScroll(state.overflowAmount.y > 0);
-    };
+    instanceRef.current = instance;
 
-    checkOverflow();
+    const ro = new ResizeObserver(refresh);
+    ro.observe(contentRef.current);
 
-    const ro = new ResizeObserver(checkOverflow);
-    if (rootRef.current) ro.observe(rootRef.current);
-    if (contentRef.current) ro.observe(contentRef.current);
+    refresh();
 
     return () => {
+      if (timerRef.current) clearTimeout(timerRef.current);
       ro.disconnect();
       instance.destroy();
+      instanceRef.current = null;
     };
-  }, []);
+  }, [refresh]);
 
   return (
     <div
-      ref={rootRef}
-      className={cn("h-full w-full overflow-x-hidden pr-2", className)}
+      ref={targetRef}
+      className={cn("h-full w-full", className)}
+      style={{
+        paddingRight: hasVerticalScroll ? 8 : 0,
+        transition: "padding-right 0.1s ease-in-out",
+      }}
     >
-      <div ref={contentRef}>{children}</div>
+      <div
+        ref={viewportRef}
+        className="h-full w-full overflow-y-scroll overflow-x-hidden"
+      >
+        <div ref={contentRef}>{children}</div>
+      </div>
     </div>
   );
 }

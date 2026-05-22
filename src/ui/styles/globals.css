@@ -23,7 +23,7 @@ body,
   --color-border: #d1d5db;
   --color-gray: #6b7280;
   --color-gray-10: #71717a;
-  --color-gray-20: #DADADA;
+  --color-gray-20: #dadada;
   --color-gradient-primary: linear-gradient(
     to right,
     #ecd187,
@@ -36,7 +36,17 @@ a {
   display: inline-block;
 }
 
-/* OverlayScrollbars custom theme */
+/* OverlayScrollbars custom theme — scrollbar appear/hide transition */
+.os-theme-custom.os-scrollbar {
+  opacity: 0;
+  transition: opacity 0s;
+}
+
+.os-theme-custom.os-scrollbar.os-scrollbar-visible {
+  opacity: 1;
+  transition: opacity 200ms ease-in-out 500ms;
+}
+
 .os-theme-custom.os-scrollbar {
   --os-size: 4px;
   --os-padding-perpendicular: 0px;
