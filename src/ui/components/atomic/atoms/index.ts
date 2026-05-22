@@ -1,8 +1,10 @@
+export { AcordionAtom } from "./AcordionAtom";
 export { SearchInput } from "./SearchInput";
 export { AtomSelect } from "./AtomSelect";
 export { AtomImage } from "./AtomImage";
 export { Container } from "./Container";
 export { Button } from "./Button";
+export { Range } from "./Range";
 export { Logo } from "./Logo";
 export { Flex } from "./Flex";
 export { Grid } from "./Grid";

@@ -18,7 +18,6 @@ export const SHIRT_PARTS: { key: ShirtPart; label: string }[] = [
 ];
 
 export const PATTERNS: PatternItem[] = [
-  { id: "none", label: "No pattern", url: "" },
   {
     id: "design_0",
     label: "Design 0",
@@ -31,7 +30,7 @@ interface PatternStore {
   patternOpacity: number;
   patternColor: string;
   setPatternForSelected: (url: string) => void;
-  setPatternForAll: (url: string) => void;
+  setPatternForAll: (url: string | null) => void;
   setPatternOpacity: (value: number) => void;
   setPatternColor: (color: string) => void;
 }

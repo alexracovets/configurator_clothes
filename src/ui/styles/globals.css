@@ -14,17 +14,43 @@ body,
 
   --color-background: #222222;
   --color-white: #ffffff;
-  --color-default: #0A0A0A;
+  --color-default: #0a0a0a;
+  --color-active: #7f163d;
 
   --color-primary: #e4e4e7cc;
   --color-primary-button: #d4d4d8cc;
   --color-primary-10: #4b5563;
   --color-border: #d1d5db;
   --color-gray: #6b7280;
-  --color-gray-10: #71717A; 
-  --color-gradient-primary: linear-gradient(to right, #ECD187, #CC2967, #030102);
+  --color-gray-10: #71717a;
+  --color-gray-20: #DADADA;
+  --color-gradient-primary: linear-gradient(
+    to right,
+    #ecd187,
+    #cc2967,
+    #030102
+  );
 }
 
 a {
   display: inline-block;
+}
+
+/* OverlayScrollbars custom theme */
+.os-theme-custom.os-scrollbar {
+  --os-size: 4px;
+  --os-padding-perpendicular: 0px;
+  --os-padding-axis: 0px;
+  --os-track-border-radius: 2px;
+  --os-track-bg: #dadada;
+  --os-track-bg-hover: #dadada;
+  --os-track-bg-active: #dadada;
+  --os-handle-border-radius: 2px;
+  --os-handle-bg: #9ca3af;
+  --os-handle-bg-hover: #6b7280;
+  --os-handle-bg-active: #6b7280;
+  --os-handle-min-size: 24px;
+  --os-handle-perpendicular-size: 100%;
+  --os-handle-perpendicular-size-hover: 100%;
+  --os-handle-perpendicular-size-active: 100%;
 }

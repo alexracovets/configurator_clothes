@@ -1,9 +1,9 @@
 "use client";
 
-import { Flex } from "@atoms";
+import { Flex, Grid } from "@atoms";
+import { ScrollArea } from "@shared";
 import { useStepsStore } from "@store";
 
-import { orbitFlag } from "../ConfiguratorCanvas/CanvasControl/ViewControls/orbitFlag";
 import { AsidePrice } from "./AsidePrice";
 import { AsideName } from "./AsideName";
 import { StepDesign, StepColor, StepSfumatura } from "@molecules";
@@ -25,12 +25,15 @@ const AsideConfigurator = () => {
   const StepPanel = STEP_PANELS[currentStep];
 
   return (
-    <Flex variant="aside_configurator" asChild>
-      <aside
-        style={{ maxHeight: "calc(100vh - 180px)" }}
-        onPointerEnter={() => (orbitFlag.enabled = false)}
-        onPointerLeave={() => (orbitFlag.enabled = true)}
-      >
+    <Grid
+      variant="aside_configurator"
+      asChild
+      onPointerDown={(e) => e.stopPropagation()}
+      onPointerMove={(e) => e.stopPropagation()}
+      onPointerUp={(e) => e.stopPropagation()}
+      onWheel={(e) => e.stopPropagation()}
+    >
+      <aside>
         <Flex className="flex-col items-start shrink-0">
           <AsideName name={data.name} min_buy={data.min_buy} id={data.id} />
           <AsidePrice
@@ -40,12 +43,14 @@ const AsideConfigurator = () => {
           />
         </Flex>
         {StepPanel && (
-          <div className="w-full overflow-y-scroll pr-1">
-            <StepPanel />
-          </div>
+          <Flex variant="aside_configurator_content">
+            <ScrollArea>
+              <StepPanel />
+            </ScrollArea>
+          </Flex>
         )}
       </aside>
-    </Flex>
+    </Grid>
   );
 };
 

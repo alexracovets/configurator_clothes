@@ -4,7 +4,8 @@
       "Bash(Get-ChildItem -Path \"d:\\\\work\\\\configurators\\\\configurator_clothes\" -Directory)",
       "Bash(Select-Object Name)",
       "Bash(node -e ' *)",
-      "Bash(Get-ChildItem -Path \"d:\\\\work\\\\configurators\\\\configurator_clothes\\\\src\\\\ui\\\\components\\\\atomic\\\\molecules\\\\ConfiguratorsSteps\" -Recurse)"
+      "Bash(Get-ChildItem -Path \"d:\\\\work\\\\configurators\\\\configurator_clothes\\\\src\\\\ui\\\\components\\\\atomic\\\\molecules\\\\ConfiguratorsSteps\" -Recurse)",
+      "Bash(Select-String -Pattern \"accordion|shadcn|radix\")"
     ]
   }
 }

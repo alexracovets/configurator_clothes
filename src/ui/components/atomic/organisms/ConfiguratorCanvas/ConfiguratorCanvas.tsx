@@ -10,26 +10,24 @@ import { LoadModel } from "./LoadModel";
 
 const ConfiguratorCanvas = () => {
   return (
-    <div className="w-full h-full">
-      <Canvas
-        camera={{ position: [0, 0, 3], fov: 45 }}
-        style={{ width: "100%", height: "100%" }}
-        gl={{
-          antialias: true,
-          powerPreference: "high-performance",
-          stencil: true,
-          toneMapping: THREE.ACESFilmicToneMapping,
-          toneMappingExposure: 1.2,
-        }}
-        dpr={[1, 2]}
-      >
-        <CanvasControl />
-        <Center position={[0, 0, 0]}>
-          <LoadModel />
-        </Center>
-        <CanvasInterface />
-      </Canvas>
-    </div>
+    <Canvas
+      camera={{ position: [0, 0, 3], fov: 45 }}
+      style={{ width: "100%", height: "100%" }}
+      gl={{
+        antialias: true,
+        powerPreference: "high-performance",
+        stencil: true,
+        toneMapping: THREE.ACESFilmicToneMapping,
+        toneMappingExposure: 1.2,
+      }}
+      dpr={[1, 2]}
+    >
+      <CanvasControl />
+      <Center position={[0, 0, 0]}>
+        <LoadModel />
+      </Center>
+      <CanvasInterface />
+    </Canvas>
   );
 };
 

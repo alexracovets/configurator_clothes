@@ -2,7 +2,7 @@
 
 import { Html } from "@react-three/drei";
 
-import { MenuStepBuy, StepControl, CanvasButtons } from "@molecules";
+import { MenuStepBuy, StepsControl, CanvasButtons } from "@molecules";
 import { AsideConfigurator } from "@organisms";
 import { Container, Box, Flex } from "@atoms";
 
@@ -14,7 +14,7 @@ const CanvasInterface = () => {
           <MenuStepBuy />
           <Box className="w-full h-full relative select-none">
             <AsideConfigurator />
-            <StepControl />
+            <StepsControl />
             <CanvasButtons />
           </Box>
         </Flex>

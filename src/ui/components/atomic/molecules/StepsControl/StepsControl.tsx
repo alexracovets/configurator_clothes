@@ -5,7 +5,7 @@ import { IoMdUndo, IoMdRedo } from "react-icons/io";
 import { useStepsStore } from "@store";
 import { Flex, Button } from "@atoms";
 
-const StepControl = () => {
+const StepsControl = () => {
   const { currentStep, prevStep, nextStep } = useStepsStore();
 
   return (
@@ -22,4 +22,4 @@ const StepControl = () => {
   );
 };
 
-export { StepControl };
+export { StepsControl };

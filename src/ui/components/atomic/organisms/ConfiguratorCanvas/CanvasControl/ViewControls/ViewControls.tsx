@@ -4,8 +4,6 @@ import { OrbitControls } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import { useRef, type ComponentRef } from "react";
 
-import { orbitFlag } from "./orbitFlag";
-
 const MIN_DISTANCE = 0.5;
 const MAX_DISTANCE = 3;
 const ROTATE_STEP = Math.PI / 8;
@@ -89,7 +87,6 @@ const ViewControls = () => {
       needsUpdate = true;
     }
 
-    if (orbitRef.current) orbitRef.current.enabled = orbitFlag.enabled;
     if (needsUpdate) orbitRef.current.update();
   });
 

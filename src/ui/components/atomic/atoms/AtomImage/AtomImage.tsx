@@ -9,11 +9,7 @@ import { cn } from "@utils";
 const variantAtomImage = cva("", {
   variants: {
     variant: {
-      default: "w-auto h-auto",
-      steps: cn(
-        "w-full h-[80px] border-2 border-transparent rounded-[8px] overflow-hidden",
-        "data-[active=true]:border-black",
-      ),
+      default: "w-full h-full",
     },
   },
   defaultVariants: {
