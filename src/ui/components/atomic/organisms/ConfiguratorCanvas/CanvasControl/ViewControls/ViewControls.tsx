@@ -8,7 +8,7 @@ import { orbitFlag } from "@utils";
 
 const MIN_DISTANCE = 0.5;
 const MAX_DISTANCE = 3;
-const ROTATE_STEP = Math.PI / 8;
+const ROTATE_STEP = Math.PI;
 const ZOOM_FACTOR = 0.8;
 const LERP = 0.1;
 const SNAP_THRESHOLD = 0.001;
@@ -33,48 +33,33 @@ const ViewControls = () => {
   useFrame(() => {
     if (!orbitRef.current) return;
     orbitRef.current.enabled = orbitFlag.enabled;
-    const { object: camera, target } = orbitRef.current;
+    const orbit = orbitRef.current;
     const anim = animRef.current;
-    let needsUpdate = false;
 
     if (anim.holdRotate !== 0) {
-      const dx = camera.position.x - target.x;
-      const dz = camera.position.z - target.z;
-      const radius = Math.sqrt(dx * dx + dz * dz);
-      const currentAngle = Math.atan2(dx, dz);
-      const newAngle = currentAngle + anim.holdRotate * HOLD_SPEED;
-      camera.position.x = target.x + Math.sin(newAngle) * radius;
-      camera.position.z = target.z + Math.cos(newAngle) * radius;
-      camera.lookAt(target);
-      anim.rotate.targetAngle = newAngle;
+      const current = orbit.getAzimuthalAngle();
+      const next = current + anim.holdRotate * HOLD_SPEED;
+      orbit.setAzimuthalAngle(next);
+      anim.rotate.targetAngle = next;
       anim.rotate.active = false;
-      needsUpdate = true;
+      orbit.update();
     } else if (anim.rotate.active) {
-      const dx = camera.position.x - target.x;
-      const dz = camera.position.z - target.z;
-      const radius = Math.sqrt(dx * dx + dz * dz);
-      const currentAngle = Math.atan2(dx, dz);
-
-      let diff = anim.rotate.targetAngle - currentAngle;
+      const current = orbit.getAzimuthalAngle();
+      let diff = anim.rotate.targetAngle - current;
       while (diff > Math.PI) diff -= 2 * Math.PI;
       while (diff < -Math.PI) diff += 2 * Math.PI;
 
       if (Math.abs(diff) < SNAP_THRESHOLD) {
-        camera.position.x =
-          target.x + Math.sin(anim.rotate.targetAngle) * radius;
-        camera.position.z =
-          target.z + Math.cos(anim.rotate.targetAngle) * radius;
+        orbit.setAzimuthalAngle(anim.rotate.targetAngle);
         anim.rotate.active = false;
       } else {
-        const newAngle = currentAngle + diff * LERP;
-        camera.position.x = target.x + Math.sin(newAngle) * radius;
-        camera.position.z = target.z + Math.cos(newAngle) * radius;
+        orbit.setAzimuthalAngle(current + diff * LERP);
       }
-      camera.lookAt(target);
-      needsUpdate = true;
+      orbit.update();
     }
 
     if (anim.zoom.active) {
+      const { object: camera, target } = orbit;
       const toTarget = camera.position.clone().sub(target);
       const currentDist = toTarget.length();
       const diff = anim.zoom.targetDistance - currentDist;
@@ -87,20 +72,15 @@ const ViewControls = () => {
         toTarget.normalize().multiplyScalar(currentDist + diff * LERP);
         camera.position.copy(target).add(toTarget);
       }
-      needsUpdate = true;
+      orbit.update();
     }
-
-    if (needsUpdate) orbitRef.current.update();
   });
 
   cameraBridge.rotate = (direction) => {
     if (!orbitRef.current) return;
-    const { object: camera, target } = orbitRef.current;
-    const dx = camera.position.x - target.x;
-    const dz = camera.position.z - target.z;
     const currentAngle = animRef.current.rotate.active
       ? animRef.current.rotate.targetAngle
-      : Math.atan2(dx, dz);
+      : orbitRef.current.getAzimuthalAngle();
     animRef.current.rotate.targetAngle = currentAngle + direction * ROTATE_STEP;
     animRef.current.rotate.active = true;
   };
@@ -134,6 +114,11 @@ const ViewControls = () => {
       minDistance={MIN_DISTANCE}
       maxDistance={MAX_DISTANCE}
       makeDefault
+      onStart={() => {
+        animRef.current.rotate.active = false;
+        animRef.current.holdRotate = 0;
+        animRef.current.zoom.active = false;
+      }}
     />
   );
 };

@@ -35,7 +35,7 @@ function useColorGradientTexture(
   baseColor: string,
 ): THREE.CanvasTexture {
   return useMemo(() => {
-    const size = 1024;
+    const size = 512;
     const canvas = document.createElement("canvas");
     canvas.width = size;
     canvas.height = size;
@@ -118,7 +118,7 @@ function ShirtMesh({
     m.roughness = 1.0;
     m.metalness = 0.0;
     m.normalMap = normalMap;
-    m.normalScale.set(1.5, 1.5);
+    m.normalScale.set(2,2);
     m.roughnessMap = roughnessMap;
     m.displacementMap = displacementMap;
     m.displacementScale = 0.0;
@@ -156,6 +156,14 @@ export function PDRTest(props: ThreeElements["group"]) {
   const displacementMap = useTexture("/models/pbr/displacement.jpg");
   const normalMap = useTexture("/models/pbr/cotton_jersey_nor_gl.jpg");
   const roughnessMap = useTexture("/models/pbr/cotton_jersey_rough.jpg");
+
+  useMemo(() => {
+    for (const tex of [normalMap, roughnessMap]) {
+      tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
+      tex.repeat.set(6, 6);
+      tex.needsUpdate = true;
+    }
+  }, [normalMap, roughnessMap]);
 
   const patternUrl = (partPatterns as Record<string, string>)["front"] || "";
   const texture = useSvgTexture(patternUrl);
