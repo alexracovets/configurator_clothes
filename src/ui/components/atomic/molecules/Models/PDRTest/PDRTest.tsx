@@ -35,7 +35,7 @@ function useColorGradientTexture(
   baseColor: string,
 ): THREE.CanvasTexture {
   return useMemo(() => {
-    const size = 512;
+    const size = 1024;
     const canvas = document.createElement("canvas");
     canvas.width = size;
     canvas.height = size;
@@ -92,7 +92,6 @@ function ShirtMesh({
   patternOpacity,
   patternColor,
   gradient,
-  displacementMap,
   normalMap,
   roughnessMap,
 }: {
@@ -103,7 +102,6 @@ function ShirtMesh({
   patternOpacity: number;
   patternColor: string;
   gradient: PartGradient;
-  displacementMap: THREE.Texture;
   normalMap: THREE.Texture;
   roughnessMap: THREE.Texture;
 }) {
@@ -113,24 +111,17 @@ function ShirtMesh({
     const m = baseMaterial.clone();
     m.color.set("#ffffff");
     m.map = colorGradientTexture;
+    m.map.colorSpace = THREE.SRGBColorSpace;
     m.transparent = false;
     m.opacity = 1;
-    m.roughness = 1.0;
+    m.roughness = 0.85;
     m.metalness = 0.0;
     m.normalMap = normalMap;
-    m.normalScale.set(2,2);
+    m.normalScale.set(0.8, 0.8);
     m.roughnessMap = roughnessMap;
-    m.displacementMap = displacementMap;
-    m.displacementScale = 0.0;
     m.needsUpdate = true;
     return m;
-  }, [
-    baseMaterial,
-    colorGradientTexture,
-    displacementMap,
-    normalMap,
-    roughnessMap,
-  ]);
+  }, [baseMaterial, colorGradientTexture, normalMap, roughnessMap]);
 
   return (
     <>
@@ -153,7 +144,6 @@ export function PDRTest(props: ThreeElements["group"]) {
   const { partPatterns, patternOpacity, patternColor } = usePatternStore();
   const { partGradients } = useGradientStore();
 
-  const displacementMap = useTexture("/models/pbr/displacement.jpg");
   const normalMap = useTexture("/models/pbr/cotton_jersey_nor_gl.jpg");
   const roughnessMap = useTexture("/models/pbr/cotton_jersey_rough.jpg");
 
@@ -180,7 +170,6 @@ export function PDRTest(props: ThreeElements["group"]) {
           patternOpacity={patternOpacity}
           patternColor={patternColor}
           gradient={partGradients[part]}
-          displacementMap={displacementMap}
           normalMap={normalMap}
           roughnessMap={roughnessMap}
         />

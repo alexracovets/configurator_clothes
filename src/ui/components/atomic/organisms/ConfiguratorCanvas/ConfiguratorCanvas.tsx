@@ -18,7 +18,7 @@ const ConfiguratorCanvas = () => {
         powerPreference: "high-performance",
         stencil: true,
         toneMapping: THREE.ACESFilmicToneMapping,
-        toneMappingExposure: 1.2,
+        toneMappingExposure: 1.0,
       }}
       dpr={[1, 2]}
     >
