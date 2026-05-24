@@ -1,7 +1,7 @@
 "use client";
 
 import { OrbitControls } from "@react-three/drei";
-import { useRef, type ComponentRef } from "react";
+import { useEffect, useRef, type ComponentRef } from "react";
 import { useFrame } from "@react-three/fiber";
 
 import { orbitFlag } from "@utils";
@@ -14,11 +14,29 @@ const LERP = 0.1;
 const SNAP_THRESHOLD = 0.001;
 const HOLD_SPEED = 0.025;
 
-const cameraBridge = {
-  rotate: (_dir: 1 | -1) => {},
-  zoom: (_dir: 1 | -1) => {},
-  startRotate: (_dir: 1 | -1) => {},
+type CameraDirection = 1 | -1;
+
+type CameraHandlers = {
+  rotate: (direction: CameraDirection) => void;
+  zoom: (direction: CameraDirection) => void;
+  startRotate: (direction: CameraDirection) => void;
+  stopRotate: () => void;
+};
+
+const noopHandlers: CameraHandlers = {
+  rotate: () => {},
+  zoom: () => {},
+  startRotate: () => {},
   stopRotate: () => {},
+};
+
+const handlersRef: { current: CameraHandlers } = { current: noopHandlers };
+
+const cameraBridge: CameraHandlers = {
+  rotate: (direction) => handlersRef.current.rotate(direction),
+  zoom: (direction) => handlersRef.current.zoom(direction),
+  startRotate: (direction) => handlersRef.current.startRotate(direction),
+  stopRotate: () => handlersRef.current.stopRotate(),
 };
 
 const ViewControls = () => {
@@ -76,36 +94,41 @@ const ViewControls = () => {
     }
   });
 
-  cameraBridge.rotate = (direction) => {
-    if (!orbitRef.current) return;
-    const currentAngle = animRef.current.rotate.active
-      ? animRef.current.rotate.targetAngle
-      : orbitRef.current.getAzimuthalAngle();
-    animRef.current.rotate.targetAngle = currentAngle + direction * ROTATE_STEP;
-    animRef.current.rotate.active = true;
-  };
-
-  cameraBridge.zoom = (direction) => {
-    if (!orbitRef.current) return;
-    const { object: camera, target } = orbitRef.current;
-    const currentDist = animRef.current.zoom.active
-      ? animRef.current.zoom.targetDistance
-      : camera.position.distanceTo(target);
-    const factor = direction > 0 ? ZOOM_FACTOR : 1 / ZOOM_FACTOR;
-    animRef.current.zoom.targetDistance = Math.max(
-      MIN_DISTANCE,
-      Math.min(MAX_DISTANCE, currentDist * factor),
-    );
-    animRef.current.zoom.active = true;
-  };
-
-  cameraBridge.startRotate = (direction) => {
-    animRef.current.holdRotate = direction;
-  };
-
-  cameraBridge.stopRotate = () => {
-    animRef.current.holdRotate = 0;
-  };
+  useEffect(() => {
+    handlersRef.current = {
+      rotate: (direction) => {
+        if (!orbitRef.current) return;
+        const currentAngle = animRef.current.rotate.active
+          ? animRef.current.rotate.targetAngle
+          : orbitRef.current.getAzimuthalAngle();
+        animRef.current.rotate.targetAngle =
+          currentAngle + direction * ROTATE_STEP;
+        animRef.current.rotate.active = true;
+      },
+      zoom: (direction) => {
+        if (!orbitRef.current) return;
+        const { object: camera, target } = orbitRef.current;
+        const currentDist = animRef.current.zoom.active
+          ? animRef.current.zoom.targetDistance
+          : camera.position.distanceTo(target);
+        const factor = direction > 0 ? ZOOM_FACTOR : 1 / ZOOM_FACTOR;
+        animRef.current.zoom.targetDistance = Math.max(
+          MIN_DISTANCE,
+          Math.min(MAX_DISTANCE, currentDist * factor),
+        );
+        animRef.current.zoom.active = true;
+      },
+      startRotate: (direction) => {
+        animRef.current.holdRotate = direction;
+      },
+      stopRotate: () => {
+        animRef.current.holdRotate = 0;
+      },
+    };
+    return () => {
+      handlersRef.current = noopHandlers;
+    };
+  }, []);
 
   return (
     <OrbitControls

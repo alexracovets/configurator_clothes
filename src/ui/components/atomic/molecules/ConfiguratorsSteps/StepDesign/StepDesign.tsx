@@ -1,7 +1,7 @@
 "use client";
 
 import { usePatternStore, PATTERNS } from "@store";
-import { Flex, Text, AtomImage, Button, Grid } from "@atoms";
+import { Flex, AtomImage, Button, Grid } from "@atoms";
 import { ColorControl, TransparentControl } from "@molecules";
 
 const StepDesign = () => {

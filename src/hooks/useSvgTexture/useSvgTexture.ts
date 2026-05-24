@@ -6,14 +6,13 @@ import * as THREE from "three";
 const SVG_RENDER_WIDTH = 4096;
 const SVG_RENDER_HEIGHT = 2048;
 
+type LoadedTexture = { url: string; texture: THREE.Texture };
+
 export function useSvgTexture(url: string): THREE.Texture | null {
-  const [texture, setTexture] = useState<THREE.Texture | null>(null);
+  const [loaded, setLoaded] = useState<LoadedTexture | null>(null);
 
   useEffect(() => {
-    if (!url) {
-      setTexture(null);
-      return;
-    }
+    if (!url) return;
 
     let cancelled = false;
 
@@ -43,7 +42,7 @@ export function useSvgTexture(url: string): THREE.Texture | null {
           tex.wrapT = THREE.ClampToEdgeWrapping;
           tex.flipY = false;
           tex.needsUpdate = true;
-          setTexture(tex);
+          setLoaded({ url, texture: tex });
         };
         img.src = objectUrl;
       });
@@ -53,5 +52,5 @@ export function useSvgTexture(url: string): THREE.Texture | null {
     };
   }, [url]);
 
-  return texture;
+  return loaded?.url === url ? loaded.texture : null;
 }

@@ -54,5 +54,5 @@ export function useGradientTexture(
     const texture = new THREE.CanvasTexture(canvas);
     texture.needsUpdate = true;
     return texture;
-  }, [color1, color2, rotation, position, opacity, softness]);
+  }, [color2, rotation, position, opacity, softness]);
 }

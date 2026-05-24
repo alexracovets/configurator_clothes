@@ -6,10 +6,9 @@ import * as THREE from "three";
 interface GradientLayerProps {
   geometry: THREE.BufferGeometry;
   texture: THREE.Texture;
-  opacity: number;
 }
 
-export function GradientLayer({ geometry, texture, opacity }: GradientLayerProps) {
+export function GradientLayer({ geometry, texture }: GradientLayerProps) {
   const mat = useMemo(() => {
     return new THREE.MeshStandardMaterial({
       map: texture,
@@ -21,7 +20,7 @@ export function GradientLayer({ geometry, texture, opacity }: GradientLayerProps
       polygonOffsetFactor: -1,
       polygonOffsetUnits: -1,
     });
-  }, [texture, opacity]);
+  }, [texture]);
 
   return <mesh geometry={geometry} material={mat} renderOrder={1} />;
 }

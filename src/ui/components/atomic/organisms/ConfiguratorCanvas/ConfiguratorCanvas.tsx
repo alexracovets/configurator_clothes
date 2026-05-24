@@ -1,6 +1,6 @@
 "use client";
 
-import { Center, Html } from "@react-three/drei";
+import { Center } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 import * as THREE from "three";
 

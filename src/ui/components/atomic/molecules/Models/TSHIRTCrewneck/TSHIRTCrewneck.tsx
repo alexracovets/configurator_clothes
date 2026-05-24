@@ -23,14 +23,16 @@ interface CrewneckGLTF {
 const MODEL_PATH = "/models/crewneck/crewneck.glb";
 
 const PART_MESHES: { node: string; part: ShirtPart }[] = [
-  { node: "crewneck_front",        part: "front" },
-  { node: "crewneck_back",         part: "back" },
-  { node: "crewneck_sleeve_left",  part: "sleeve_left" },
+  { node: "crewneck_front", part: "front" },
+  { node: "crewneck_back", part: "back" },
+  { node: "crewneck_sleeve_left", part: "sleeve_left" },
   { node: "crewneck_sleeve_right", part: "sleeve_right" },
-  { node: "crewneck_collar",       part: "collar" },
+  { node: "crewneck_collar", part: "collar" },
 ];
 
-function useGradientTexture(gradient: PartGradient, baseColor: string): THREE.CanvasTexture | null {
+function useGradientTexture(
+  gradient: PartGradient,
+): THREE.CanvasTexture | null {
   return useMemo(() => {
     if (!gradient.enabled) return null;
 
@@ -47,8 +49,10 @@ function useGradientTexture(gradient: PartGradient, baseColor: string): THREE.Ca
     const dy = Math.sin(rad) * size;
 
     const grad = ctx.createLinearGradient(
-      cx - dx / 2, cy - dy / 2,
-      cx + dx / 2, cy + dy / 2,
+      cx - dx / 2,
+      cy - dy / 2,
+      cx + dx / 2,
+      cy + dy / 2,
     );
 
     const mid = gradient.position / 100;
@@ -62,10 +66,10 @@ function useGradientTexture(gradient: PartGradient, baseColor: string): THREE.Ca
     const g = Math.round(c2.g * 255);
     const b = Math.round(c2.b * 255);
 
-    grad.addColorStop(0,     `rgba(${r},${g},${b},0)`);
+    grad.addColorStop(0, `rgba(${r},${g},${b},0)`);
     grad.addColorStop(start, `rgba(${r},${g},${b},0)`);
-    grad.addColorStop(end,   `rgba(${r},${g},${b},${a})`);
-    grad.addColorStop(1,     `rgba(${r},${g},${b},${a})`);
+    grad.addColorStop(end, `rgba(${r},${g},${b},${a})`);
+    grad.addColorStop(1, `rgba(${r},${g},${b},${a})`);
 
     ctx.fillStyle = grad;
     ctx.fillRect(0, 0, size, size);
@@ -73,7 +77,7 @@ function useGradientTexture(gradient: PartGradient, baseColor: string): THREE.Ca
     const tex = new THREE.CanvasTexture(canvas);
     tex.needsUpdate = true;
     return tex;
-  }, [gradient, baseColor]);
+  }, [gradient]);
 }
 
 function ShirtMesh({
@@ -105,7 +109,7 @@ function ShirtMesh({
     return m;
   }, [baseMaterial, baseColor]);
 
-  const gradientTexture = useGradientTexture(gradient, baseColor);
+  const gradientTexture = useGradientTexture(gradient);
 
   const gradientMat = useMemo(() => {
     if (!gradientTexture) return null;
@@ -163,8 +167,14 @@ export function TSHIRTCrewneck(props: ThreeElements["group"]) {
           gradient={partGradients[part]}
         />
       ))}
-      <mesh geometry={nodes.Mesh002.geometry}   material={materials.crewneck_inside} />
-      <mesh geometry={nodes.Mesh002_1.geometry} material={materials.sweatband} />
+      <mesh
+        geometry={nodes.Mesh002.geometry}
+        material={materials.crewneck_inside}
+      />
+      <mesh
+        geometry={nodes.Mesh002_1.geometry}
+        material={materials.sweatband}
+      />
       <mesh geometry={nodes.Mesh002_2.geometry} material={materials.label} />
     </group>
   );
