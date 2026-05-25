@@ -1,3 +1,4 @@
+export { LayoutsModalStructure } from "./LayoutsModalStructure";
 export { CanvasButtons } from "./CanvasButtons";
 export { LangSwitcher } from "./LangSwitcher";
 export { StepsControl } from "./StepsControl";
@@ -10,3 +11,4 @@ export { Auth } from "./Auth";
 export * from "./ConfiguratorsSteps";
 export * from "./ConfigTools";
 export * from "./Models";
+export * from "./ModalLayers";

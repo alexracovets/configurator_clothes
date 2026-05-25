@@ -7,7 +7,7 @@ import * as THREE from "three";
 
 import { useColorStore, usePatternStore, useGradientStore } from "@store";
 import type { ShirtPart, PartGradient } from "@store";
-import { PatternLayer } from "../PatternLayer";
+import { PatternLayer } from "../../ModalLayers";
 import { useSvgTexture } from "@hooks";
 
 interface CrewneckGLTF {
