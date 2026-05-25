@@ -85,7 +85,7 @@ export const PDRTest = (props: ThreeElements["group"]) => {
     >
       <mesh geometry={nodes.Mesh002.geometry} material={insideMat} />
       <mesh geometry={nodes.crewneck_collar.geometry} material={neckMat} />
-      <mesh geometry={nodes.Mesh002_1.geometry} material={neckMat} />
+      <mesh geometry={nodes.Mesh002_1.geometry} material={materials.sweatband} />
       <mesh geometry={nodes.Mesh002_2.geometry} material={materials.label} />
     </LayoutsModalStructure>
   );
