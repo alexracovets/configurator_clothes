@@ -5,7 +5,14 @@
       "Bash(Select-Object Name)",
       "Bash(node -e ' *)",
       "Bash(Get-ChildItem -Path \"d:\\\\work\\\\configurators\\\\configurator_clothes\\\\src\\\\ui\\\\components\\\\atomic\\\\molecules\\\\ConfiguratorsSteps\" -Recurse)",
-      "Bash(Select-String -Pattern \"accordion|shadcn|radix\")"
+      "Bash(Select-String -Pattern \"accordion|shadcn|radix\")",
+      "Bash(node -e \"const t = require\\('three'\\); console.log\\(t.REVISION\\)\")",
+      "Bash(node -e \"const fs = require\\('fs'\\); const prog = fs.readFileSync\\('./node_modules/three/src/renderers/webgl/WebGLProgram.js', 'utf8'\\); const idx = prog.indexOf\\('uv1'\\); console.log\\(prog.substring\\(idx - 400, idx + 300\\)\\);\")",
+      "Bash(node -e \"const fs = require\\('fs'\\); const prog = fs.readFileSync\\('./node_modules/three/src/renderers/webgl/WebGLProgram.js', 'utf8'\\); const idx = prog.indexOf\\('USE_UV1'\\); console.log\\(prog.substring\\(idx - 100, idx + 500\\)\\);\")",
+      "Bash(node -e \"const fs = require\\('fs'\\); const prog = fs.readFileSync\\('./node_modules/three/src/renderers/webgl/WebGLProgram.js', 'utf8'\\); const idx = prog.indexOf\\('AOMAP_UV'\\); console.log\\(prog.substring\\(idx - 50, idx + 200\\)\\);\")",
+      "Bash(node -e \"const fs = require\\('fs'\\); const prog = fs.readFileSync\\('./node_modules/three/src/renderers/webgl/WebGLProgram.js', 'utf8'\\); const idx = prog.indexOf\\('aoMapUv'\\); console.log\\(prog.substring\\(idx - 10, idx + 100\\)\\); const idx2 = prog.indexOf\\('aoMapUv :'\\); console.log\\(prog.substring\\(idx2 - 10, idx2 + 200\\)\\);\")",
+      "Bash(node -e \"const fs = require\\('fs'\\); const src = fs.readFileSync\\('./node_modules/three/src/renderers/webgl/WebGLPrograms.js', 'utf8'\\); const idx = src.indexOf\\('aoMapUv'\\); console.log\\(src.substring\\(idx - 20, idx + 150\\)\\);\")",
+      "Bash(node -e \"const fs = require\\('fs'\\); const src = fs.readFileSync\\('./node_modules/three/src/renderers/webgl/WebGLPrograms.js', 'utf8'\\); const idx = src.indexOf\\('getChannel'\\); console.log\\(src.substring\\(idx - 10, idx + 200\\)\\);\")"
     ]
   }
 }

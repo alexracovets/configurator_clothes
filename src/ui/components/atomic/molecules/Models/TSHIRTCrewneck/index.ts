@@ -1,1 +1,0 @@
-export { TSHIRTCrewneck } from "./TSHIRTCrewneck";
