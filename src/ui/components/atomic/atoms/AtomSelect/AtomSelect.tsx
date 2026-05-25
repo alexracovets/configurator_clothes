@@ -61,11 +61,12 @@ const AtomSelect = ({
   return (
     <Select
       value={value.value}
-      onValueChange={(val) =>
-        onChange({
-          ...(options.find((o) => o.value === val) ?? { label: "", value: val }),
-        })
-      }
+      onValueChange={(val) => {
+        if (val == null) return;
+        onChange(
+          options.find((o) => o.value === val) ?? { label: "", value: val },
+        );
+      }}
     >
       <SelectTrigger className={variantTrigger({ variant })} icon={icon}>
         <SelectValue>
