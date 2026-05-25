@@ -9,12 +9,12 @@ export interface PatternItem {
   url: string;
 }
 
-export const SHIRT_PARTS: { key: ShirtPart; label: string }[] = [
-  { key: "front", label: "Front" },
-  { key: "back", label: "Back" },
-  { key: "sleeve_left", label: "Left sleeve" },
-  { key: "sleeve_right", label: "Right sleeve" },
-  { key: "collar", label: "Collar" },
+export const SHIRT_PARTS: { key: ShirtPart; label: string; italianLabel: string }[] = [
+  { key: "front",        label: "Front",       italianLabel: "Davanti"  },
+  { key: "back",         label: "Back",        italianLabel: "Retro"    },
+  { key: "sleeve_left",  label: "Left sleeve", italianLabel: "Manica 1" },
+  { key: "sleeve_right", label: "Right sleeve",italianLabel: "Manica 2" },
+  { key: "collar",       label: "Collar",      italianLabel: "Colletto" },
 ];
 
 export const PATTERNS: PatternItem[] = [

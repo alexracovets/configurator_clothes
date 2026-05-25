@@ -10,12 +10,12 @@ interface PatternLayerProps {
   patternColor: string;
 }
 
-export function PatternLayer({
+export const PatternLayer = ({
   geometry,
   texture,
   patternOpacity,
   patternColor,
-}: PatternLayerProps) {
+}: PatternLayerProps) => {
   const mat = useMemo(() => {
     const m = new THREE.MeshStandardMaterial({
       map: texture,

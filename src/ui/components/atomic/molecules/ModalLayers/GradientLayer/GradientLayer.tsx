@@ -8,7 +8,7 @@ interface GradientLayerProps {
   texture: THREE.Texture;
 }
 
-export function GradientLayer({ geometry, texture }: GradientLayerProps) {
+export const GradientLayer = ({ geometry, texture }: GradientLayerProps) => {
   const mat = useMemo(() => {
     return new THREE.MeshStandardMaterial({
       map: texture,

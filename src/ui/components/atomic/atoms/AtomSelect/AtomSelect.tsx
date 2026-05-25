@@ -34,14 +34,11 @@ const variantContent = cva("", {
   },
 });
 
-interface AtomSelectProps {
+interface AtomSelectProps extends React.ComponentProps<typeof Select> {
   options: { label: string; value: string }[];
   value: { label: string; value: string };
   onChange: (value: { label: string; value: string }) => void;
   icon?: boolean;
-}
-
-interface AtomSelectProps extends React.ComponentProps<typeof Select> {
   variant?: VariantProps<typeof variantTrigger>["variant"];
 }
 

@@ -4,3 +4,4 @@ export type { LayerConfig } from "./LayerConfig";
 export type { PBRMaps } from "./PBRMaps";
 export type { IndicatorStyle } from "./IndicatorStyle";
 export type { UseSlidingIndicatorReturn } from "./UseSlidingIndicatorReturn";
+export type { AcordionItem } from "./AcordionItem";

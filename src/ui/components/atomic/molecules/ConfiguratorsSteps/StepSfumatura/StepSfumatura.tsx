@@ -1,23 +1,14 @@
 "use client";
 
 import { useGradientStore, useColorStore, SHIRT_PARTS } from "@store";
-import type { ShirtPart } from "@store";
 import { Flex, Text, AcordionAtom } from "@atoms";
 import { ColorControl, RangeControl, ToggleControl } from "@molecules";
-
-const PART_LABELS: Record<ShirtPart, string> = {
-  front: "Davanti",
-  back: "Retro",
-  sleeve_left: "Manica 1",
-  sleeve_right: "Manica 2",
-  collar: "Colletto",
-};
 
 const StepSfumatura = () => {
   const { partGradients, setPartGradient } = useGradientStore();
   const { partColors } = useColorStore();
 
-  const items = SHIRT_PARTS.map(({ key }) => {
+  const items = SHIRT_PARTS.map(({ key, italianLabel }) => {
     const gradient = partGradients[key];
     const color1 = partColors[key];
 
@@ -34,7 +25,7 @@ const StepSfumatura = () => {
             style={{ background: previewGrad }}
           />
           <Text className="text-sm font-medium text-gray-800">
-            {PART_LABELS[key]}
+            {italianLabel}
           </Text>
           {gradient.enabled && (
             <Text className="text-[14px] leading-[15px] text-gray-400">

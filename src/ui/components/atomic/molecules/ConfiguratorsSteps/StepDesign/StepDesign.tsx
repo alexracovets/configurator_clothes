@@ -2,7 +2,7 @@
 
 import { usePatternStore, PATTERNS } from "@store";
 import { Flex, AtomImage, Button, Grid } from "@atoms";
-import { ColorControl, TransparentControl } from "@molecules";
+import { ColorControl, RangeControl } from "@molecules";
 
 const StepDesign = () => {
   const {
@@ -61,11 +61,12 @@ const StepDesign = () => {
         />
       )}
       {activePatterUrl && (
-        <TransparentControl
+        <RangeControl
           value={Math.round(patternOpacity * 100)}
-          onChange={(val) => setPatternOpacity(val / 100)}
+          onChange={(val: number) => setPatternOpacity(val / 100)}
           min={0}
           max={100}
+          unit="%"
           label="Trasparenza"
         />
       )}

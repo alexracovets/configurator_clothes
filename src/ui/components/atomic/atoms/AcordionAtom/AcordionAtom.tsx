@@ -45,11 +45,7 @@ const accordionContentVariants = cva("", {
   },
 });
 
-export interface AcordionItem {
-  value: string;
-  trigger: React.ReactNode;
-  content: React.ReactNode;
-}
+import type { AcordionItem } from "@types";
 
 interface AcordionAtomProps extends VariantProps<typeof accordionItemVariants> {
   items: AcordionItem[];
