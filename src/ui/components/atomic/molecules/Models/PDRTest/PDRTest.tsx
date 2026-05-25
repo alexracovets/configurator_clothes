@@ -6,6 +6,7 @@ import { useGLTF, useTexture } from "@react-three/drei";
 import * as THREE from "three";
 
 import { LayoutsModalStructure } from "@molecules";
+import { NECK_DEFAULT_COLOR } from "@store";
 import type { LayerConfig } from "@types";
 
 const MODEL_PATH = "/models/pbr/crewneck.gltf";
@@ -36,8 +37,17 @@ export const PDRTest = (props: ThreeElements["group"]) => {
     { part: "back", geometry: nodes.crewneck_back.geometry },
     { part: "sleeve_left", geometry: nodes.crewneck_sleeve_left.geometry },
     { part: "sleeve_right", geometry: nodes.crewneck_sleeve_right.geometry },
-    { part: "collar", geometry: nodes.crewneck_collar.geometry },
   ];
+
+  const neckMat = useMemo(
+    () =>
+      new THREE.MeshStandardMaterial({
+        color: NECK_DEFAULT_COLOR,
+        roughness: 0.9,
+        metalness: 0,
+      }),
+    [],
+  );
 
   const insideMat = useMemo(() => {
     const m = materials.crewneck_inside.clone();
@@ -68,7 +78,8 @@ export const PDRTest = (props: ThreeElements["group"]) => {
       pbrTexturePaths={PBR_TEXTURE_PATHS}
     >
       <mesh geometry={nodes.Mesh002.geometry} material={insideMat} />
-      <mesh geometry={nodes.Mesh002_1.geometry} material={materials.sweatband} />
+      <mesh geometry={nodes.crewneck_collar.geometry} material={neckMat} />
+      <mesh geometry={nodes.Mesh002_1.geometry} material={neckMat} />
       <mesh geometry={nodes.Mesh002_2.geometry} material={materials.label} />
     </LayoutsModalStructure>
   );

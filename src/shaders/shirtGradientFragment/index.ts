@@ -1,0 +1,1 @@
+export { shirtGradientFragment } from "./shirtGradientFragment";

@@ -3,15 +3,17 @@
 import { useLayoutEffect, useRef } from "react";
 import * as THREE from "three";
 
-import { useNameStore, type ShirtPart } from "@store";
+import { useNameStore, type PartGradient, type ShirtPart } from "@store";
 import { useShirtMaterial } from "@hooks";
 import type { PBRMaps } from "@types";
 
 interface ColorLayerProps {
   part: ShirtPart;
   geometry: THREE.BufferGeometry;
-  colorGradientTexture: THREE.CanvasTexture;
+  baseColorTexture: THREE.CanvasTexture;
+  gradient: PartGradient;
   maps: PBRMaps;
+  renderOrder?: number;
 }
 
 const meshRaycast = THREE.Mesh.prototype.raycast;
@@ -19,10 +21,12 @@ const meshRaycast = THREE.Mesh.prototype.raycast;
 export const ColorLayer = ({
   part,
   geometry,
-  colorGradientTexture,
+  baseColorTexture,
+  gradient,
   maps,
+  renderOrder = 0,
 }: ColorLayerProps) => {
-  const mat = useShirtMaterial(colorGradientTexture, maps);
+  const mat = useShirtMaterial(baseColorTexture, maps, gradient, part);
   const isNameVisible = useNameStore(({ isVisible }) => isVisible);
   const meshRef = useRef<THREE.Mesh>(null);
 
@@ -42,7 +46,7 @@ export const ColorLayer = ({
       ref={meshRef}
       geometry={geometry}
       material={mat}
-      renderOrder={0}
+      renderOrder={renderOrder}
     />
   );
 };

@@ -35,7 +35,6 @@ export const useGradientStore = create<GradientStore>((set) => ({
     back: { ...DEFAULT_GRADIENT },
     sleeve_left: { ...DEFAULT_GRADIENT },
     sleeve_right: { ...DEFAULT_GRADIENT },
-    collar: { ...DEFAULT_GRADIENT },
   },
 
   setGradientForSelected: (gradient) =>

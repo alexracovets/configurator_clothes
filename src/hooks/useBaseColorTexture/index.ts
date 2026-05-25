@@ -1,0 +1,1 @@
+export { useBaseColorTexture } from "./useBaseColorTexture";

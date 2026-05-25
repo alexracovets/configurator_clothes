@@ -8,6 +8,7 @@ interface PatternLayerProps {
   texture: THREE.Texture;
   patternOpacity: number;
   patternColor: string;
+  renderOrder?: number;
 }
 
 export const PatternLayer = ({
@@ -15,6 +16,7 @@ export const PatternLayer = ({
   texture,
   patternOpacity,
   patternColor,
+  renderOrder = 2,
 }: PatternLayerProps) => {
   const mat = useMemo(() => {
     const m = new THREE.MeshStandardMaterial({
@@ -33,5 +35,5 @@ export const PatternLayer = ({
     return m;
   }, [texture, patternOpacity, patternColor]);
 
-  return <mesh geometry={geometry} material={mat} renderOrder={2} />;
-}
+  return <mesh geometry={geometry} material={mat} renderOrder={renderOrder} />;
+};

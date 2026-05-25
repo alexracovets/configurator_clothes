@@ -1,11 +1,9 @@
 "use client";
 
-import * as THREE from "three";
-
 import { useColorStore, usePatternStore, useGradientStore } from "@store";
-import { useColorGradientTexture, useSvgTexture } from "@hooks";
+import { useBaseColorTexture, useSvgTexture } from "@hooks";
+import { getPartRenderOrder } from "@utils";
 import { ColorLayer } from "../ColorLayer";
-import { GradientLayer } from "../GradientLayer";
 import { PatternLayer } from "../PatternLayer";
 import type { PBRMaps } from "@types";
 import type { LayerConfig } from "@types";
@@ -24,34 +22,30 @@ export const PartLayers = ({ layer, maps }: PartLayersProps) => {
   const gradient = partGradients[layer.part];
   const patternUrl = (partPatterns as Record<string, string>)[layer.part] || layer.defaultPatternUrl || "";
 
-  const colorGradientTexture = useColorGradientTexture(gradient, baseColor);
+  const baseColorTexture = useBaseColorTexture(baseColor);
   const patternTexture = useSvgTexture(patternUrl);
+  const partRenderOrder = getPartRenderOrder(layer.part);
 
   return (
     <>
-      {/* Layer 0 — base color + PBR */}
+      {/* Layer 0 — base color + shader gradient + PBR maps */}
       <ColorLayer
         part={layer.part}
         geometry={layer.geometry}
-        colorGradientTexture={colorGradientTexture}
+        baseColorTexture={baseColorTexture}
+        gradient={gradient}
         maps={maps}
+        renderOrder={partRenderOrder}
       />
 
-      {/* Layer 1 — gradient overlay */}
-      {gradient.enabled && (
-        <GradientLayer
-          geometry={layer.geometry}
-          texture={colorGradientTexture as unknown as THREE.Texture}
-        />
-      )}
-
-      {/* Layer 2 — pattern / design */}
+      {/* Layer 1 — pattern / design */}
       {patternTexture && (
         <PatternLayer
           geometry={layer.geometry}
           texture={patternTexture}
           patternOpacity={patternOpacity}
           patternColor={patternColor}
+          renderOrder={partRenderOrder + 1}
         />
       )}
     </>

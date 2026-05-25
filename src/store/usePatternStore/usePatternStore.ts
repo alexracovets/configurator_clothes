@@ -14,7 +14,6 @@ export const SHIRT_PARTS: { key: ShirtPart; label: string; italianLabel: string 
   { key: "back",         label: "Back",        italianLabel: "Retro"    },
   { key: "sleeve_left",  label: "Left sleeve", italianLabel: "Manica 1" },
   { key: "sleeve_right", label: "Right sleeve",italianLabel: "Manica 2" },
-  { key: "collar",       label: "Collar",      italianLabel: "Colletto" },
 ];
 
 export const PATTERNS: PatternItem[] = [
@@ -41,7 +40,6 @@ export const usePatternStore = create<PatternStore>((set) => ({
     back: "",
     sleeve_left: "",
     sleeve_right: "",
-    collar: "",
   },
   patternOpacity: 0.8,
   patternColor: "#000000",

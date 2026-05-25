@@ -6,3 +6,4 @@ export {
   setOrbitLockedByNameTool,
 } from "./orbitFlag";
 export { hexToRgb } from "./hexToRgb";
+export { getPartRenderOrder } from "./partRenderOrder";
