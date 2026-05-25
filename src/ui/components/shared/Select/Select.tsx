@@ -76,14 +76,14 @@ function SelectContent({
         align={align}
         alignOffset={alignOffset}
         alignItemWithTrigger={alignItemWithTrigger}
-        className="isolate z-50"
+        className="isolate z-9999"
       >
         <SelectPrimitive.Popup
           data-slot="select-content"
           data-align-trigger={alignItemWithTrigger}
           className={cn(
             "relative isolate z-50 max-h-(--available-height) w-(--anchor-width) min-w-36 origin-(--transform-origin)",
-            "overflow-x-hidden overflow-y-auto shadow-md rounded-md",
+            "overflow-x-hidden overflow-y-auto shadow-md rounded-md bg-white",
             "data-[align-trigger=true]:animate-none",
             "data-[side=bottom]:slide-in-from-top-2 data-[side=inline-end]:slide-in-from-left-2 data-[side=inline-start]:slide-in-from-right-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
             "data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95",
@@ -118,11 +118,13 @@ function SelectLabel({
 function SelectItem({
   className,
   children,
+  style,
   ...props
-}: SelectPrimitive.Item.Props) {
+}: SelectPrimitive.Item.Props & { style?: React.CSSProperties }) {
   return (
     <SelectPrimitive.Item
       data-slot="select-item"
+      style={style}
       className={cn(
         "cursor-pointer p-2",
         "relative w-full flex items-center",

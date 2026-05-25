@@ -1,5 +1,5 @@
 import type { ChildrenType } from "@types";
-import { inter } from "@fonts";
+import { inter, oswald, bebasNeue, anton, russoOne, blackOpsOne } from "@fonts";
 
 import "@styles/globals.css";
 import { Geist } from "next/font/google";
@@ -18,6 +18,11 @@ const RootLayout = ({ children }: ChildrenType) => {
         inter.variable,
         "font-sans",
         geist.variable,
+        oswald.variable,
+        bebasNeue.variable,
+        anton.variable,
+        russoOne.variable,
+        blackOpsOne.variable,
       )}
     >
       <body className="h-full">{children}</body>

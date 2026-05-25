@@ -1,12 +1,17 @@
 import { create } from "zustand";
 
 export const FONTS = [
-  { label: "F1", value: "Arial" },
-  { label: "F2", value: "Georgia" },
-  { label: "F3", value: "Impact" },
-  { label: "F4", value: "Courier New" },
-  { label: "F5", value: "Trebuchet MS" },
+  { label: "Serie EA",      value: "--font-oswald",        canvasFont: "Oswald" },
+  { label: "Bebas Neue",    value: "--font-bebas-neue",    canvasFont: "Bebas Neue" },
+  { label: "Anton",         value: "--font-anton",         canvasFont: "Anton" },
+  { label: "Russo One",     value: "--font-russo-one",     canvasFont: "Russo One" },
+  { label: "Black Ops One", value: "--font-black-ops-one", canvasFont: "Black Ops One" },
 ];
+
+export const fontCssFamily = (cssVar: string) => `var(${cssVar})`;
+
+export const fontCanvasName = (cssVar: string): string =>
+  FONTS.find((f) => f.value === cssVar)?.canvasFont ?? cssVar;
 
 export const DEFAULT_NAME_TEXT = "PLAYER NAME";
 

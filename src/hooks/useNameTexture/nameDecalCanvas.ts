@@ -25,6 +25,16 @@ export interface NameDecalDrawParams {
   hoveredZone?: GizmoZone | null;
 }
 
+const CSS_VAR_TO_FONT: Record<string, string> = {
+  "--font-oswald": "Oswald",
+  "--font-bebas-neue": "Bebas Neue",
+  "--font-anton": "Anton",
+  "--font-russo-one": "Russo One",
+  "--font-black-ops-one": "Black Ops One",
+};
+
+const resolveFont = (font: string): string => CSS_VAR_TO_FONT[font] ?? font;
+
 const HANDLE_RADIUS = 26;
 const HANDLE_OFFSET = HANDLE_RADIUS + 6;
 const BOX_PAD_X = 28;
@@ -37,7 +47,8 @@ export const buildNameDecalLayout = (
   font: string,
   fontSize: number,
 ): NameDecalLayout => {
-  ctx.font = `bold ${fontSize}px "${font}"`;
+  ctx.font = `bold ${fontSize}px "${resolveFont(font)}"`;
+
   const metrics = ctx.measureText(text);
   const textW = metrics.width;
   const textH = fontSize * 1.1;
@@ -84,7 +95,8 @@ export const drawNameDecal = (
   const cx = NAME_DECAL_CANVAS_W / 2;
   const cy = NAME_DECAL_CANVAS_H / 2;
 
-  ctx.font = `bold ${fontSize}px "${font}"`;
+  ctx.font = `bold ${fontSize}px "${resolveFont(font)}"`;
+
   ctx.textAlign = "center";
   ctx.textBaseline = "middle";
 
@@ -143,19 +155,6 @@ const isInsideGizmoOuter = (pt: { x: number; y: number }, layout: NameDecalLayou
   );
 };
 
-const quadrantHandle = (
-  pt: { x: number; y: number },
-  layout: NameDecalLayout,
-): GizmoHandle => {
-  const box = layout.textBox;
-  const cx = box.x + box.w / 2;
-  const cy = box.y + box.h / 2;
-
-  if (pt.x < cx && pt.y < cy) return "copy";
-  if (pt.x < cx && pt.y >= cy) return "delete";
-  if (pt.x >= cx && pt.y < cy) return "rotate";
-  return "resize";
-};
 
 const hitTestAtCanvasPoint = (
   pt: { x: number; y: number },
@@ -165,57 +164,26 @@ const hitTestAtCanvasPoint = (
 
   if (isInsideTextBox(pt, layout.textBox)) return "body";
 
-  return quadrantHandle(pt, layout);
-};
-
-const resolveCanvasPoint = (
-  uv: THREE.Vector2,
-  layout: NameDecalLayout,
-): { x: number; y: number } | null => {
-  const candidates = uvToCanvasCandidates(uv);
-  let bestPt: { x: number; y: number } | null = null;
-  let bestScore = Infinity;
-
-  for (const pt of candidates) {
-    if (!isInsideGizmoOuter(pt, layout)) continue;
-
-    const zone = hitTestAtCanvasPoint(pt, layout);
-    if (!zone || zone === "body") {
-      if (zone === "body") {
-        const cx = layout.textBox.x + layout.textBox.w / 2;
-        const cy = layout.textBox.y + layout.textBox.h / 2;
-        const score = Math.hypot(pt.x - cx, pt.y - cy);
-        if (score < bestScore) {
-          bestScore = score;
-          bestPt = pt;
-        }
-      }
-      continue;
-    }
-
-    const score = distToHandle(pt, layout, zone);
-    if (score < bestScore) {
-      bestScore = score;
-      bestPt = pt;
-    }
+  // Check each handle by actual distance — not just quadrant
+  const hitRadius = layout.handleRadius + 10;
+  for (const handle of GIZMO_HANDLES) {
+    if (distToHandle(pt, layout, handle) <= hitRadius) return handle;
   }
 
-  if (bestPt) return bestPt;
-
-  for (const pt of candidates) {
-    if (isInsideGizmoOuter(pt, layout)) return pt;
-  }
-
-  return candidates[0] ?? null;
+  return null;
 };
 
 export const hitTestNameDecal = (
   uv: THREE.Vector2,
   layout: NameDecalLayout,
 ): GizmoZone => {
-  const pt = resolveCanvasPoint(uv, layout);
-  if (!pt) return null;
-  return hitTestAtCanvasPoint(pt, layout);
+  // Try both UV candidates (flipped and non-flipped) and return
+  // the first one that hits a real zone — never fall back to a guess.
+  for (const pt of uvToCanvasCandidates(uv)) {
+    const zone = hitTestAtCanvasPoint(pt, layout);
+    if (zone !== null) return zone;
+  }
+  return null;
 };
 
 export const gizmoCursor = (zone: GizmoZone): string => {
