@@ -21,17 +21,13 @@ export const useColorStore = create<ColorStore>((set) => ({
   },
 
   setColorForSelected: (color) =>
-    set((state) => {
+    set(({ partColors }) => {
       const { selectedParts } = useSelectionStore.getState();
       const updates: Partial<PartColors> = {};
-      selectedParts.forEach((p) => {
-        updates[p] = color;
-      });
-      return { partColors: { ...state.partColors, ...updates } };
+      selectedParts.forEach((part) => { updates[part] = color; });
+      return { partColors: { ...partColors, ...updates } };
     }),
 
   setPartColor: (part, color) =>
-    set((state) => ({
-      partColors: { ...state.partColors, [part]: color },
-    })),
+    set(({ partColors }) => ({ partColors: { ...partColors, [part]: color } })),
 }));

@@ -19,7 +19,9 @@
       "WebFetch(domain:pmndrs.github.io)",
       "WebFetch(domain:drei.docs.pmnd.rs)",
       "Bash(npx tsc *)",
-      "Bash(grep -v \"^[[:space:]]*//\")"
+      "Bash(grep -v \"^[[:space:]]*//\")",
+      "Bash(node -e \"const t = require\\('three'\\); console.log\\(Object.keys\\(t\\).filter\\(k => k.toLowerCase\\(\\).includes\\('merge'\\)\\)\\)\")",
+      "Bash(node -e \"const t = require\\('three/examples/jsm/utils/BufferGeometryUtils.js'\\); console.log\\(Object.keys\\(t\\)\\)\")"
     ]
   }
 }

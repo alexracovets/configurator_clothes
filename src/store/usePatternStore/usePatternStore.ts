@@ -47,19 +47,17 @@ export const usePatternStore = create<PatternStore>((set) => ({
   patternColor: "#000000",
 
   setPatternForSelected: (url) =>
-    set((state) => {
+    set(({ partPatterns }) => {
       const { selectedParts } = useSelectionStore.getState();
       const updates: Partial<PartPatterns> = {};
-      selectedParts.forEach((p) => {
-        updates[p] = url;
-      });
-      return { partPatterns: { ...state.partPatterns, ...updates } };
+      selectedParts.forEach((part) => { updates[part] = url; });
+      return { partPatterns: { ...partPatterns, ...updates } };
     }),
 
   setPatternForAll: (url) =>
-    set((state) => ({
+    set(({ partPatterns }) => ({
       partPatterns: Object.fromEntries(
-        Object.keys(state.partPatterns).map((k) => [k, url]),
+        Object.keys(partPatterns).map((k) => [k, url]),
       ) as PartPatterns,
     })),
 

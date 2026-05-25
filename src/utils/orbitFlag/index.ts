@@ -1,1 +1,5 @@
-export { orbitFlag } from "./orbitFlag";
+export {
+  orbitFlag,
+  orbitControlsRef,
+  setOrbitLockedByNameTool,
+} from "./orbitFlag";

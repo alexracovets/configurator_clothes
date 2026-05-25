@@ -15,10 +15,8 @@ export const useStepsStore = create<StepsStore>((set) => ({
   setStep: (index) => set({ currentStep: index }),
 
   prevStep: () =>
-    set((state) => ({ currentStep: Math.max(0, state.currentStep - 1) })),
+    set(({ currentStep }) => ({ currentStep: Math.max(0, currentStep - 1) })),
 
   nextStep: () =>
-    set((state) => ({
-      currentStep: Math.min(TOTAL_STEPS - 1, state.currentStep + 1),
-    })),
+    set(({ currentStep }) => ({ currentStep: Math.min(TOTAL_STEPS - 1, currentStep + 1) })),
 }));

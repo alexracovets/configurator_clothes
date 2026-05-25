@@ -1,11 +1,11 @@
 "use client";
 
-import { useMemo, useRef, useEffect } from "react";
+import { useMemo } from "react";
 import { ThreeElements } from "@react-three/fiber";
 import { useGLTF, useTexture } from "@react-three/drei";
 import * as THREE from "three";
 
-import { LayoutsModalStructure, NameLayer } from "@molecules";
+import { LayoutsModalStructure } from "@molecules";
 import type { LayerConfig } from "@types";
 
 const MODEL_PATH = "/models/pbr/crewneck.gltf";
@@ -30,18 +30,6 @@ interface CrewneckGLTF {
 export const PDRTest = (props: ThreeElements["group"]) => {
   const { nodes, materials } = useGLTF(MODEL_PATH) as unknown as CrewneckGLTF;
   const { insideAo } = useTexture({ insideAo: "/models/pbr/inside_ao.jpg" });
-
-  // Ref to the hidden back mesh for Decal projection
-  const backMeshRef = useRef<THREE.Mesh>(null);
-
-  // Copy matrixWorld from the GLTF node so Decal projects correctly
-  useEffect(() => {
-    const mesh = backMeshRef.current;
-    if (!mesh) return;
-    // The GLTF back node has identity matrix (geometry already in world space after Center)
-    // We just need to force matrixWorld update
-    mesh.updateMatrixWorld(true);
-  });
 
   const layerConfigs: LayerConfig[] = [
     { part: "front", geometry: nodes.crewneck_front.geometry },
@@ -82,16 +70,6 @@ export const PDRTest = (props: ThreeElements["group"]) => {
       <mesh geometry={nodes.Mesh002.geometry} material={insideMat} />
       <mesh geometry={nodes.Mesh002_1.geometry} material={materials.sweatband} />
       <mesh geometry={nodes.Mesh002_2.geometry} material={materials.label} />
-
-      {/* Hidden back mesh — used by Decal for projection surface */}
-      <mesh
-        ref={backMeshRef}
-        geometry={nodes.crewneck_back.geometry}
-        visible={false}
-        matrixAutoUpdate={false}
-      />
-
-      <NameLayer meshRef={backMeshRef} />
     </LayoutsModalStructure>
   );
 };

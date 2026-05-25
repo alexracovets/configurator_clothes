@@ -1,6 +1,5 @@
 "use client";
 
-import { useEffect } from "react";
 import * as THREE from "three";
 
 interface BackMeshProps {
@@ -15,7 +14,6 @@ export const BackMesh = ({ geometry, onMount }: BackMeshProps) => {
       visible={false}
       ref={(mesh) => {
         if (mesh) {
-          // Force matrix update so Decal can use it immediately
           mesh.updateMatrixWorld(true);
           onMount(mesh);
         }

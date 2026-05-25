@@ -20,13 +20,13 @@ export const useSelectionStore = create<SelectionStore>((set) => ({
   meshRefs: {},
 
   registerMesh: (part, mesh) =>
-    set((state) => ({ meshRefs: { ...state.meshRefs, [part]: mesh } })),
+    set(({ meshRefs }) => ({ meshRefs: { ...meshRefs, [part]: mesh } })),
 
   setHoveredPart: (part) => set({ hoveredPart: part }),
 
   togglePart: (part) =>
-    set((state) => {
-      const next = new Set(state.selectedParts);
+    set(({ selectedParts }) => {
+      const next = new Set(selectedParts);
       if (next.has(part)) {
         if (next.size > 1) next.delete(part);
       } else {

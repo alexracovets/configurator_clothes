@@ -39,20 +39,18 @@ export const useGradientStore = create<GradientStore>((set) => ({
   },
 
   setGradientForSelected: (gradient) =>
-    set((state) => {
+    set(({ partGradients }) => {
       const { selectedParts } = useSelectionStore.getState();
-      const next = { ...state.partGradients };
-      selectedParts.forEach((p) => {
-        next[p] = { ...next[p], ...gradient };
-      });
+      const next = { ...partGradients };
+      selectedParts.forEach((part) => { next[part] = { ...next[part], ...gradient }; });
       return { partGradients: next };
     }),
 
   setPartGradient: (part, gradient) =>
-    set((state) => ({
+    set(({ partGradients }) => ({
       partGradients: {
-        ...state.partGradients,
-        [part]: { ...state.partGradients[part], ...gradient },
+        ...partGradients,
+        [part]: { ...partGradients[part], ...gradient },
       },
     })),
 }));

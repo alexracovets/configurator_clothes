@@ -31,6 +31,7 @@ export const PartLayers = ({ layer, maps }: PartLayersProps) => {
     <>
       {/* Layer 0 — base color + PBR */}
       <ColorLayer
+        part={layer.part}
         geometry={layer.geometry}
         colorGradientTexture={colorGradientTexture}
         maps={maps}

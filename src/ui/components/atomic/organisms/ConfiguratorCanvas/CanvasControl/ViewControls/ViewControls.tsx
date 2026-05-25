@@ -4,7 +4,7 @@ import { OrbitControls } from "@react-three/drei";
 import { useEffect, useRef, type ComponentRef } from "react";
 import { useFrame } from "@react-three/fiber";
 
-import { orbitFlag } from "@utils";
+import { orbitFlag, orbitControlsRef } from "@utils";
 
 const MIN_DISTANCE = 0.5;
 const MAX_DISTANCE = 3;
@@ -50,7 +50,8 @@ const ViewControls = () => {
 
   useFrame(() => {
     if (!orbitRef.current) return;
-    orbitRef.current.enabled = orbitFlag.enabled;
+    orbitControlsRef.current = orbitRef.current;
+    orbitRef.current.enabled = orbitFlag.enabled && !orbitFlag.nameToolActive;
     const orbit = orbitRef.current;
     const anim = animRef.current;
 

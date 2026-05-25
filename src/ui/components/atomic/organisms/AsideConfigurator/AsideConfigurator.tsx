@@ -9,10 +9,17 @@ import { ScrollArea } from "@shared";
 import { useStepsStore } from "@store";
 import { orbitFlag } from "@utils";
 
-const STEP_PANELS = [StepDesign, StepColor, StepSfumatura, StepName, null, null];
+const STEP_PANELS = [
+  StepDesign,
+  StepColor,
+  StepSfumatura,
+  StepName,
+  null,
+  null,
+];
 
 const AsideConfigurator = () => {
-  const { currentStep } = useStepsStore();
+  const currentStep = useStepsStore(({ currentStep }) => currentStep);
 
   const data = {
     name: "Maglia Federer",
@@ -28,6 +35,7 @@ const AsideConfigurator = () => {
   return (
     <Grid variant="aside_configurator" asChild>
       <aside
+        className="pointer-events-auto"
         onPointerEnter={() => (orbitFlag.enabled = false)}
         onPointerLeave={() => (orbitFlag.enabled = true)}
       >
