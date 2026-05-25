@@ -5,8 +5,8 @@ export interface PBRMaps {
   bakeNormal: THREE.Texture;
   /** Packed AO (R) + Roughness (G) bake — UV1 (TEXCOORD_1) */
   bakeAoRoughness: THREE.Texture;
-  /** Tiled fabric detail normals — UV0 (TEXCOORD_0) */
+  /** Tiled fabric normals — inside mesh (UV0) */
   fabricNormal: THREE.Texture;
-  /** Tiled fabric roughness — UV0 (TEXCOORD_0) */
+  /** Tiled fabric roughness — exterior mesh (UV0) */
   fabricRoughness: THREE.Texture;
 }

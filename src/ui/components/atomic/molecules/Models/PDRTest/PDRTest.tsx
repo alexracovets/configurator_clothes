@@ -52,10 +52,12 @@ export const PDRTest = (props: ThreeElements["group"]) => {
   const insideMat = useMemo(() => {
     const m = materials.crewneck_inside.clone();
     const aoTex = insideAo.clone() as THREE.Texture;
+    aoTex.flipY = false;
     aoTex.colorSpace = THREE.NoColorSpace;
     aoTex.needsUpdate = true;
     m.aoMap = aoTex;
     m.aoMapIntensity = 1.0;
+    m.roughnessMap = null;
 
     const fabricNorm = new THREE.TextureLoader().load(PBR_TEXTURE_PATHS.fabricNormal);
     fabricNorm.wrapS = THREE.RepeatWrapping;
@@ -67,6 +69,10 @@ export const PDRTest = (props: ThreeElements["group"]) => {
     m.normalScale.set(0.4, 0.4);
     m.roughness = 0.95;
     m.metalness = 0.0;
+    m.side = THREE.FrontSide;
+    m.polygonOffset = true;
+    m.polygonOffsetFactor = 1;
+    m.polygonOffsetUnits = 2;
     m.needsUpdate = true;
     return m;
   }, [materials.crewneck_inside, insideAo]);

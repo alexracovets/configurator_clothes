@@ -1,0 +1,1 @@
+export { shirtRoughnessFragment } from "./shirtRoughnessFragment";
