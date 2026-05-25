@@ -1,45 +1,20 @@
 import { create } from "zustand";
 
-export const FONTS = [
-  { label: "Serie EA",      value: "--font-oswald",        canvasFont: "Oswald" },
-  { label: "Bebas Neue",    value: "--font-bebas-neue",    canvasFont: "Bebas Neue" },
-  { label: "Anton",         value: "--font-anton",         canvasFont: "Anton" },
-  { label: "Russo One",     value: "--font-russo-one",     canvasFont: "Russo One" },
-  { label: "Black Ops One", value: "--font-black-ops-one", canvasFont: "Black Ops One" },
-];
+import {
+  FONTS,
+  fontCssFamily,
+  fontCanvasName,
+  DECAL_DEPTH,
+  clampDecalScale,
+  fontSizeToDecalScale,
+  decalWidthToFontSize,
+} from "../decal";
 
-export const fontCssFamily = (cssVar: string) => `var(${cssVar})`;
-
-export const fontCanvasName = (cssVar: string): string =>
-  FONTS.find((f) => f.value === cssVar)?.canvasFont ?? cssVar;
+export { FONTS, fontCssFamily, fontCanvasName, fontSizeToDecalScale, decalWidthToFontSize };
 
 export const DEFAULT_NAME_TEXT = "PLAYER NAME";
 
-export const NAME_DECAL_SCALE_MIN = 0.1;
-export const NAME_DECAL_SCALE_MAX = 0.8;
-export const NAME_DECAL_ASPECT = 1024 / 256;
-export const NAME_DECAL_DEPTH = 0.3;
-
-const REF_NAME_FONT_SIZE = 64;
-const REF_NAME_DECAL_WIDTH = 1;
-const FONT_SIZE_MIN = 24;
-const FONT_SIZE_MAX = 120;
-
-export const clampNameDecalScale = (width: number): [number, number, number] => {
-  const w = Math.min(NAME_DECAL_SCALE_MAX, Math.max(NAME_DECAL_SCALE_MIN, width));
-  return [w, w / NAME_DECAL_ASPECT, NAME_DECAL_DEPTH];
-};
-
-export const fontSizeToDecalScale = (fontSize: number): [number, number, number] =>
-  clampNameDecalScale(REF_NAME_DECAL_WIDTH * (fontSize / REF_NAME_FONT_SIZE));
-
-export const decalWidthToFontSize = (width: number): number =>
-  Math.round(
-    Math.min(
-      FONT_SIZE_MAX,
-      Math.max(FONT_SIZE_MIN, REF_NAME_FONT_SIZE * (width / REF_NAME_DECAL_WIDTH)),
-    ),
-  );
+export const NAME_DECAL_DEPTH = DECAL_DEPTH;
 
 export interface NameInstance {
   id: string;
@@ -126,7 +101,7 @@ export const useNameStore = create<NameStore>((set, get) => ({
         if (patch.fontSize !== undefined) {
           next.decalScale = fontSizeToDecalScale(patch.fontSize);
         } else if (patch.decalScale !== undefined) {
-          next.decalScale = clampNameDecalScale(patch.decalScale[0]);
+          next.decalScale = clampDecalScale(patch.decalScale[0]);
           next.fontSize = decalWidthToFontSize(next.decalScale[0]);
         }
 

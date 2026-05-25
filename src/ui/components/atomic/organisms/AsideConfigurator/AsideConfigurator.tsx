@@ -1,6 +1,6 @@
 "use client";
 
-import { StepDesign, StepColor, StepSfumatura, StepName } from "@molecules";
+import { StepDesign, StepColor, StepSfumatura, StepName, StepNumber } from "@molecules";
 import { AsidePrice } from "./AsidePrice";
 import { AsideName } from "./AsideName";
 import { Flex, Grid } from "@atoms";
@@ -14,7 +14,7 @@ const STEP_PANELS = [
   StepColor,
   StepSfumatura,
   StepName,
-  null,
+  StepNumber,
   null,
 ];
 

@@ -6,11 +6,10 @@ import { Decal } from "@react-three/drei";
 import { useThree } from "@react-three/fiber";
 
 import {
-  useNameStore,
+  useNumberStore,
   DECAL_SCALE_MIN,
   DECAL_SCALE_MAX,
   clampDecalScale,
-  type NameInstance,
 } from "@store";
 import { setOrbitLockedByNameTool } from "@utils";
 import {
@@ -21,11 +20,11 @@ import {
   type GizmoHandle,
   type GizmoZone,
 } from "@hooks";
+import type { NumberInstance } from "@store";
 
 type DragMode = "move" | GizmoHandle | null;
 
 interface DragState {
-  instanceId: string | null;
   mode: DragMode;
   startX: number;
   startY: number;
@@ -39,14 +38,14 @@ const SCALE_SENS = 0.008;
 const _worldHit = new THREE.Vector3();
 const _localHit = new THREE.Vector3();
 
-const NameDecalInstance = ({
+const NumberDecalInstance = ({
   instance,
   hoverZone,
   onMeshRef,
 }: {
-  instance: NameInstance;
+  instance: NumberInstance;
   hoverZone: GizmoZone;
-  onMeshRef: (id: string, mesh: THREE.Mesh | null) => void;
+  onMeshRef: (mesh: THREE.Mesh | null) => void;
 }) => {
   const texture = useDecalTexture({
     text: instance.text,
@@ -61,7 +60,7 @@ const NameDecalInstance = ({
 
   return (
     <Decal
-      ref={(mesh) => onMeshRef(instance.id, mesh)}
+      ref={onMeshRef}
       position={instance.decalPosition}
       rotation={instance.decalRotation}
       scale={instance.decalScale}
@@ -79,23 +78,19 @@ const NameDecalInstance = ({
   );
 };
 
-const NameLayer = () => {
-  const isVisible = useNameStore(({ isVisible }) => isVisible);
-  const instances = useNameStore(({ instances }) => instances);
-  const setActiveId = useNameStore(({ setActiveId }) => setActiveId);
-  const updateInstance = useNameStore(({ updateInstance }) => updateInstance);
-  const duplicateInstance = useNameStore(({ duplicateInstance }) => duplicateInstance);
-  const removeInstance = useNameStore(({ removeInstance }) => removeInstance);
+const NumberLayer = () => {
+  const isVisible = useNumberStore(({ isVisible }) => isVisible);
+  const instance = useNumberStore(({ instance }) => instance);
+  const update = useNumberStore(({ update }) => update);
+  const setVisible = useNumberStore(({ setVisible }) => setVisible);
 
   const [hoverZone, setHoverZone] = useState<GizmoZone>(null);
-  const [hoverInstanceId, setHoverInstanceId] = useState<string | null>(null);
 
   const { gl, camera, raycaster } = useThree();
   const canvasElRef = useRef<HTMLCanvasElement | null>(null);
-  const meshRefs = useRef<Map<string, THREE.Mesh>>(new Map());
-  const instancesRef = useRef(instances);
+  const meshRef = useRef<THREE.Mesh | null>(null);
+  const instanceRef = useRef(instance);
   const dragRef = useRef<DragState>({
-    instanceId: null,
     mode: null,
     startX: 0,
     startY: 0,
@@ -105,17 +100,11 @@ const NameLayer = () => {
   });
   const pointer = useRef(new THREE.Vector2());
 
-  useEffect(() => {
-    canvasElRef.current = gl.domElement;
-  }, [gl]);
+  useEffect(() => { canvasElRef.current = gl.domElement; }, [gl]);
+  useEffect(() => { instanceRef.current = instance; }, [instance]);
 
-  useEffect(() => {
-    instancesRef.current = instances;
-  }, [instances]);
-
-  const registerMesh = (id: string, mesh: THREE.Mesh | null) => {
-    if (mesh) meshRefs.current.set(id, mesh);
-    else meshRefs.current.delete(id);
+  const registerMesh = (mesh: THREE.Mesh | null) => {
+    meshRef.current = mesh;
   };
 
   useEffect(() => {
@@ -129,9 +118,7 @@ const NameLayer = () => {
     const el = canvasElRef.current;
     if (!el) return;
 
-    const setCursor = (zone: GizmoZone) => {
-      el.style.cursor = gizmoCursor(zone);
-    };
+    const setCursor = (zone: GizmoZone) => { el.style.cursor = gizmoCursor(zone); };
 
     const setPointerFromClient = (clientX: number, clientY: number) => {
       const rect = el.getBoundingClientRect();
@@ -140,7 +127,7 @@ const NameLayer = () => {
     };
 
     const getHitLocal = (clientX: number, clientY: number) => {
-      const decalMesh = meshRefs.current.values().next().value;
+      const decalMesh = meshRef.current;
       const mesh = decalMesh?.parent as THREE.Mesh | null;
       if (!mesh) return null;
 
@@ -154,52 +141,37 @@ const NameLayer = () => {
       _worldHit.copy(hits[0].point);
       _localHit.copy(_worldHit);
       mesh.worldToLocal(_localHit);
-
       return _localHit.clone();
     };
 
-    const pickInstance = (clientX: number, clientY: number) => {
+    const pickZone = (clientX: number, clientY: number): GizmoZone => {
+      const mesh = meshRef.current;
+      if (!mesh || !instanceRef.current) return null;
+
       setPointerFromClient(clientX, clientY);
       raycaster.setFromCamera(pointer.current, camera);
+      const hits = raycaster.intersectObject(mesh, false);
+      if (!hits.length || !hits[0].uv) return null;
 
-      let best: { id: string; distance: number; uv: THREE.Vector2 } | null = null;
-
-      for (const { id } of instancesRef.current) {
-        const mesh = meshRefs.current.get(id);
-        if (!mesh) continue;
-        const hits = raycaster.intersectObject(mesh, false);
-        if (!hits.length || !hits[0].uv) continue;
-        if (!best || hits[0].distance < best.distance) {
-          best = { id, distance: hits[0].distance, uv: hits[0].uv };
-        }
-      }
-
-      if (!best) return null;
-
-      const inst = instancesRef.current.find(({ id }) => id === best!.id);
-      if (!inst) return null;
-
+      const inst = instanceRef.current;
       const canvas = document.createElement("canvas");
       const ctx = canvas.getContext("2d")!;
       const layout = buildDecalLayout(ctx, inst.text, inst.font, inst.fontSize);
-      const zone = hitTestDecal(best.uv, layout);
-
-      return { id: best.id, zone };
+      return hitTestDecal(hits[0].uv, layout);
     };
 
     const applyDrag = (e: PointerEvent) => {
       const drag = dragRef.current;
-      if (!drag.mode || !drag.instanceId) return;
+      if (!drag.mode) return;
 
       const dx = e.clientX - drag.startX;
       const dy = e.clientY - drag.startY;
-      const id = drag.instanceId;
 
       if (drag.mode === "move") {
         const hitLocal = getHitLocal(e.clientX, e.clientY);
         if (!hitLocal) return;
-        const inst = instancesRef.current.find(({ id: instId }) => instId === id);
-        updateInstance(id, {
+        const inst = instanceRef.current;
+        update({
           decalPosition: [
             hitLocal.x + drag.grabOffset[0],
             hitLocal.y + drag.grabOffset[1],
@@ -210,11 +182,9 @@ const NameLayer = () => {
       }
 
       if (drag.mode === "rotate") {
-        const inst = instancesRef.current.find(({ id: instId }) => instId === id);
+        const inst = instanceRef.current;
         const r = inst?.decalRotation ?? [Math.PI, 0, 0];
-        updateInstance(id, {
-          decalRotation: [r[0], r[1], drag.startRotZ - dy * ROTATE_SENS],
-        });
+        update({ decalRotation: [r[0], r[1], drag.startRotZ - dy * ROTATE_SENS] });
         return;
       }
 
@@ -223,45 +193,34 @@ const NameLayer = () => {
           DECAL_SCALE_MAX,
           Math.max(DECAL_SCALE_MIN, drag.startScale + (dx - dy) * SCALE_SENS),
         );
-        updateInstance(id, { decalScale: clampDecalScale(width) });
+        update({ decalScale: clampDecalScale(width) });
       }
     };
 
     const endDrag = (e: PointerEvent) => {
       dragRef.current.mode = null;
-      dragRef.current.instanceId = null;
-      const pick = pickInstance(e.clientX, e.clientY);
-      setHoverInstanceId(pick?.id ?? null);
-      setHoverZone(pick?.zone ?? null);
-      setOrbitLockedByNameTool(!!pick?.zone);
-      setCursor(pick?.zone ?? null);
+      const zone = pickZone(e.clientX, e.clientY);
+      setHoverZone(zone);
+      setOrbitLockedByNameTool(!!zone);
+      setCursor(zone);
     };
 
-    const startDrag = (
-      pick: { id: string; zone: GizmoZone },
-      inst: NameInstance,
-      e: PointerEvent,
-    ) => {
-      if (pick.zone !== "body" && pick.zone !== "rotate" && pick.zone !== "resize") return;
+    const startDrag = (zone: GizmoZone, inst: NumberInstance, e: PointerEvent) => {
+      if (zone !== "body" && zone !== "rotate" && zone !== "resize") return;
 
       setOrbitLockedByNameTool(true);
       e.preventDefault();
       e.stopImmediatePropagation();
 
       let grabOffset: [number, number, number] = [0, 0, 0];
-      if (pick.zone === "body") {
+      if (zone === "body") {
         const hitLocal = getHitLocal(e.clientX, e.clientY);
         if (!hitLocal) return;
-        grabOffset = [
-          inst.decalPosition[0] - hitLocal.x,
-          inst.decalPosition[1] - hitLocal.y,
-          0,
-        ];
+        grabOffset = [inst.decalPosition[0] - hitLocal.x, inst.decalPosition[1] - hitLocal.y, 0];
       }
 
       dragRef.current = {
-        instanceId: pick.id,
-        mode: pick.zone === "body" ? "move" : pick.zone,
+        mode: zone === "body" ? "move" : zone,
         startX: e.clientX,
         startY: e.clientY,
         grabOffset,
@@ -269,14 +228,13 @@ const NameLayer = () => {
         startScale: inst.decalScale[0],
       };
 
-      setCursor(pick.zone);
+      setCursor(zone);
 
       const onMove = (ev: PointerEvent) => {
         ev.preventDefault();
         ev.stopImmediatePropagation();
         applyDrag(ev);
       };
-
       const onUp = (ev: PointerEvent) => {
         ev.preventDefault();
         ev.stopImmediatePropagation();
@@ -291,45 +249,39 @@ const NameLayer = () => {
 
     const onPointerMove = (e: PointerEvent) => {
       if (dragRef.current.mode) return;
-      const pick = pickInstance(e.clientX, e.clientY);
-      setHoverInstanceId(pick?.id ?? null);
-      setHoverZone(pick?.zone ?? null);
-      setOrbitLockedByNameTool(!!pick?.zone);
-      setCursor(pick?.zone ?? null);
+      const zone = pickZone(e.clientX, e.clientY);
+      setHoverZone(zone);
+      setOrbitLockedByNameTool(!!zone);
+      setCursor(zone);
     };
 
     const onPointerDown = (e: PointerEvent) => {
-      const pick = pickInstance(e.clientX, e.clientY);
-      if (!pick?.zone) return;
+      const zone = pickZone(e.clientX, e.clientY);
+      if (!zone) return;
 
-      const inst = instancesRef.current.find(({ id }) => id === pick.id);
+      const inst = instanceRef.current;
       if (!inst) return;
 
       e.stopImmediatePropagation();
       e.preventDefault();
       setOrbitLockedByNameTool(true);
-      setActiveId(pick.id);
-      setCursor(pick.zone);
+      setCursor(zone);
 
-      if (pick.zone === "copy") {
-        duplicateInstance(pick.id);
-        return;
-      }
+      if (zone === "copy") return; // no duplicate for number
 
-      if (pick.zone === "delete") {
-        removeInstance(pick.id);
+      if (zone === "delete") {
+        setVisible(false);
         setOrbitLockedByNameTool(false);
         setCursor(null);
         return;
       }
 
-      startDrag(pick, inst, e);
+      startDrag(zone, inst, e);
     };
 
     const onPointerLeave = () => {
       if (dragRef.current.mode) return;
       setHoverZone(null);
-      setHoverInstanceId(null);
       setOrbitLockedByNameTool(false);
       setCursor(null);
     };
@@ -345,26 +297,19 @@ const NameLayer = () => {
       setOrbitLockedByNameTool(false);
       el.style.cursor = "auto";
     };
-  }, [camera, duplicateInstance, isVisible, raycaster, removeInstance, setActiveId, updateInstance]);
+  }, [camera, isVisible, raycaster, setVisible, update]);
 
-  useEffect(() => {
-    return () => setOrbitLockedByNameTool(false);
-  }, []);
+  useEffect(() => () => setOrbitLockedByNameTool(false), []);
 
-  if (!isVisible || instances.length === 0) return null;
+  if (!isVisible || !instance) return null;
 
   return (
-    <>
-      {instances.map((inst) => (
-        <NameDecalInstance
-          key={inst.id}
-          instance={inst}
-          hoverZone={inst.id === hoverInstanceId ? hoverZone : null}
-          onMeshRef={registerMesh}
-        />
-      ))}
-    </>
+    <NumberDecalInstance
+      instance={instance}
+      hoverZone={hoverZone}
+      onMeshRef={registerMesh}
+    />
   );
 };
 
-export { NameLayer };
+export { NumberLayer };

@@ -3,11 +3,11 @@
 import { useMemo } from "react";
 import type { ThreeElements } from "@react-three/fiber";
 
-import { PartLayers, NameLayer } from "@molecules";
+import { PartLayers, NameLayer, NumberLayer } from "@molecules";
 
 import type { LayerConfig, PBRTexturePaths } from "@types";
 import { usePBRMaps } from "@hooks";
-import { useNameStore } from "@store";
+import { useNameStore, useNumberStore } from "@store";
 
 type GroupProps = ThreeElements["group"];
 
@@ -25,9 +25,15 @@ const LayoutsModalStructure = ({
 }: LayoutsModalStructureProps) => {
   const maps = usePBRMaps(pbrTexturePaths);
   const isNameVisible = useNameStore(({ isVisible }) => isVisible);
+  const isNumberVisible = useNumberStore(({ isVisible }) => isVisible);
 
   const backGeometry = useMemo(
     () => layerConfigs.find((l) => l.part === "back")?.geometry ?? null,
+    [layerConfigs],
+  );
+
+  const frontGeometry = useMemo(
+    () => layerConfigs.find((l) => l.part === "front")?.geometry ?? null,
     [layerConfigs],
   );
 
@@ -41,6 +47,13 @@ const LayoutsModalStructure = ({
         <mesh geometry={backGeometry} renderOrder={5}>
           <meshBasicMaterial transparent opacity={0} depthWrite={false} colorWrite={false} />
           {isNameVisible && <NameLayer />}
+        </mesh>
+      )}
+
+      {frontGeometry && (
+        <mesh geometry={frontGeometry} renderOrder={5}>
+          <meshBasicMaterial transparent opacity={0} depthWrite={false} colorWrite={false} />
+          {isNumberVisible && <NumberLayer />}
         </mesh>
       )}
 

@@ -3,3 +3,4 @@ export { GradientLayer } from "./GradientLayer";
 export { PatternLayer } from "./PatternLayer";
 export { PartLayers } from "./PartLayers";
 export { NameLayer } from "./NameLayer";
+export { NumberLayer } from "./NumberLayer";

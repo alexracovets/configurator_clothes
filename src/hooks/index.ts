@@ -4,12 +4,12 @@ export { useShirtMaterial } from "./useShirtMaterial";
 export { useSvgTexture } from "./useSvgTexture";
 export { usePBRMaps } from "./usePBRMaps";
 export {
-  useNameTexture,
-  buildNameDecalLayout,
-  drawNameDecal,
-  hitTestNameDecal,
+  useDecalTexture,
+  buildDecalLayout,
+  drawDecal,
+  hitTestDecal,
   gizmoCursor,
-  NAME_DECAL_CANVAS_W,
-  NAME_DECAL_CANVAS_H,
+  DECAL_CANVAS_W,
+  DECAL_CANVAS_H,
 } from "./useNameTexture";
-export type { GizmoHandle, GizmoZone, NameDecalLayout } from "./useNameTexture";
+export type { GizmoHandle, GizmoZone, DecalLayout } from "./useNameTexture";

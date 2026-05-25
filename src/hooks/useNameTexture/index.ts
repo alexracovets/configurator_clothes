@@ -1,10 +1,10 @@
-export { useNameTexture } from "./useNameTexture";
+export { useDecalTexture } from "./useDecalTexture";
 export {
-  buildNameDecalLayout,
-  drawNameDecal,
-  hitTestNameDecal,
-  NAME_DECAL_CANVAS_W,
-  NAME_DECAL_CANVAS_H,
-} from "./nameDecalCanvas";
-export { gizmoCursor } from "./nameDecalCanvas";
-export type { GizmoHandle, GizmoZone, NameDecalLayout } from "./nameDecalCanvas";
+  buildDecalLayout,
+  drawDecal,
+  hitTestDecal,
+  gizmoCursor,
+  DECAL_CANVAS_W,
+  DECAL_CANVAS_H,
+} from "./decalCanvas";
+export type { GizmoHandle, GizmoZone, DecalLayout } from "./decalCanvas";
