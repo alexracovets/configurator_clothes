@@ -1,0 +1,1 @@
+export { shirtNormalFragment } from "./shirtNormalFragment";

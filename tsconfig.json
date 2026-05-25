@@ -31,7 +31,8 @@
       "@store": ["./src/store"],
       "@utils": ["./src/utils"],
       "@fonts": ["./src/fonts"],
-      "@hooks": ["./src/hooks"]
+      "@hooks": ["./src/hooks"],
+      "@shaders": ["./src/shaders"]
     }
   },
   "include": [

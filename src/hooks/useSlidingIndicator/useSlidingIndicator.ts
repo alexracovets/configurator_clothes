@@ -1,23 +1,10 @@
-import {
-  useCallback,
-  useLayoutEffect,
-  useRef,
-  useState,
-  type RefObject,
-} from "react";
+import { useCallback, useLayoutEffect, useRef, useState } from "react";
 
-type IndicatorStyle = {
-  left: number;
-  width: number;
-};
+import type { IndicatorStyle, UseSlidingIndicatorReturn } from "@types";
 
-type UseSlidingIndicatorReturn = {
-  wrapperRef: RefObject<HTMLDivElement | null>;
-  getItemRef: (index: number) => (el: HTMLElement | null) => void;
-  indicator: IndicatorStyle;
-};
-
-const useSlidingIndicator = (activeIndex: number): UseSlidingIndicatorReturn => {
+export const useSlidingIndicator = (
+  activeIndex: number,
+): UseSlidingIndicatorReturn => {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const itemRefs = useRef<(HTMLElement | null)[]>([]);
   const [indicator, setIndicator] = useState<IndicatorStyle>({
@@ -35,7 +22,6 @@ const useSlidingIndicator = (activeIndex: number): UseSlidingIndicatorReturn => 
   const updateIndicator = useCallback(() => {
     const wrapper = wrapperRef.current;
     const item = itemRefs.current[activeIndex];
-
     if (!wrapper || !item) return;
 
     const wrapperRect = wrapper.getBoundingClientRect();
@@ -60,7 +46,6 @@ const useSlidingIndicator = (activeIndex: number): UseSlidingIndicatorReturn => 
     itemRefs.current.forEach((item) => {
       if (item) observer.observe(item);
     });
-
     window.addEventListener("resize", updateIndicator);
 
     return () => {
@@ -71,6 +56,3 @@ const useSlidingIndicator = (activeIndex: number): UseSlidingIndicatorReturn => 
 
   return { wrapperRef, getItemRef, indicator };
 };
-
-export { useSlidingIndicator };
-export type { IndicatorStyle, UseSlidingIndicatorReturn };

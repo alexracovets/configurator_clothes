@@ -1,0 +1,1 @@
+export { shirtVertexUv } from "./shirtVertexUv";

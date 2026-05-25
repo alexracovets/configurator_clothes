@@ -2,6 +2,7 @@ import { useMemo } from "react";
 import * as THREE from "three";
 
 import type { PartGradient } from "@store";
+import { hexToRgb } from "@utils";
 
 export const useColorGradientTexture = (
   gradient: PartGradient,
@@ -14,7 +15,6 @@ export const useColorGradientTexture = (
     canvas.height = size;
     const ctx = canvas.getContext("2d")!;
 
-    // Base color fill
     ctx.fillStyle = baseColor;
     ctx.fillRect(0, 0, size, size);
 
@@ -37,13 +37,12 @@ export const useColorGradientTexture = (
       const stop1 = Math.min(1, Math.max(mid + spread, stop0 + 0.001));
       const alpha = gradient.opacity / 100;
 
-      const c2 = new THREE.Color(gradient.color2);
-      const rgba = `rgba(${Math.round(c2.r * 255)},${Math.round(c2.g * 255)},${Math.round(c2.b * 255)},${alpha})`;
+      const [r, g, b] = hexToRgb(gradient.color2);
 
       grad.addColorStop(0, "rgba(0,0,0,0)");
       grad.addColorStop(stop0, "rgba(0,0,0,0)");
-      grad.addColorStop(stop1, rgba);
-      grad.addColorStop(1, rgba);
+      grad.addColorStop(stop1, `rgba(${r},${g},${b},${alpha})`);
+      grad.addColorStop(1, `rgba(${r},${g},${b},${alpha})`);
 
       ctx.fillStyle = grad;
       ctx.fillRect(0, 0, size, size);

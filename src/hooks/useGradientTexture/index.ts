@@ -1,1 +1,0 @@
-export { useGradientTexture } from "./useGradientTexture";

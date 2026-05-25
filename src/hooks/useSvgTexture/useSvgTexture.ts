@@ -1,5 +1,3 @@
-"use client";
-
 import { useEffect, useState } from "react";
 import * as THREE from "three";
 
@@ -8,7 +6,7 @@ const SVG_RENDER_HEIGHT = 2048;
 
 type LoadedTexture = { url: string; texture: THREE.Texture };
 
-export function useSvgTexture(url: string): THREE.Texture | null {
+export const useSvgTexture = (url: string): THREE.Texture | null => {
   const [loaded, setLoaded] = useState<LoadedTexture | null>(null);
 
   useEffect(() => {
@@ -30,6 +28,7 @@ export function useSvgTexture(url: string): THREE.Texture | null {
             URL.revokeObjectURL(objectUrl);
             return;
           }
+
           const canvas = document.createElement("canvas");
           canvas.width = SVG_RENDER_WIDTH;
           canvas.height = SVG_RENDER_HEIGHT;
@@ -53,4 +52,4 @@ export function useSvgTexture(url: string): THREE.Texture | null {
   }, [url]);
 
   return loaded?.url === url ? loaded.texture : null;
-}
+};

@@ -7,7 +7,7 @@ import { useColorGradientTexture, useSvgTexture } from "@hooks";
 import { ColorLayer } from "../ColorLayer";
 import { GradientLayer } from "../GradientLayer";
 import { PatternLayer } from "../PatternLayer";
-import type { PBRMaps } from "../ColorLayer";
+import type { PBRMaps } from "@types";
 import type { LayerConfig } from "@types";
 
 interface PartLayersProps {

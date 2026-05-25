@@ -7,8 +7,9 @@ import * as THREE from "three";
 
 import { useColorStore, usePatternStore, useGradientStore } from "@store";
 import type { ShirtPart, PartGradient } from "@store";
+import type { PBRMaps } from "@types";
 import { PatternLayer } from "../../ModalLayers";
-import { useSvgTexture } from "@hooks";
+import { useSvgTexture, useColorGradientTexture } from "@hooks";
 
 interface CrewneckGLTF {
   nodes: Record<string, THREE.Mesh>;
@@ -33,70 +34,7 @@ const PART_MESHES: { node: string; part: ShirtPart }[] = [
   { node: "crewneck_collar", part: "collar" },
 ];
 
-function useColorGradientTexture(
-  gradient: PartGradient,
-  baseColor: string,
-): THREE.CanvasTexture {
-  return useMemo(() => {
-    const size = 1024;
-    const canvas = document.createElement("canvas");
-    canvas.width = size;
-    canvas.height = size;
-    const ctx = canvas.getContext("2d")!;
 
-    ctx.fillStyle = baseColor;
-    ctx.fillRect(0, 0, size, size);
-
-    if (gradient.enabled) {
-      const cx = size / 2;
-      const cy = size / 2;
-      const rad = (gradient.rotation * Math.PI) / 180;
-      const dx = Math.cos(rad) * size;
-      const dy = Math.sin(rad) * size;
-
-      const grad = ctx.createLinearGradient(
-        cx - dx / 2,
-        cy - dy / 2,
-        cx + dx / 2,
-        cy + dy / 2,
-      );
-
-      const mid = gradient.position / 100;
-      const half = (gradient.softness / 100) * 0.5;
-      const start = Math.max(0, mid - half);
-      const end = Math.min(1, Math.max(mid + half, start + 0.001));
-      const a = gradient.opacity / 100;
-
-      const c2 = new THREE.Color(gradient.color2);
-      const r = Math.round(c2.r * 255);
-      const g = Math.round(c2.g * 255);
-      const b = Math.round(c2.b * 255);
-
-      grad.addColorStop(0, `rgba(${r},${g},${b},0)`);
-      grad.addColorStop(start, `rgba(${r},${g},${b},0)`);
-      grad.addColorStop(end, `rgba(${r},${g},${b},${a})`);
-      grad.addColorStop(1, `rgba(${r},${g},${b},${a})`);
-
-      ctx.fillStyle = grad;
-      ctx.fillRect(0, 0, size, size);
-    }
-
-    const tex = new THREE.CanvasTexture(canvas);
-    tex.needsUpdate = true;
-    return tex;
-  }, [gradient, baseColor]);
-}
-
-interface PBRMaps {
-  /** Baked large-scale normals — UV1 (TEXCOORD_1) */
-  bakeNormal: THREE.Texture;
-  /** Packed AO (R) + Roughness (G) bake — UV1 (TEXCOORD_1) */
-  bakeAoRoughness: THREE.Texture;
-  /** Tiled fabric detail normals — UV0 (TEXCOORD_0) */
-  fabricNormal: THREE.Texture;
-  /** Tiled fabric roughness — UV0 (TEXCOORD_0) */
-  fabricRoughness: THREE.Texture;
-}
 
 /**
  * Builds a MeshStandardMaterial with a custom shader that:

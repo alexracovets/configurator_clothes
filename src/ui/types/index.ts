@@ -1,3 +1,6 @@
-export { type ChildrenType } from "./ChildrenType";
-export type { LayerConfig } from "./LayerConfig";
 export type { PBRTexturePaths } from "./PBRTexturePaths";
+export type { ChildrenType } from "./ChildrenType";
+export type { LayerConfig } from "./LayerConfig";
+export type { PBRMaps } from "./PBRMaps";
+export type { IndicatorStyle } from "./IndicatorStyle";
+export type { UseSlidingIndicatorReturn } from "./UseSlidingIndicatorReturn";
