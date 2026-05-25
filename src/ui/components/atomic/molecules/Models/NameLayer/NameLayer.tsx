@@ -1,7 +1,1 @@
-"use client";
-
-const NameLayer = () => {
-  return null;
-};
-
-export { NameLayer };
+export { NameLayer } from "../../ModalLayers/NameLayer";

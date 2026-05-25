@@ -14,7 +14,12 @@
       "Bash(node -e \"const fs = require\\('fs'\\); const src = fs.readFileSync\\('./node_modules/three/src/renderers/webgl/WebGLPrograms.js', 'utf8'\\); const idx = src.indexOf\\('aoMapUv'\\); console.log\\(src.substring\\(idx - 20, idx + 150\\)\\);\")",
       "Bash(node -e \"const fs = require\\('fs'\\); const src = fs.readFileSync\\('./node_modules/three/src/renderers/webgl/WebGLPrograms.js', 'utf8'\\); const idx = src.indexOf\\('getChannel'\\); console.log\\(src.substring\\(idx - 10, idx + 200\\)\\);\")",
       "Bash(Get-ChildItem -Path \"d:\\\\work\\\\configurators\\\\configurator_clothes\\\\src\" -Recurse -Filter \"*.ts\" -o File)",
-      "Bash(Select-Object -ExpandProperty FullName)"
+      "Bash(Select-Object -ExpandProperty FullName)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:pmndrs.github.io)",
+      "WebFetch(domain:drei.docs.pmnd.rs)",
+      "Bash(npx tsc *)",
+      "Bash(grep -v \"^[[:space:]]*//\")"
     ]
   }
 }

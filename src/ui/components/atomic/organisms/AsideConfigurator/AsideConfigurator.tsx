@@ -1,6 +1,6 @@
 "use client";
 
-import { StepDesign, StepColor, StepSfumatura } from "@molecules";
+import { StepDesign, StepColor, StepSfumatura, StepName } from "@molecules";
 import { AsidePrice } from "./AsidePrice";
 import { AsideName } from "./AsideName";
 import { Flex, Grid } from "@atoms";
@@ -9,7 +9,7 @@ import { ScrollArea } from "@shared";
 import { useStepsStore } from "@store";
 import { orbitFlag } from "@utils";
 
-const STEP_PANELS = [StepDesign, StepColor, StepSfumatura, null, null, null];
+const STEP_PANELS = [StepDesign, StepColor, StepSfumatura, StepName, null, null];
 
 const AsideConfigurator = () => {
   const { currentStep } = useStepsStore();

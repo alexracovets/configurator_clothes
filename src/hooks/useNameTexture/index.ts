@@ -1,0 +1,1 @@
+export { useNameTexture } from "./useNameTexture";
