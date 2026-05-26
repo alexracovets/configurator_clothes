@@ -82,6 +82,29 @@ export function getHits(
   return out;
 }
 
+/** Raycast only meshes belonging to one print zone (cheaper during drag). */
+export function getHitInZone(
+  e: PointerEvent,
+  gl: THREE.WebGLRenderer,
+  camera: THREE.Camera,
+  scene: THREE.Scene,
+  zone: PrintZoneKey,
+): { uv: THREE.Vector2; zone: PrintZoneKey } | null {
+  const rect = gl.domElement.getBoundingClientRect();
+  _ndc.set(
+    ((e.clientX - rect.left) / rect.width) * 2 - 1,
+    ((e.clientY - rect.top) / rect.height) * -2 + 1,
+  );
+  _ray.setFromCamera(_ndc, camera);
+
+  const meshes = getSceneMeshes(scene).filter((mesh) => zoneFromName(mesh.name) === zone);
+  for (const hit of _ray.intersectObjects(meshes, false)) {
+    if (!hit.uv) continue;
+    return { uv: hit.uv, zone };
+  }
+  return null;
+}
+
 // Shared offscreen canvas for hit-test layout computations
 let _hitCanvas: HTMLCanvasElement | null = null;
 function getHitCanvas(): HTMLCanvasElement {

@@ -1,9 +1,13 @@
 "use client";
 
-import { useEffect, useRef, useCallback, useMemo } from "react";
+import { useCallback, useEffect, useSyncExternalStore } from "react";
 import * as THREE from "three";
 
-import { TEXTURE_SIZE_EDITOR } from "../texture/textureConstants";
+import {
+  TEXTURE_SIZE_DRAG,
+  TEXTURE_SIZE_EDITOR,
+  UV0_BOUNDS,
+} from "../texture/textureConstants";
 import type { PrintZoneKey } from "../texture/textureConstants";
 import { useConfiguratorStore } from "../store";
 import type { DesignLayer } from "../store/configurator.store";
@@ -36,6 +40,13 @@ export interface LayerLayout {
   handles: Record<GizmoHandle, { x: number; y: number }>;
 }
 
+export interface LayerGlyph {
+  canvas: HTMLCanvasElement;
+  halfW: number;
+  halfH: number;
+  styleSerial: string;
+}
+
 export function buildLayerLayout(
   ctx: CanvasRenderingContext2D,
   layer: DesignLayer,
@@ -54,7 +65,6 @@ export function buildLayerLayout(
   const cy = layer.y * size;
   const rad = ((layer.rotation ?? 0) * Math.PI) / 180;
 
-  // Compute AABB of rotated text corners
   const hw = textW / 2 + BOX_PAD_X;
   const hh = textH / 2 + BOX_PAD_Y;
   const corners = [
@@ -78,7 +88,6 @@ export function buildLayerLayout(
     if (ry > maxY) maxY = ry;
   }
 
-  // Ensure box is large enough for 4 non-overlapping handles
   const minBoxSize = HANDLE_RADIUS * 4 + 8;
   const boxW = Math.max(maxX - minX, minBoxSize);
   const boxH = Math.max(maxY - minY, minBoxSize);
@@ -117,7 +126,6 @@ export function hitTestLayout(
   return null;
 }
 
-// Gizmo drawing helpers
 function drawGizmoFrame(
   ctx: CanvasRenderingContext2D,
   box: LayerLayout["textBox"],
@@ -193,22 +201,68 @@ function drawHandle(
   ctx.restore();
 }
 
-function drawLayer(
-  ctx: CanvasRenderingContext2D,
+function serialiseLayerStyle(layer: DesignLayer): string {
+  return JSON.stringify({
+    text: layer.text,
+    font: layer.font,
+    fontSize: layer.fontSize,
+    textColor: layer.textColor,
+    strokeColor: layer.strokeColor,
+    strokeWidth: layer.strokeWidth,
+    type: layer.type,
+    visible: layer.visible,
+  });
+}
+
+function serialiseLayersTransform(layers: DesignLayer[]): string {
+  return JSON.stringify(
+    layers.map((l) => ({
+      id: l.id,
+      x: l.x,
+      y: l.y,
+      rotation: l.rotation,
+      zone: l.zone,
+      visible: l.visible,
+    })),
+  );
+}
+
+function serialiseGizmo(selectedId: string | null): string {
+  return selectedId ?? "";
+}
+
+function getDesignLayers(layers: DesignLayer[]): DesignLayer[] {
+  return layers.filter(
+    (l) => l.visible && (l.type === "text" || l.type === "number"),
+  );
+}
+
+export function renderLayerGlyph(
   layer: DesignLayer,
-  size: number,
-) {
+  atlasSize: number,
+): LayerGlyph {
   const text = layer.text ?? (layer.type === "number" ? "9" : "NAME");
   const font = resolveFont(layer.font ?? "--font-oswald");
   const fontSize = Math.round(
-    (layer.fontSize ?? 128) * FONT_SCALE * (size / TEXTURE_SIZE_EDITOR),
+    (layer.fontSize ?? 128) * FONT_SCALE * (atlasSize / TEXTURE_SIZE_EDITOR),
   );
   const strokeWidth =
-    (layer.strokeWidth ?? 4) * FONT_SCALE * (size / TEXTURE_SIZE_EDITOR);
+    (layer.strokeWidth ?? 4) * FONT_SCALE * (atlasSize / TEXTURE_SIZE_EDITOR);
 
-  ctx.save();
-  ctx.translate(layer.x * size, layer.y * size);
-  ctx.rotate(((layer.rotation ?? 0) * Math.PI) / 180);
+  const measureCanvas = document.createElement("canvas");
+  const mCtx = measureCanvas.getContext("2d")!;
+  mCtx.font = `bold ${fontSize}px "${font}"`;
+  const metrics = mCtx.measureText(text);
+  const textW = metrics.width;
+  const textH = fontSize * 1.1;
+  const pad = strokeWidth + 4;
+  const w = Math.max(2, Math.ceil(textW + pad * 2));
+  const h = Math.max(2, Math.ceil(textH + pad * 2));
+
+  const canvas = document.createElement("canvas");
+  canvas.width = w;
+  canvas.height = h;
+  const ctx = canvas.getContext("2d")!;
   ctx.font = `bold ${fontSize}px "${font}"`;
   ctx.textAlign = "center";
   ctx.textBaseline = "middle";
@@ -217,71 +271,64 @@ function drawLayer(
     ctx.strokeStyle = layer.strokeColor ?? "#1A2744";
     ctx.lineWidth = strokeWidth * 2;
     ctx.lineJoin = "round";
-    ctx.strokeText(text, 0, 0);
+    ctx.strokeText(text, w / 2, h / 2);
   }
 
   ctx.fillStyle = layer.textColor ?? "#FFFFFF";
-  ctx.fillText(text, 0, 0);
+  ctx.fillText(text, w / 2, h / 2);
+
+  return {
+    canvas,
+    halfW: w / 2,
+    halfH: h / 2,
+    styleSerial: serialiseLayerStyle(layer),
+  };
+}
+
+function drawLayerFromGlyph(
+  ctx: CanvasRenderingContext2D,
+  layer: DesignLayer,
+  glyph: LayerGlyph,
+  canvasSize: number,
+): void {
+  const cx = layer.x * canvasSize;
+  const cy = layer.y * canvasSize;
+
+  ctx.save();
+  ctx.translate(cx, cy);
+  ctx.rotate(((layer.rotation ?? 0) * Math.PI) / 180);
+  ctx.drawImage(glyph.canvas, -glyph.halfW, -glyph.halfH);
   ctx.restore();
 }
 
-// Serialise only text-affecting fields (not selectedId) — used to detect if text cache is stale
-function serialiseText(layers: DesignLayer[]): string {
-  return JSON.stringify(layers.map((l) => ({
-    id: l.id, text: l.text, font: l.font, fontSize: l.fontSize,
-    textColor: l.textColor, strokeColor: l.strokeColor, strokeWidth: l.strokeWidth,
-    x: l.x, y: l.y, rotation: l.rotation, visible: l.visible, type: l.type,
-  })));
+interface CompositeZoneOptions {
+  showGizmo?: boolean;
+  fast?: boolean;
 }
 
-// Serialise selectedId separately to detect gizmo-only changes
-function serialiseGizmo(selectedId: string | null): string {
-  return selectedId ?? "";
-}
-
-// Draw all layers onto ctx without any gizmo overlay
-function drawTextOnly(
-  ctx: CanvasRenderingContext2D,
-  layers: DesignLayer[],
-  size: number,
-): void {
-  ctx.imageSmoothingEnabled = true;
-  ctx.imageSmoothingQuality = "high";
-  ctx.clearRect(0, 0, size, size);
-  for (const layer of layers) {
-    if (!layer.visible) continue;
-    if (layer.type !== "text" && layer.type !== "number") continue;
-    drawLayer(ctx, layer, size);
-  }
-}
-
-export function drawLayersDirect(
+function compositeZone(
   canvas: HTMLCanvasElement,
   layers: DesignLayer[],
-  selectedId: string | null = null,
-  textCache?: HTMLCanvasElement | null,
+  glyphMap: Map<string, LayerGlyph>,
+  selectedId: string | null,
+  options: CompositeZoneOptions = {},
 ): void {
+  const { showGizmo = true, fast = false } = options;
   const size = canvas.width;
   const ctx = canvas.getContext("2d");
   if (!ctx) return;
 
   ctx.clearRect(0, 0, size, size);
+  ctx.imageSmoothingEnabled = !fast;
+  if (!fast) ctx.imageSmoothingQuality = "high";
 
-  if (textCache) {
-    // Fast path: blit cached text, then draw gizmo only
-    ctx.drawImage(textCache, 0, 0);
-  } else {
-    ctx.imageSmoothingEnabled = true;
-    ctx.imageSmoothingQuality = "high";
-    for (const layer of layers) {
-      if (!layer.visible) continue;
-      if (layer.type !== "text" && layer.type !== "number") continue;
-      drawLayer(ctx, layer, size);
-    }
+  for (const layer of layers) {
+    const glyph = glyphMap.get(layer.id);
+    if (!glyph) continue;
+    drawLayerFromGlyph(ctx, layer, glyph, size);
   }
 
-  // Draw gizmo for selected layer
-  if (selectedId) {
+  if (showGizmo && selectedId) {
     const selected = layers.find((l) => l.id === selectedId);
     if (selected) {
       const layout = buildLayerLayout(ctx, selected, size);
@@ -291,6 +338,19 @@ export function drawLayersDirect(
       }
     }
   }
+}
+
+function applyTextureUploadMode(
+  texture: THREE.CanvasTexture,
+  interacting: boolean,
+): void {
+  const wantMipmaps = !interacting;
+  if (texture.generateMipmaps === wantMipmaps) return;
+  texture.generateMipmaps = wantMipmaps;
+  texture.minFilter = wantMipmaps
+    ? THREE.LinearMipmapLinearFilter
+    : THREE.LinearFilter;
+  texture.needsUpdate = true;
 }
 
 function createCanvasTexture(size: number): {
@@ -309,114 +369,323 @@ function createCanvasTexture(size: number): {
   texture.minFilter = THREE.LinearMipmapLinearFilter;
   texture.magFilter = THREE.LinearFilter;
   texture.generateMipmaps = true;
-  texture.anisotropy = 16;
+  texture.anisotropy = 4;
   texture.needsUpdate = true;
 
   return { canvas, texture };
 }
 
+const PRINT_ZONE_KEYS = Object.keys(UV0_BOUNDS) as PrintZoneKey[];
+const DRAG_REDRAW_MS = 33;
+
+const threeInvalidators = new Set<() => void>();
+
+/** Hook into R3F `invalidate` so `frameloop="demand"` still updates the viewport. */
+export function registerDesignRenderInvalidate(fn: () => void): () => void {
+  threeInvalidators.add(fn);
+  return () => threeInvalidators.delete(fn);
+}
+
+function requestThreeRender() {
+  for (const fn of threeInvalidators) fn();
+}
+
+interface ZoneTarget {
+  canvas: HTMLCanvasElement;
+  texture: THREE.CanvasTexture;
+}
+
+// ─── Singleton engine: per-zone canvas (0–1 part UV) + shared glyph cache ──
+
+type DragPreview = Partial<Omit<DesignLayer, "id">> & { id: string };
+
+class DesignTextureEngine {
+  private readonly zoneTargets = new Map<PrintZoneKey, ZoneTarget>();
+  private readonly glyphMap = new Map<string, LayerGlyph>();
+  private rafId: number | null = null;
+  private dragPreview: DragPreview | null = null;
+  private interacting = false;
+  private lastStyleSerial = "";
+  private lastTransformSerial = "";
+  private lastGizmoSerial = "";
+  private lastInteracting = false;
+  private readonly editorSize: number;
+  private canvasSize: number;
+  private lastRedrawAt = 0;
+  private redrawRafId: number | null = null;
+
+  constructor(size: number) {
+    this.editorSize = size;
+    this.canvasSize = size;
+    for (const zone of PRINT_ZONE_KEYS) {
+      this.zoneTargets.set(zone, createCanvasTexture(size));
+    }
+    this.redraw();
+  }
+
+  private setCanvasResolution(size: number) {
+    if (this.canvasSize === size) return;
+    this.canvasSize = size;
+    for (const { canvas } of this.zoneTargets.values()) {
+      canvas.width = size;
+      canvas.height = size;
+    }
+    this.glyphMap.clear();
+    this.lastStyleSerial = "";
+  }
+
+  getTexture(zone: PrintZoneKey): THREE.CanvasTexture {
+    return this.zoneTargets.get(zone)!.texture;
+  }
+
+  setDragPreview(preview: DragPreview | null) {
+    this.dragPreview = preview;
+    this.scheduleRedraw();
+  }
+
+  setInteracting(active: boolean) {
+    if (this.interacting === active) return;
+    this.interacting = active;
+    this.setCanvasResolution(active ? TEXTURE_SIZE_DRAG : this.editorSize);
+    for (const { texture } of this.zoneTargets.values()) {
+      applyTextureUploadMode(texture, active);
+    }
+    this.lastTransformSerial = "";
+    this.scheduleRedraw();
+  }
+
+  private getEffectiveLayers(): DesignLayer[] {
+    const base = getDesignLayers(useConfiguratorStore.getState().layers);
+    if (!this.dragPreview) return base;
+    const { id, ...patch } = this.dragPreview;
+    return base.map((l) => (l.id === id ? { ...l, ...patch } : l));
+  }
+
+  scheduleRedraw() {
+    if (this.interacting) {
+      const elapsed = performance.now() - this.lastRedrawAt;
+      if (elapsed < DRAG_REDRAW_MS) {
+        if (this.redrawRafId !== null) return;
+        this.redrawRafId = window.setTimeout(() => {
+          this.redrawRafId = null;
+          this.scheduleRedraw();
+        }, DRAG_REDRAW_MS - elapsed);
+        return;
+      }
+    }
+
+    if (this.rafId !== null) return;
+    this.rafId = requestAnimationFrame(() => {
+      this.rafId = null;
+      this.lastRedrawAt = performance.now();
+      this.redraw();
+    });
+  }
+
+  private syncGlyphs(layers: DesignLayer[]): boolean {
+    let styleChanged = false;
+    const liveIds = new Set(layers.map((l) => l.id));
+
+    for (const id of this.glyphMap.keys()) {
+      if (!liveIds.has(id)) {
+        this.glyphMap.delete(id);
+        styleChanged = true;
+      }
+    }
+
+    for (const layer of layers) {
+      const styleSerial = serialiseLayerStyle(layer);
+      const cached = this.glyphMap.get(layer.id);
+      if (cached && cached.styleSerial === styleSerial) continue;
+
+      this.glyphMap.set(layer.id, renderLayerGlyph(layer, this.canvasSize));
+      styleChanged = true;
+    }
+
+    return styleChanged;
+  }
+
+  redraw(): void {
+    const state = useConfiguratorStore.getState();
+    const layers = this.getEffectiveLayers();
+    const selectedId = state.selectedId;
+
+    const styleSerial = layers
+      .map((l) => `${l.id}:${serialiseLayerStyle(l)}`)
+      .join("|");
+    const transformSerial = serialiseLayersTransform(layers);
+    const gizmoSerial = serialiseGizmo(selectedId);
+
+    const styleDirty = styleSerial !== this.lastStyleSerial;
+    const transformDirty = transformSerial !== this.lastTransformSerial;
+    const gizmoDirty = gizmoSerial !== this.lastGizmoSerial;
+    const interactingDirty = this.interacting !== this.lastInteracting;
+
+    if (!styleDirty && !transformDirty && !gizmoDirty && !interactingDirty) {
+      return;
+    }
+
+    if (styleDirty) {
+      this.syncGlyphs(layers);
+      this.lastStyleSerial = styleSerial;
+    }
+
+    if (styleDirty || transformDirty || gizmoDirty || interactingDirty) {
+      const zonesToDraw = new Set(layers.map((l) => l.zone));
+      const fast = this.interacting;
+
+      for (const zone of zonesToDraw) {
+        const zoneLayers = layers.filter((l) => l.zone === zone);
+        const target = this.zoneTargets.get(zone)!;
+        const zoneSelected =
+          !fast && selectedId && zoneLayers.some((l) => l.id === selectedId)
+            ? selectedId
+            : null;
+        compositeZone(target.canvas, zoneLayers, this.glyphMap, zoneSelected, {
+          showGizmo: !fast,
+          fast,
+        });
+        target.texture.needsUpdate = true;
+      }
+
+      this.lastTransformSerial = transformSerial;
+      this.lastGizmoSerial = gizmoSerial;
+      this.lastInteracting = this.interacting;
+      requestThreeRender();
+    }
+  }
+
+  invalidate() {
+    this.lastStyleSerial = "";
+    this.lastTransformSerial = "";
+    this.lastGizmoSerial = "";
+    this.redraw();
+  }
+
+  dispose() {
+    if (this.rafId !== null) cancelAnimationFrame(this.rafId);
+    if (this.redrawRafId !== null) clearTimeout(this.redrawRafId);
+    for (const { texture } of this.zoneTargets.values()) texture.dispose();
+    this.zoneTargets.clear();
+    this.glyphMap.clear();
+    this.dragPreview = null;
+  }
+}
+
+let storeSubscribed = false;
+let designDragActive = false;
+
+function ensureStoreSubscription() {
+  if (storeSubscribed || typeof document === "undefined") return;
+  storeSubscribed = true;
+  useConfiguratorStore.subscribe(() => {
+    if (designDragActive) return;
+    engine?.scheduleRedraw();
+  });
+}
+
+function initEngine(): DesignTextureEngine {
+  if (!engine) {
+    const resolution =
+      useConfiguratorStore.getState().textureSettings.resolution ??
+      TEXTURE_SIZE_EDITOR;
+    engine = new DesignTextureEngine(resolution);
+    ensureStoreSubscription();
+  }
+  return engine;
+}
+
+/** Live drag preview — no Zustand updates per frame. */
+export function setDesignDragPreview(preview: DragPreview | null) {
+  designDragActive = preview !== null;
+  initEngine().setDragPreview(preview);
+}
+
+export function setDesignInteracting(active: boolean) {
+  initEngine().setInteracting(active);
+}
+
+export function clearDesignDragPreview() {
+  designDragActive = false;
+  engine?.setDragPreview(null);
+}
+
+let engine: DesignTextureEngine | null = null;
+let engineRefCount = 0;
+
+const engineListeners = new Set<() => void>();
+
+function subscribeDesignEngine(onStoreChange: () => void): () => void {
+  engineListeners.add(onStoreChange);
+  return () => engineListeners.delete(onStoreChange);
+}
+
+function notifyDesignEngineListeners() {
+  for (const listener of engineListeners) listener();
+}
+
+const SSR_DUMMY_TEXTURE =
+  typeof document !== "undefined"
+    ? new THREE.CanvasTexture(document.createElement("canvas"))
+    : (null as unknown as THREE.CanvasTexture);
+
+/** Per-zone design texture — stable ref, canvas updates without React re-renders. */
 export function useDesignTexture(zone: PrintZoneKey): {
   texture: THREE.CanvasTexture;
   invalidate: () => void;
 } {
-  const resolution = useConfiguratorStore((s) => s.textureSettings.resolution);
+  const texture = useSyncExternalStore(
+    subscribeDesignEngine,
+    () =>
+      typeof document === "undefined" || !engine
+        ? SSR_DUMMY_TEXTURE
+        : engine.getTexture(zone),
+    () => SSR_DUMMY_TEXTURE,
+  );
 
-  // Initialise canvas + texture once (useMemo = safe during render, no ref mutation)
-  const { canvas: initCanvas, texture: initTexture } = useMemo(() => {
-    if (typeof document === "undefined") return { canvas: null, texture: null };
-    return createCanvasTexture(resolution ?? TEXTURE_SIZE_EDITOR);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  // Stable refs for use inside effects/callbacks only
-  const canvasRef    = useRef(initCanvas);
-  const textureRef   = useRef(initTexture);
-  // Offscreen canvas caching rendered text pixels (no gizmo)
-  const textCacheRef = useRef<HTMLCanvasElement | null>(null);
-
-  // Subscribe to store changes and redraw
   useEffect(() => {
-    const canvas = canvasRef.current;
-    const texture = textureRef.current;
-    if (!canvas || !texture) return;
-
-    const size = canvas.width;
-
-    // Lazily create offscreen text-cache canvas matching main canvas size
-    if (!textCacheRef.current && typeof document !== "undefined") {
-      const tc = document.createElement("canvas");
-      tc.width  = size;
-      tc.height = size;
-      textCacheRef.current = tc;
-    }
-
-    let lastTextSerial  = "";
-    let lastGizmoSerial = "";
-    let rafId: number | null = null;
-
-    const redraw = () => {
-      const state      = useConfiguratorStore.getState();
-      const layers     = state.layers.filter((l) => l.zone === zone && l.visible);
-      const selectedId = state.selectedId;
-
-      const textSerial  = serialiseText(layers);
-      const gizmoSerial = serialiseGizmo(selectedId);
-
-      // Nothing changed at all — skip
-      if (textSerial === lastTextSerial && gizmoSerial === lastGizmoSerial) return;
-
-      // Text content/style/position changed — re-render text cache
-      if (textSerial !== lastTextSerial) {
-        lastTextSerial = textSerial;
-        const tc  = textCacheRef.current;
-        const tCtx = tc?.getContext("2d");
-        if (tc && tCtx) drawTextOnly(tCtx, layers, size);
-      }
-
-      lastGizmoSerial = gizmoSerial;
-
-      // Composite: blit text cache + draw gizmo
-      drawLayersDirect(canvas, layers, selectedId, textCacheRef.current);
-      texture.needsUpdate = true;
-    };
-
-    // Throttle redraws to one per animation frame
-    const scheduleRedraw = () => {
-      if (rafId !== null) return;
-      rafId = requestAnimationFrame(() => { rafId = null; redraw(); });
-    };
-
-    redraw();
-    const unsub = useConfiguratorStore.subscribe(scheduleRedraw);
+    if (typeof document === "undefined") return;
+    engineRefCount++;
+    initEngine();
+    notifyDesignEngineListeners();
     return () => {
-      unsub();
-      if (rafId !== null) cancelAnimationFrame(rafId);
+      engineRefCount = Math.max(0, engineRefCount - 1);
+      if (engineRefCount === 0) {
+        engine?.dispose();
+        engine = null;
+        storeSubscribed = false;
+      }
+      notifyDesignEngineListeners();
     };
   }, [zone]);
-
-  // Dispose texture on unmount
-  useEffect(() => {
-    const texture = textureRef.current;
-    return () => {
-      texture?.dispose();
-    };
-  }, []);
 
   const invalidate = useCallback(() => {
-    const canvas = canvasRef.current;
-    const texture = textureRef.current;
-    if (!canvas || !texture) return;
-    const state = useConfiguratorStore.getState();
-    const layers = state.layers.filter((l) => l.zone === zone && l.visible);
-    drawLayersDirect(canvas, layers, state.selectedId);
-    texture.needsUpdate = true;
-  }, [zone]);
+    engine?.invalidate();
+  }, []);
 
-  // Return initTexture directly (stable useMemo value, no ref access during render)
-  if (!initTexture) {
-    const dummy = new THREE.CanvasTexture(document.createElement("canvas"));
-    return { texture: dummy, invalidate };
+  return { texture, invalidate };
+}
+
+/** @deprecated Use useDesignTexture(zone) */
+export function useSharedDesignTexture(): {
+  texture: THREE.CanvasTexture;
+  invalidate: () => void;
+} {
+  return useDesignTexture("back");
+}
+
+/** @deprecated Kept for callers that imported drawLayersDirect */
+export function drawLayersDirect(
+  canvas: HTMLCanvasElement,
+  layers: DesignLayer[],
+  selectedId: string | null = null,
+): void {
+  const glyphMap = new Map<string, LayerGlyph>();
+  const size = canvas.width;
+  for (const layer of layers) {
+    if (!layer.visible || (layer.type !== "text" && layer.type !== "number"))
+      continue;
+    glyphMap.set(layer.id, renderLayerGlyph(layer, size));
   }
-
-  return { texture: initTexture, invalidate };
+  compositeZone(canvas, layers, glyphMap, selectedId);
 }

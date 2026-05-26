@@ -98,10 +98,9 @@ export const useShirtDesignMaterial = (
     uDesignUvBounds: { value: new THREE.Vector4(bounds.minX, bounds.minY, bounds.maxX, bounds.maxY) },
   });
 
-  // Sync designTexture into uniform after render
   useLayoutEffect(() => {
     designUniforms.current.uDesignMap.value = designTexture;
-  });
+  }, [designTexture]);
 
   return useMemo(() => {
     const offset    = part ? PART_POLYGON_OFFSET[part] : undefined;

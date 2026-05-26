@@ -2,6 +2,8 @@
 export const TEXTURE_SIZE_EDITOR = 2048;
 export const TEXTURE_SIZE_EXPORT = 4096;
 export const TEXTURE_SIZE_MOBILE = 1024;
+/** Lighter canvas while dragging text (4× fewer pixels than editor). */
+export const TEXTURE_SIZE_DRAG = 1024;
 
 // UV0 atlas bounds per mesh (measured from crewneck.gltf TEXCOORD_0)
 // Design layers store position as normalised [0,1] within the part's own UV rect.

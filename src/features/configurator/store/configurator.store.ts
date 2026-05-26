@@ -66,6 +66,8 @@ interface ConfiguratorState {
   selectedId: string | null;
   activeZone: PrintZoneKey;
   textureSettings: TextureSettings;
+  /** True while dragging gizmo — skips mipmaps for faster uploads */
+  isInteracting: boolean;
   // undo / redo stacks (each entry is a full layers snapshot)
   _past:   DesignLayer[][];
   _future: DesignLayer[][];
@@ -94,6 +96,7 @@ interface ConfiguratorActions {
   canRedo: () => boolean;
   // texture settings
   setTextureSettings: (patch: Partial<TextureSettings>) => void;
+  setInteracting: (interacting: boolean) => void;
   // helpers
   getLayer: (id: string) => DesignLayer | undefined;
   getLayersForZone: (zone: PrintZoneKey) => DesignLayer[];
@@ -130,6 +133,7 @@ export const useConfiguratorStore = create<ConfiguratorStore>((set, get) => ({
     resolution: TEXTURE_SIZE_EDITOR,
     transparentBackground: true,
   },
+  isInteracting: false,
   _past: [],
   _future: [],
 
@@ -250,6 +254,8 @@ export const useConfiguratorStore = create<ConfiguratorStore>((set, get) => ({
   // ── texture settings ────────────────────────────────────────────────────────
   setTextureSettings: (patch) =>
     set((s) => ({ textureSettings: { ...s.textureSettings, ...patch } })),
+
+  setInteracting: (interacting) => set({ isInteracting: interacting }),
 
   // ── helpers ─────────────────────────────────────────────────────────────────
   getLayer: (id) => get().layers.find((l) => l.id === id),

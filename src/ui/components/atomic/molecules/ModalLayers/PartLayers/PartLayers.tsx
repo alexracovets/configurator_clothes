@@ -28,7 +28,6 @@ export const PartLayers = ({ layer, maps }: PartLayersProps) => {
   const patternTexture   = useSvgTexture(patternUrl);
   const partRenderOrder  = getPartRenderOrder(layer.part);
 
-  // Design texture for this jersey part (numbers / names via UV compositing)
   const { texture: designTexture } = useDesignTexture(layer.part as PrintZoneKey);
 
   return (

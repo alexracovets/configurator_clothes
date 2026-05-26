@@ -13,6 +13,7 @@ const ConfiguratorCanvas = () => {
     <Canvas
       camera={{ position: [0, 0, 3], fov: 45 }}
       style={{ width: "100%", height: "100%" }}
+      frameloop="demand"
       gl={{
         antialias: true,
         powerPreference: "high-performance",
@@ -20,7 +21,7 @@ const ConfiguratorCanvas = () => {
         toneMapping: THREE.ACESFilmicToneMapping,
         toneMappingExposure: 1.0,
       }}
-      dpr={[1, 2]}
+      dpr={[1, 1.5]}
     >
       <CanvasControl />
       <Center position={[0, 0, 0]}>
