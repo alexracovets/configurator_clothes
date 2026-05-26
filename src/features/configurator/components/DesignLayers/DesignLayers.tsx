@@ -55,6 +55,8 @@ const PointerHandler = () => {
     let dragStartFontSize = 0;
 
     let wasDrag = false;
+    /** Ignore synthetic pointerup emitted to cancel OrbitControls mid-gesture. */
+    let suppressPointerUp = false;
 
     function cancelOrbitGesture(e: PointerEvent) {
       const controls = orbitControlsRef.current;
@@ -62,6 +64,7 @@ const PointerHandler = () => {
         controls.enabled = false;
         controls.enabled = isOrbitControlsEnabled();
       }
+      suppressPointerUp = true;
       canvas.dispatchEvent(
         new PointerEvent("pointerup", {
           bubbles: true,
@@ -201,8 +204,9 @@ const PointerHandler = () => {
       dragStartClientX = e.clientX;
       dragStartClientY = e.clientY;
 
-      if (gz === "body") {
+      if (gz === "body" && id === state.selectedId) {
         pendingDragMode = "body";
+        e.stopPropagation();
         return;
       }
 
@@ -242,6 +246,11 @@ const PointerHandler = () => {
     }
 
     function onPointerUp() {
+      if (suppressPointerUp) {
+        suppressPointerUp = false;
+        return;
+      }
+
       if (rafId !== null) {
         cancelAnimationFrame(rafId);
         rafId = null;
@@ -256,6 +265,15 @@ const PointerHandler = () => {
           state.updateLayer(dragId, { rotation: lastPreview.rotation });
         if (dragMode === "resize" && lastPreview.fontSize !== undefined)
           state.updateLayer(dragId, { fontSize: lastPreview.fontSize });
+      }
+
+      if (!wasDrag && pendingDragMode) {
+        pendingDragMode = null;
+        dragId = null;
+        dragZone = null;
+        dragStartUV = null;
+        dragStartXY = null;
+        return;
       }
 
       resetDragState();

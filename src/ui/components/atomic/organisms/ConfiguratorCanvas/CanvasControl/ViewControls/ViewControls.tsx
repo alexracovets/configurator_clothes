@@ -9,7 +9,6 @@ import {
   clearDesignDragPreview,
   setDesignInteracting,
 } from "@features/configurator/hooks/useDesignTexture";
-import { useConfiguratorStore } from "@features/configurator/store/configurator.store";
 import { isOrbitControlsEnabled, orbitControlsRef } from "@utils";
 
 const MIN_DISTANCE = 0.5;
@@ -210,7 +209,6 @@ const ViewControls = () => {
         animRef.current.zoom.active = false;
         clearDesignDragPreview();
         setDesignInteracting(false);
-        useConfiguratorStore.getState().selectLayer(null);
         invalidate();
       }}
     />

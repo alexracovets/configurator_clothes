@@ -42,15 +42,42 @@ const _ndc = new THREE.Vector2();
 let _cachedScene: THREE.Scene | null = null;
 let _cachedMeshes: THREE.Mesh[] = [];
 
+/** Pickable body meshes only (ColorLayer) — skip pattern/overlay duplicates. */
 function getSceneMeshes(scene: THREE.Scene): THREE.Mesh[] {
   if (scene !== _cachedScene) {
     _cachedMeshes = [];
     scene.traverse((o) => {
-      if (o instanceof THREE.Mesh && o.geometry?.attributes?.uv) _cachedMeshes.push(o);
+      if (!(o instanceof THREE.Mesh) || !o.geometry?.attributes?.uv) return;
+      if (!zoneFromName(o.name)) return;
+      _cachedMeshes.push(o);
     });
     _cachedScene = scene;
   }
   return _cachedMeshes;
+}
+
+const _worldNormal = new THREE.Vector3();
+
+/** Keep only intersections on the front-most surface (no ray pierce-through). */
+function frontSurfaceHits(
+  hits: THREE.Intersection[],
+): THREE.Intersection[] {
+  if (hits.length === 0) return hits;
+  const minDistance = hits[0].distance;
+  const epsilon = Math.max(0.002, minDistance * 0.02);
+  const out: THREE.Intersection[] = [];
+  for (const hit of hits) {
+    if (hit.distance > minDistance + epsilon) break;
+    if (!hit.face) continue;
+    _worldNormal
+      .copy(hit.face.normal)
+      .transformDirection(hit.object.matrixWorld)
+      .normalize();
+    // Skip backfaces (shouldn't occur with FrontSide, but guards thin shells).
+    if (_worldNormal.dot(_ray.ray.direction) > 0) continue;
+    out.push(hit);
+  }
+  return out;
 }
 
 export function invalidateMeshCache() {
@@ -73,10 +100,9 @@ export function getHits(
 
   const meshes = getSceneMeshes(scene);
   const out: Array<{ uv: THREE.Vector2; zone: PrintZoneKey }> = [];
-  for (const hit of _ray.intersectObjects(meshes, false)) {
+  for (const hit of frontSurfaceHits(_ray.intersectObjects(meshes, false))) {
     if (!hit.uv) continue;
-    const mesh = hit.object as THREE.Mesh;
-    const zone = zoneFromName(mesh.name) ?? zoneFromUV(hit.uv.x, hit.uv.y);
+    const zone = zoneFromName((hit.object as THREE.Mesh).name);
     if (zone) out.push({ uv: hit.uv.clone(), zone });
   }
   return out;
@@ -98,7 +124,7 @@ export function getHitInZone(
   _ray.setFromCamera(_ndc, camera);
 
   const meshes = getSceneMeshes(scene).filter((mesh) => zoneFromName(mesh.name) === zone);
-  for (const hit of _ray.intersectObjects(meshes, false)) {
+  for (const hit of frontSurfaceHits(_ray.intersectObjects(meshes, false))) {
     if (!hit.uv) continue;
     return { uv: hit.uv, zone };
   }
@@ -148,11 +174,22 @@ export function atlasHitTest(uvX: number, uvY: number, zone: PrintZoneKey) {
   return null;
 }
 
-// Find first hit that matches any layer across all candidate zones
+// Find a layer on the front-most surface only (hits must come from getHits).
 export function findLayerHit(hits: Array<{ uv: THREE.Vector2; zone: PrintZoneKey }>) {
   for (const { uv, zone } of hits) {
     const result = atlasHitTest(uv.x, uv.y, zone);
     if (result) return { result, uv, zone };
   }
   return null;
+}
+
+/** Closest body surface under pointer (for deselect on empty fabric click). */
+export function getFrontSurfaceHit(
+  e: PointerEvent,
+  gl: THREE.WebGLRenderer,
+  camera: THREE.Camera,
+  scene: THREE.Scene,
+): { uv: THREE.Vector2; zone: PrintZoneKey } | null {
+  const hits = getHits(e, gl, camera, scene);
+  return hits[0] ?? null;
 }

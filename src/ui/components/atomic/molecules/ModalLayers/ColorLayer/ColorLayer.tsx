@@ -4,7 +4,7 @@ import { useLayoutEffect, useRef } from "react";
 import * as THREE from "three";
 
 import { type PartGradient, type ShirtPart } from "@store";
-import { useShirtDesignMaterial } from "@hooks";
+import { useShirtMaterial } from "@hooks";
 import type { PBRMaps } from "@types";
 
 interface ColorLayerProps {
@@ -14,8 +14,6 @@ interface ColorLayerProps {
   gradient: PartGradient;
   maps: PBRMaps;
   renderOrder?: number;
-  /** Design canvas texture composited over fabric via shader */
-  designTexture: THREE.CanvasTexture;
 }
 
 const meshRaycast = THREE.Mesh.prototype.raycast;
@@ -27,15 +25,8 @@ export const ColorLayer = ({
   gradient,
   maps,
   renderOrder = 0,
-  designTexture,
 }: ColorLayerProps) => {
-  const matWithDesign = useShirtDesignMaterial(
-    baseColorTexture,
-    maps,
-    gradient,
-    part,
-    designTexture,
-  );
+  const material = useShirtMaterial(baseColorTexture, maps, gradient, part);
 
   const meshRef = useRef<THREE.Mesh>(null);
 
@@ -50,7 +41,7 @@ export const ColorLayer = ({
       ref={meshRef}
       name={part}
       geometry={geometry}
-      material={matWithDesign}
+      material={material}
       renderOrder={renderOrder}
     />
   );

@@ -33,8 +33,7 @@ const LayoutsModalStructure = ({
       {/*
         DesignLayers — zero R3F output, pure side-effect:
         syncs legacy NameStore / NumberStore → configurator store
-        → CanvasTexture → shader overlay on each part's ColorLayer.
-        Patterns are unaffected (remain on PatternLayer).
+        → CanvasTexture → DesignOverlayLayer above PatternLayer.
       */}
       <DesignLayers />
 

@@ -4,6 +4,7 @@ import { useColorStore, usePatternStore, useGradientStore } from "@store";
 import { useBaseColorTexture, useSvgTexture } from "@hooks";
 import { getPartRenderOrder } from "@utils";
 import { ColorLayer } from "../ColorLayer";
+import { DesignOverlayLayer } from "../DesignOverlayLayer";
 import { PatternLayer } from "../PatternLayer";
 import type { PBRMaps } from "@types";
 import type { LayerConfig } from "@types";
@@ -32,7 +33,7 @@ export const PartLayers = ({ layer, maps }: PartLayersProps) => {
 
   return (
     <>
-      {/* Layer 0 — base colour + shader gradient + PBR maps + design overlay */}
+      {/* Layer 0 — base colour + shader gradient + PBR maps */}
       <ColorLayer
         part={layer.part}
         geometry={layer.geometry}
@@ -40,10 +41,9 @@ export const PartLayers = ({ layer, maps }: PartLayersProps) => {
         gradient={gradient}
         maps={maps}
         renderOrder={partRenderOrder}
-        designTexture={designTexture}
       />
 
-      {/* Layer 1 — pattern / design (unchanged — patterns are NOT affected) */}
+      {/* Layer 1 — pattern */}
       {patternTexture && (
         <PatternLayer
           geometry={layer.geometry}
@@ -53,6 +53,14 @@ export const PartLayers = ({ layer, maps }: PartLayersProps) => {
           renderOrder={partRenderOrder + 1}
         />
       )}
+
+      {/* Layer 2 — names / numbers above pattern */}
+      <DesignOverlayLayer
+        part={layer.part}
+        geometry={layer.geometry}
+        designTexture={designTexture}
+        renderOrder={partRenderOrder + 2}
+      />
     </>
   );
 };
