@@ -84,7 +84,9 @@ const NameLayer = () => {
   const instances = useNameStore(({ instances }) => instances);
   const setActiveId = useNameStore(({ setActiveId }) => setActiveId);
   const updateInstance = useNameStore(({ updateInstance }) => updateInstance);
-  const duplicateInstance = useNameStore(({ duplicateInstance }) => duplicateInstance);
+  const duplicateInstance = useNameStore(
+    ({ duplicateInstance }) => duplicateInstance,
+  );
   const removeInstance = useNameStore(({ removeInstance }) => removeInstance);
 
   const [hoverZone, setHoverZone] = useState<GizmoZone>(null);
@@ -162,7 +164,8 @@ const NameLayer = () => {
       setPointerFromClient(clientX, clientY);
       raycaster.setFromCamera(pointer.current, camera);
 
-      let best: { id: string; distance: number; uv: THREE.Vector2 } | null = null;
+      let best: { id: string; distance: number; uv: THREE.Vector2 } | null =
+        null;
 
       for (const { id } of instancesRef.current) {
         const mesh = meshRefs.current.get(id);
@@ -198,7 +201,9 @@ const NameLayer = () => {
       if (drag.mode === "move") {
         const hitLocal = getHitLocal(e.clientX, e.clientY);
         if (!hitLocal) return;
-        const inst = instancesRef.current.find(({ id: instId }) => instId === id);
+        const inst = instancesRef.current.find(
+          ({ id: instId }) => instId === id,
+        );
         updateInstance(id, {
           decalPosition: [
             hitLocal.x + drag.grabOffset[0],
@@ -210,7 +215,9 @@ const NameLayer = () => {
       }
 
       if (drag.mode === "rotate") {
-        const inst = instancesRef.current.find(({ id: instId }) => instId === id);
+        const inst = instancesRef.current.find(
+          ({ id: instId }) => instId === id,
+        );
         const r = inst?.decalRotation ?? [Math.PI, 0, 0];
         updateInstance(id, {
           decalRotation: [r[0], r[1], drag.startRotZ - dy * ROTATE_SENS],
@@ -242,7 +249,12 @@ const NameLayer = () => {
       inst: NameInstance,
       e: PointerEvent,
     ) => {
-      if (pick.zone !== "body" && pick.zone !== "rotate" && pick.zone !== "resize") return;
+      if (
+        pick.zone !== "body" &&
+        pick.zone !== "rotate" &&
+        pick.zone !== "resize"
+      )
+        return;
 
       setOrbitLockedByNameTool(true);
       e.preventDefault();
@@ -345,7 +357,15 @@ const NameLayer = () => {
       setOrbitLockedByNameTool(false);
       el.style.cursor = "auto";
     };
-  }, [camera, duplicateInstance, isVisible, raycaster, removeInstance, setActiveId, updateInstance]);
+  }, [
+    camera,
+    duplicateInstance,
+    isVisible,
+    raycaster,
+    removeInstance,
+    setActiveId,
+    updateInstance,
+  ]);
 
   useEffect(() => {
     return () => setOrbitLockedByNameTool(false);

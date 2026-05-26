@@ -21,7 +21,11 @@
       "Bash(npx tsc *)",
       "Bash(grep -v \"^[[:space:]]*//\")",
       "Bash(node -e \"const t = require\\('three'\\); console.log\\(Object.keys\\(t\\).filter\\(k => k.toLowerCase\\(\\).includes\\('merge'\\)\\)\\)\")",
-      "Bash(node -e \"const t = require\\('three/examples/jsm/utils/BufferGeometryUtils.js'\\); console.log\\(Object.keys\\(t\\)\\)\")"
+      "Bash(node -e \"const t = require\\('three/examples/jsm/utils/BufferGeometryUtils.js'\\); console.log\\(Object.keys\\(t\\)\\)\")",
+      "Bash(npm install *)",
+      "Bash(node -e \"require\\('konva'\\); console.log\\('konva ok'\\)\")",
+      "Bash(node -e \"require\\('react-konva'\\); console.log\\('react-konva ok'\\)\")",
+      "Bash(xargs grep -l \"output_fragment\\\\|gl_FragColor\\\\|outgoingLight\")"
     ]
   }
 }

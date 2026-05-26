@@ -1,4 +1,5 @@
 export { useBaseColorTexture } from "./useBaseColorTexture";
+export { useShirtDesignMaterial } from "./useShirtDesignMaterial";
 export { useColorGradientTexture } from "./useColorGradientTexture";
 export { useSlidingIndicator } from "./useSlidingIndicator";
 export { useShirtMaterial } from "./useShirtMaterial";

@@ -32,7 +32,8 @@
       "@utils": ["./src/utils"],
       "@fonts": ["./src/fonts"],
       "@hooks": ["./src/hooks"],
-      "@shaders": ["./src/shaders"]
+      "@shaders": ["./src/shaders"],
+      "@features/*": ["./src/features/*"]
     }
   },
   "include": [
