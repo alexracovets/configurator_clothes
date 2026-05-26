@@ -5,7 +5,12 @@ import { useEffect, useRef, type ComponentRef, type MutableRefObject } from "rea
 import { useFrame, useThree } from "@react-three/fiber";
 import type { OrbitControls as OrbitControlsImpl } from "three-stdlib";
 
-import { orbitFlag, orbitControlsRef } from "@utils";
+import {
+  clearDesignDragPreview,
+  setDesignInteracting,
+} from "@features/configurator/hooks/useDesignTexture";
+import { useConfiguratorStore } from "@features/configurator/store/configurator.store";
+import { isOrbitControlsEnabled, orbitControlsRef } from "@utils";
 
 const MIN_DISTANCE = 0.5;
 const MAX_DISTANCE = 3;
@@ -114,7 +119,7 @@ const ViewControls = () => {
   useFrame(() => {
     if (!orbitRef.current) return;
     orbitControlsRef.current = orbitRef.current;
-    orbitRef.current.enabled = orbitFlag.enabled;
+    orbitRef.current.enabled = isOrbitControlsEnabled();
     const orbit = orbitRef.current;
     const anim = animRef.current;
     let needsRender = false;
@@ -203,6 +208,9 @@ const ViewControls = () => {
         const orbit = orbitRef.current;
         if (orbit) cancelButtonRotation(orbit, animRef.current);
         animRef.current.zoom.active = false;
+        clearDesignDragPreview();
+        setDesignInteracting(false);
+        useConfiguratorStore.getState().selectLayer(null);
         invalidate();
       }}
     />

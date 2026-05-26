@@ -11,10 +11,19 @@ export const orbitControlsRef: { current: OrbitControlsImpl | null } = {
   current: null,
 };
 
+export const isOrbitControlsEnabled = () =>
+  orbitFlag.enabled && !orbitFlag.toolPanelActive;
+
 const applyOrbitEnabled = () => {
   const controls = orbitControlsRef.current;
   if (!controls) return;
-  controls.enabled = orbitFlag.enabled && !orbitFlag.toolPanelActive;
+  controls.enabled = isOrbitControlsEnabled();
+};
+
+/** Disable orbit while the pointer is over the aside panel. */
+export const setAsidePointerOver = (over: boolean) => {
+  orbitFlag.enabled = !over;
+  applyOrbitEnabled();
 };
 
 /** Lock mouse-orbit only when the 3D tool panel / gizmo is in use. */

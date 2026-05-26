@@ -11,7 +11,10 @@ import {
   setDesignDragPreview,
   setDesignInteracting,
 } from "../../hooks/useDesignTexture";
-import { useConfiguratorStore } from "../../store/configurator.store";
+import {
+  useConfiguratorStore,
+  type DesignLayer,
+} from "../../store/configurator.store";
 import type { PrintZoneKey } from "../../texture/textureConstants";
 import {
   findLayerHit,
@@ -19,10 +22,13 @@ import {
   getHits,
   normaliseUV,
 } from "../../utils/hitTest";
+import { isOrbitControlsEnabled, orbitControlsRef } from "@utils";
 
 type DragMode = "body" | "rotate" | "resize";
 
 const clamp01 = (v: number) => Math.max(0.01, Math.min(0.99, v));
+/** Pixels before a body drag steals the gesture from orbit controls. */
+const DRAG_THRESHOLD_PX = 6;
 
 const PointerHandler = () => {
   const { gl, camera, scene, invalidate } = useThree();
@@ -39,6 +45,7 @@ const PointerHandler = () => {
     let dragMode: DragMode | null = null;
     let dragId: string | null = null;
     let dragZone: PrintZoneKey | null = null;
+    let pendingDragMode: DragMode | null = null;
 
     let dragStartUV: THREE.Vector2 | null = null;
     let dragStartXY: { x: number; y: number } | null = null;
@@ -48,6 +55,63 @@ const PointerHandler = () => {
     let dragStartFontSize = 0;
 
     let wasDrag = false;
+
+    function cancelOrbitGesture(e: PointerEvent) {
+      const controls = orbitControlsRef.current;
+      if (controls) {
+        controls.enabled = false;
+        controls.enabled = isOrbitControlsEnabled();
+      }
+      canvas.dispatchEvent(
+        new PointerEvent("pointerup", {
+          bubbles: true,
+          pointerId: e.pointerId,
+          clientX: e.clientX,
+          clientY: e.clientY,
+          pointerType: e.pointerType,
+        }),
+      );
+    }
+
+    function beginDrag(
+      mode: DragMode,
+      id: string,
+      zone: PrintZoneKey,
+      layer: DesignLayer,
+      uv: THREE.Vector2,
+    ) {
+      dragMode = mode;
+      dragId = id;
+      dragZone = zone;
+      pendingDragMode = null;
+      setDesignInteracting(true);
+
+      if (mode === "body") {
+        dragStartUV = uv.clone();
+        dragStartXY = { x: layer.x, y: layer.y };
+        canvas.style.cursor = "grabbing";
+      } else if (mode === "rotate") {
+        dragStartRotation = layer.rotation ?? 0;
+        canvas.style.cursor = "ns-resize";
+      } else {
+        dragStartFontSize = layer.fontSize ?? 128;
+        canvas.style.cursor = "ew-resize";
+      }
+    }
+
+    function resetDragState() {
+      clearDesignDragPreview();
+      setDesignInteracting(false);
+      lastPreview = null;
+      dragMode = null;
+      dragId = null;
+      dragZone = null;
+      pendingDragMode = null;
+      dragStartUV = null;
+      dragStartXY = null;
+      canvas.style.cursor = "";
+      wasDrag = false;
+    }
 
     let rafId: number | null = null;
     let latestMoveEvent: PointerEvent | null = null;
@@ -98,6 +162,7 @@ const PointerHandler = () => {
 
     function onPointerDown(e: PointerEvent) {
       wasDrag = false;
+      pendingDragMode = null;
 
       const hits = getHits(e, gl, camera, scene);
       const found = findLayerHit(hits);
@@ -136,27 +201,40 @@ const PointerHandler = () => {
       dragStartClientX = e.clientX;
       dragStartClientY = e.clientY;
 
-      setDesignInteracting(true);
-
       if (gz === "body") {
-        dragMode = "body";
-        dragStartUV = found.uv.clone();
-        dragStartXY = { x: layer.x, y: layer.y };
-        canvas.style.cursor = "grabbing";
-      } else if (gz === "rotate") {
-        dragMode = "rotate";
-        dragStartRotation = layer.rotation ?? 0;
-        canvas.style.cursor = "ns-resize";
-      } else if (gz === "resize") {
-        dragMode = "resize";
-        dragStartFontSize = layer.fontSize ?? 128;
-        canvas.style.cursor = "ew-resize";
+        pendingDragMode = "body";
+        return;
       }
 
-      e.stopPropagation();
+      if (gz === "rotate" || gz === "resize") {
+        beginDrag(gz, id, found.zone, layer, found.uv);
+        e.stopPropagation();
+      }
     }
 
     function onPointerMove(e: PointerEvent) {
+      if (pendingDragMode && !dragMode && dragId && dragZone) {
+        const dist = Math.hypot(
+          e.clientX - dragStartClientX,
+          e.clientY - dragStartClientY,
+        );
+        if (dist >= DRAG_THRESHOLD_PX) {
+          const state = useConfiguratorStore.getState();
+          const layer = state.layers.find((l) => l.id === dragId);
+          const hits = getHits(e, gl, camera, scene);
+          const found = findLayerHit(hits);
+          if (layer && found && found.result.id === dragId) {
+            cancelOrbitGesture(e);
+            beginDrag(pendingDragMode, dragId, dragZone, layer, found.uv);
+            e.stopPropagation();
+          } else {
+            pendingDragMode = null;
+            dragId = null;
+            dragZone = null;
+          }
+        }
+      }
+
       if (!dragMode || !dragId) return;
       wasDrag = true;
       latestMoveEvent = e;
@@ -180,17 +258,7 @@ const PointerHandler = () => {
           state.updateLayer(dragId, { fontSize: lastPreview.fontSize });
       }
 
-      clearDesignDragPreview();
-      setDesignInteracting(false);
-      lastPreview = null;
-
-      dragMode = null;
-      dragId = null;
-      dragZone = null;
-      dragStartUV = null;
-      dragStartXY = null;
-      canvas.style.cursor = "";
-      wasDrag = false;
+      resetDragState();
     }
 
     function onKeyDown(e: KeyboardEvent) {
@@ -203,17 +271,18 @@ const PointerHandler = () => {
       }
     }
 
-    canvas.addEventListener("pointerdown", onPointerDown);
+    canvas.addEventListener("pointerdown", onPointerDown, true);
     window.addEventListener("pointermove", onPointerMove);
     window.addEventListener("pointerup", onPointerUp);
+    window.addEventListener("pointercancel", onPointerUp);
     window.addEventListener("keydown", onKeyDown);
     return () => {
       if (rafId !== null) cancelAnimationFrame(rafId);
-      clearDesignDragPreview();
-      setDesignInteracting(false);
-      canvas.removeEventListener("pointerdown", onPointerDown);
+      resetDragState();
+      canvas.removeEventListener("pointerdown", onPointerDown, true);
       window.removeEventListener("pointermove", onPointerMove);
       window.removeEventListener("pointerup", onPointerUp);
+      window.removeEventListener("pointercancel", onPointerUp);
       window.removeEventListener("keydown", onKeyDown);
     };
   }, [gl, camera, scene]);

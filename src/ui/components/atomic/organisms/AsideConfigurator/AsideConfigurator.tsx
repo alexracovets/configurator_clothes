@@ -7,7 +7,7 @@ import { Flex, Grid } from "@atoms";
 import { ScrollArea } from "@shared";
 
 import { useStepsStore } from "@store";
-import { orbitFlag } from "@utils";
+import { setAsidePointerOver } from "@utils";
 
 const STEP_PANELS = [
   StepDesign,
@@ -36,8 +36,8 @@ const AsideConfigurator = () => {
     <Grid variant="aside_configurator" asChild>
       <aside
         className="pointer-events-auto"
-        onPointerEnter={() => (orbitFlag.enabled = false)}
-        onPointerLeave={() => (orbitFlag.enabled = true)}
+        onPointerEnter={() => setAsidePointerOver(true)}
+        onPointerLeave={() => setAsidePointerOver(false)}
       >
         <Flex className="flex-col items-start shrink-0">
           <AsideName name={data.name} min_buy={data.min_buy} id={data.id} />

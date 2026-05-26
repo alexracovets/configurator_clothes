@@ -75,7 +75,10 @@ interface ConfiguratorState {
 
 interface ConfiguratorActions {
   // layer CRUD
-  addLayer: (layer: Omit<DesignLayer, "id">) => string;
+  addLayer: (
+    layer: Omit<DesignLayer, "id">,
+    options?: { select?: boolean },
+  ) => string;
   updateLayer: (id: string, patch: Partial<Omit<DesignLayer, "id">>) => void;
   removeLayer: (id: string) => void;
   duplicateLayer: (id: string) => void;
@@ -138,7 +141,7 @@ export const useConfiguratorStore = create<ConfiguratorStore>((set, get) => ({
   _future: [],
 
   // ── layer CRUD ──────────────────────────────────────────────────────────────
-  addLayer: (layer) => {
+  addLayer: (layer, options) => {
     const id = newId();
     const centre = zoneCentre(layer.zone);
     const full: DesignLayer = Object.assign(
@@ -157,7 +160,7 @@ export const useConfiguratorStore = create<ConfiguratorStore>((set, get) => ({
     set((s) => ({
       ...pushHistory(s),
       layers: [...s.layers, full],
-      selectedId: id,
+      selectedId: options?.select === false ? s.selectedId : id,
     }));
     return id;
   },

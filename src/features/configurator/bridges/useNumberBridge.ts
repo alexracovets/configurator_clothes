@@ -24,23 +24,26 @@ export function useNumberBridge() {
       }
 
       if (!configIdRef.current) {
-        const id = addLayer({
-          type:        "number",
-          zone:        FRONT_ZONE,
-          x:           DEFAULT_UV.x,
-          y:           DEFAULT_UV.y,
-          rotation:    0,
-          scaleX:      0.25,
-          scaleY:      0.25,
-          visible:     true,
-          locked:      false,
-          text:        instance.text,
-          font:        instance.font,
-          fontSize:    instance.fontSize,
-          textColor:   instance.textColor,
-          strokeColor: instance.strokeColor,
-          strokeWidth: instance.strokeWidth,
-        });
+        const id = addLayer(
+          {
+            type: "number",
+            zone: FRONT_ZONE,
+            x: DEFAULT_UV.x,
+            y: DEFAULT_UV.y,
+            rotation: 0,
+            scaleX: 0.25,
+            scaleY: 0.25,
+            visible: true,
+            locked: false,
+            text: instance.text,
+            font: instance.font,
+            fontSize: instance.fontSize,
+            textColor: instance.textColor,
+            strokeColor: instance.strokeColor,
+            strokeWidth: instance.strokeWidth,
+          },
+          { select: false },
+        );
         configIdRef.current = id;
       } else {
         updateLayer(configIdRef.current, {
