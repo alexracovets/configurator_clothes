@@ -1,7 +1,8 @@
-"use client";
+'use client';
 
-import { Grid, Text } from "@atoms";
-import { BageProduct } from "./BageProduct";
+import { Grid, Text } from '@atoms';
+
+import { BageProduct } from './BageProduct';
 
 interface AsideNameProps {
   name: string;

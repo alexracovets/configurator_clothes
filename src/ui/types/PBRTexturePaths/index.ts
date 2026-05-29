@@ -1,1 +1,1 @@
-export type { PBRTexturePaths } from "./PBRTexturePaths";
+export type { PBRTexturePaths } from './PBRTexturePaths';

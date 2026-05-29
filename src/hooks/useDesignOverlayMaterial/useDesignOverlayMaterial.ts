@@ -1,12 +1,12 @@
-﻿"use client";
+﻿'use client';
 
-import { useLayoutEffect, useMemo, useRef } from "react";
-import * as THREE from "three";
+import { useLayoutEffect, useMemo, useRef } from 'react';
 
-import { UV0_BOUNDS } from "@utils";
-import type { PrintZoneKey } from "@types";
-import type { ShirtPart } from "@types";
-import { shirtFragmentUniforms, shirtVertexUvParsVertex, shirtVertexUvVertex } from "@shaders";
+import * as THREE from 'three';
+
+import { UV0_BOUNDS } from '@utils';
+import { shirtFragmentUniforms, shirtVertexUvParsVertex, shirtVertexUvVertex } from '@shaders';
+import type { PrintZoneKey, ShirtPart } from '@types';
 
 const OVERLAY_FRAG_UNIFORMS = /* glsl */ `
   uniform sampler2D uDesignMap;
@@ -26,12 +26,8 @@ const OVERLAY_FRAG_MAIN = /* glsl */ `
   }
 `;
 
-const useDesignOverlayMaterial = (
-  part: ShirtPart,
-  designTexture: THREE.CanvasTexture,
-): THREE.MeshBasicMaterial => {
-  const bounds =
-    UV0_BOUNDS[part as PrintZoneKey] ?? { minX: 0, minY: 0, maxX: 1, maxY: 1 };
+const useDesignOverlayMaterial = (part: ShirtPart, designTexture: THREE.CanvasTexture): THREE.MeshBasicMaterial => {
+  const bounds = UV0_BOUNDS[part as PrintZoneKey] ?? { minX: 0, minY: 0, maxX: 1, maxY: 1 };
 
   const designUniforms = useRef({
     uDesignMap: { value: designTexture as THREE.Texture },
@@ -66,15 +62,12 @@ const useDesignOverlayMaterial = (
       shader.uniforms.uDesignUvBounds = du.uDesignUvBounds;
 
       shader.vertexShader = shader.vertexShader
-        .replace("#include <uv_pars_vertex>", shirtVertexUvParsVertex)
-        .replace("#include <uv_vertex>", shirtVertexUvVertex);
+        .replace('#include <uv_pars_vertex>', shirtVertexUvParsVertex)
+        .replace('#include <uv_vertex>', shirtVertexUvVertex);
 
       shader.fragmentShader = shader.fragmentShader
-        .replace(
-          "#include <uv_pars_fragment>",
-          shirtFragmentUniforms + "\n" + OVERLAY_FRAG_UNIFORMS,
-        )
-        .replace("#include <map_fragment>", OVERLAY_FRAG_MAIN);
+        .replace('#include <uv_pars_fragment>', shirtFragmentUniforms + '\n' + OVERLAY_FRAG_UNIFORMS)
+        .replace('#include <map_fragment>', OVERLAY_FRAG_MAIN);
     };
 
     m.needsUpdate = true;

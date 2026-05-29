@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef } from 'react';
 
-import { useNumberStore, useConfiguratorStore } from "@store";
+import { useConfiguratorStore, useNumberStore } from '@store';
 
-const FRONT_ZONE = "front" as const;
+const FRONT_ZONE = 'front' as const;
 const DEFAULT_UV = { x: 0.5, y: 0.45 };
 
 const useNumberBridge = () => {
@@ -24,10 +24,36 @@ const useNumberBridge = () => {
       }
 
       if (!configIdRef.current) {
-        const id = addLayer({ type: "number", zone: FRONT_ZONE, x: DEFAULT_UV.x, y: DEFAULT_UV.y, rotation: 0, scaleX: 0.25, scaleY: 0.25, visible: true, locked: false, text: instance.text, font: instance.font, fontSize: instance.fontSize, textColor: instance.textColor, strokeColor: instance.strokeColor, strokeWidth: instance.strokeWidth }, { select: false });
+        const id = addLayer(
+          {
+            type: 'number',
+            zone: FRONT_ZONE,
+            x: DEFAULT_UV.x,
+            y: DEFAULT_UV.y,
+            rotation: 0,
+            scaleX: 0.25,
+            scaleY: 0.25,
+            visible: true,
+            locked: false,
+            text: instance.text,
+            font: instance.font,
+            fontSize: instance.fontSize,
+            textColor: instance.textColor,
+            strokeColor: instance.strokeColor,
+            strokeWidth: instance.strokeWidth,
+          },
+          { select: false },
+        );
         configIdRef.current = id;
       } else {
-        updateLayer(configIdRef.current, { text: instance.text, font: instance.font, fontSize: instance.fontSize, textColor: instance.textColor, strokeColor: instance.strokeColor, strokeWidth: instance.strokeWidth });
+        updateLayer(configIdRef.current, {
+          text: instance.text,
+          font: instance.font,
+          fontSize: instance.fontSize,
+          textColor: instance.textColor,
+          strokeColor: instance.strokeColor,
+          strokeWidth: instance.strokeWidth,
+        });
       }
     };
 

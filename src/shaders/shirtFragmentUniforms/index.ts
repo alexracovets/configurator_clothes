@@ -1,1 +1,1 @@
-export { shirtFragmentUniforms } from "./shirtFragmentUniforms";
+export { shirtFragmentUniforms } from './shirtFragmentUniforms';

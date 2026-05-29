@@ -1,24 +1,13 @@
-﻿import { Slider as SliderPrimitive } from "@base-ui/react/slider";
+﻿import { Slider as SliderPrimitive } from '@base-ui/react/slider';
 
-import { cn } from "@utils";
+import { cn } from '@utils';
 
-const Slider = ({
-  className,
-  defaultValue,
-  value,
-  min = 0,
-  max = 100,
-  ...props
-}: SliderPrimitive.Root.Props) => {
-  const _values = Array.isArray(value)
-    ? value
-    : Array.isArray(defaultValue)
-      ? defaultValue
-      : [min, max];
+const Slider = ({ className, defaultValue, value, min = 0, max = 100, ...props }: SliderPrimitive.Root.Props) => {
+  const _values = Array.isArray(value) ? value : Array.isArray(defaultValue) ? defaultValue : [min, max];
 
   return (
     <SliderPrimitive.Root
-      className={cn("data-horizontal:w-full data-vertical:h-full", className)}
+      className={cn('data-horizontal:w-full data-vertical:h-full', className)}
       data-slot="slider"
       defaultValue={defaultValue}
       value={value}
@@ -32,10 +21,7 @@ const Slider = ({
           data-slot="slider-track"
           className="relative grow overflow-hidden rounded-full bg-muted select-none data-horizontal:h-1 data-horizontal:w-full data-vertical:h-full data-vertical:w-1"
         >
-          <SliderPrimitive.Indicator
-            data-slot="slider-range"
-            className="bg-primary select-none data-horizontal:h-full data-vertical:w-full"
-          />
+          <SliderPrimitive.Indicator data-slot="slider-range" className="bg-primary select-none data-horizontal:h-full data-vertical:w-full" />
         </SliderPrimitive.Track>
         {Array.from({ length: _values.length }, (_, index) => (
           <SliderPrimitive.Thumb
@@ -47,6 +33,6 @@ const Slider = ({
       </SliderPrimitive.Control>
     </SliderPrimitive.Root>
   );
-}
+};
 
 export { Slider };

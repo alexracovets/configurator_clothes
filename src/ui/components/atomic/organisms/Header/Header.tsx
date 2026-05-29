@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { LangSwitcher, Search, UserBar } from "@molecules";
-import { Box, Container, Flex, Grid, Logo } from "@atoms";
+import { LangSwitcher, Search, UserBar } from '@molecules';
+import { Box, Container, Flex, Grid, Logo } from '@atoms';
 
 const Header = () => {
   return (

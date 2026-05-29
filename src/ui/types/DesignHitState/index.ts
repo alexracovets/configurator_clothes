@@ -1,1 +1,1 @@
-export type { DesignHitState } from "./DesignHitState";
+export type { DesignHitState } from './DesignHitState';

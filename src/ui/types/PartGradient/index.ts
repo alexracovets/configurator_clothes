@@ -1,1 +1,1 @@
-export type { PartGradient, PartGradients } from "./PartGradient";
+export type { PartGradient, PartGradients } from './PartGradient';

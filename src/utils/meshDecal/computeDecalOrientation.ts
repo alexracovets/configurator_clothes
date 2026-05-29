@@ -1,10 +1,6 @@
-﻿import * as THREE from "three";
+﻿import * as THREE from 'three';
 
-const computeDecalOrientation = (
-  mesh: THREE.Mesh,
-  position: THREE.Vector3,
-  rotZ = 0,
-): THREE.Euler => {
+const computeDecalOrientation = (mesh: THREE.Mesh, position: THREE.Vector3, rotZ = 0): THREE.Euler => {
   const geometry = mesh.geometry;
   if (!geometry.attributes.normal) {
     geometry.computeVertexNormals();
@@ -34,11 +30,7 @@ const computeDecalOrientation = (
   helper.position.copy(position);
 
   if (chosenIdx >= 0) {
-    const closestNormal = new THREE.Vector3(
-      normals[chosenIdx],
-      normals[chosenIdx + 1],
-      normals[chosenIdx + 2],
-    );
+    const closestNormal = new THREE.Vector3(normals[chosenIdx], normals[chosenIdx + 1], normals[chosenIdx + 2]);
     helper.lookAt(helper.position.clone().add(closestNormal));
     helper.rotateZ(Math.PI);
     helper.rotateY(Math.PI);

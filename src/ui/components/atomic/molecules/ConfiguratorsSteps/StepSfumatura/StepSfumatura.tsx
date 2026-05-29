@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { useGradientStore, useColorStore, SHIRT_PARTS } from "@store";
-import { Flex, AcordionAtom } from "@atoms";
-import { ColorControl, RangeControl, ToggleControl, PartColorSwatch } from "@molecules";
+import { ColorControl, PartColorSwatch, RangeControl, ToggleControl } from '@molecules';
+import { AcordionAtom, Flex } from '@atoms';
+import { SHIRT_PARTS, useColorStore, useGradientStore } from '@store';
 
 const StepSfumatura = () => {
   const { partGradients, setPartGradient } = useGradientStore();
@@ -11,13 +11,11 @@ const StepSfumatura = () => {
   const items = SHIRT_PARTS.map(({ key, italianLabel }) => {
     const gradient = partGradients[key];
     const color1 = partColors[key];
-    const previewGrad = gradient.enabled
-      ? `linear-gradient(${gradient.rotation}deg, ${color1} ${gradient.position}%, ${gradient.color2})`
-      : color1;
+    const previewGrad = gradient.enabled ? `linear-gradient(${gradient.rotation}deg, ${color1} ${gradient.position}%, ${gradient.color2})` : color1;
 
     return {
       value: key,
-      trigger: <PartColorSwatch label={italianLabel} color={previewGrad} badge={gradient.enabled ? "sfumatura attiva" : undefined} />,
+      trigger: <PartColorSwatch label={italianLabel} color={previewGrad} badge={gradient.enabled ? 'sfumatura attiva' : undefined} />,
       content: (
         <Flex variant="configurator_part" className="gap-7">
           <ToggleControl label="Sfumatura" value={gradient.enabled} onChange={(enabled) => setPartGradient(key, { enabled })} />
@@ -40,7 +38,7 @@ const StepSfumatura = () => {
 
   return (
     <Flex variant="step_design">
-      <AcordionAtom items={items} defaultValue={["front"]} />
+      <AcordionAtom items={items} defaultValue={['front']} />
     </Flex>
   );
 };

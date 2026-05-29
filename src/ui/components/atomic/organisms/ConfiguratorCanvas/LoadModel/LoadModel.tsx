@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { CrewneckModel } from "@organisms";
+import { CrewneckModel } from '@organisms';
 
 const LoadModel = () => {
   return <CrewneckModel />;

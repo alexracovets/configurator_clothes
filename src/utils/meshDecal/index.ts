@@ -1,3 +1,2 @@
-export * from "./computeDecalOrientation";
-export * from "./createConformingDecalGeometry";
-export * from "./MeshDecal";
+export * from './computeDecalOrientation';
+export * from './createConformingDecalGeometry';

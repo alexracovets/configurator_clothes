@@ -1,1 +1,1 @@
-export { useColorStore } from "./useColorStore";
+export { useColorStore } from './useColorStore';

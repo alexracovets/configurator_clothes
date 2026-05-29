@@ -1,4 +1,4 @@
-import type Konva from "konva";
+import type Konva from 'konva';
 
 export interface DesignCanvasResult {
   stage: Konva.Stage;

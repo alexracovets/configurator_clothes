@@ -1,1 +1,1 @@
-export * from "./ColorTabControl";
+export * from './ColorTabControl';

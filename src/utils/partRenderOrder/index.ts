@@ -1,1 +1,1 @@
-export { getPartRenderOrder } from "./partRenderOrder";
+export { getPartRenderOrder } from './partRenderOrder';

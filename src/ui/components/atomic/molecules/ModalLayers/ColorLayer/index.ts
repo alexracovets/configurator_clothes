@@ -1,1 +1,1 @@
-export { ColorLayer } from "./ColorLayer";
+export { ColorLayer } from './ColorLayer';

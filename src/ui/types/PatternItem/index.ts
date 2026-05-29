@@ -1,1 +1,1 @@
-export type { PatternItem } from "./PatternItem";
+export type { PatternItem } from './PatternItem';

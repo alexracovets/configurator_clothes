@@ -1,1 +1,1 @@
-export { ToggleControl } from "./ToggleControl";
+export { ToggleControl } from './ToggleControl';

@@ -1,19 +1,20 @@
-"use client";
+'use client';
 
-import { useState, useRef } from "react";
-import { AnimatePresence, motion } from "motion/react";
-import { IoIosSearch, IoIosClose } from "react-icons/io";
+import { useRef, useState } from 'react';
 
-import { SearchInput, Flex } from "@atoms";
+import { AnimatePresence, motion } from 'motion/react';
+import { IoIosClose, IoIosSearch } from 'react-icons/io';
+
+import { Flex, SearchInput } from '@atoms';
 
 const Search = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [value, setValue] = useState("");
+  const [value, setValue] = useState('');
   const inputRef = useRef<HTMLInputElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
 
   const handleClose = () => {
-    setValue("");
+    setValue('');
     setIsOpen(false);
     setTimeout(() => triggerRef.current?.focus(), 0);
   };
@@ -33,7 +34,7 @@ const Search = () => {
         if (isOpen) inputRef.current?.focus();
       }}
       onKeyDown={(e) => {
-        if (e.key === "Escape") handleClose();
+        if (e.key === 'Escape') handleClose();
       }}
     >
       <Flex variant="search_bar" data-active={isOpen}>
@@ -52,10 +53,7 @@ const Search = () => {
               aria-controls="search-input"
               className="absolute inset-0 flex items-center justify-center z-10"
             >
-              <IoIosSearch
-                aria-hidden="true"
-                className="size-5 text-primary-10 cursor-pointer shrink-0"
-              />
+              <IoIosSearch aria-hidden="true" className="size-5 text-primary-10 cursor-pointer shrink-0" />
             </motion.button>
           ) : (
             <motion.button
@@ -69,10 +67,7 @@ const Search = () => {
               aria-label="Close search"
               className="absolute right-1 top-1/2 -translate-y-1/2 size-7 rounded-full bg-border flex items-center justify-center z-10"
             >
-              <IoIosClose
-                aria-hidden="true"
-                className="size-5 text-primary-10 cursor-pointer"
-              />
+              <IoIosClose aria-hidden="true" className="size-5 text-primary-10 cursor-pointer" />
             </motion.button>
           )}
         </AnimatePresence>

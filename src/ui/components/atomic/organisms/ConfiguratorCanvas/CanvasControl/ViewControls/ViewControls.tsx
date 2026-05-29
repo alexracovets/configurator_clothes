@@ -1,12 +1,13 @@
-﻿"use client";
+﻿'use client';
 
-import { OrbitControls } from "@react-three/drei";
-import { useEffect, useRef, type ComponentRef, type MutableRefObject } from "react";
-import { useFrame, useThree } from "@react-three/fiber";
-import type { OrbitControls as OrbitControlsImpl } from "three-stdlib";
+import { type ComponentRef, type MutableRefObject, useEffect, useRef } from 'react';
 
-import { clearDesignDragPreview, setDesignInteracting } from "@hooks";
-import { isOrbitControlsEnabled, orbitControlsRef } from "@utils";
+import { OrbitControls } from '@react-three/drei';
+import { useFrame, useThree } from '@react-three/fiber';
+import type { OrbitControls as OrbitControlsImpl } from 'three-stdlib';
+
+import { clearDesignDragPreview, setDesignInteracting } from '@hooks';
+import { isOrbitControlsEnabled, orbitControlsRef } from '@utils';
 
 const MIN_DISTANCE = 0.5;
 const MAX_DISTANCE = 3;
@@ -62,11 +63,7 @@ const cancelButtonRotation = (orbit: OrbitControlsImpl, anim: AnimState) => {
   anim.holdRotate = 0;
 };
 
-const addButtonRotation = (
-  orbit: OrbitControlsImpl,
-  anim: AnimState,
-  delta: number,
-) => {
+const addButtonRotation = (orbit: OrbitControlsImpl, anim: AnimState, delta: number) => {
   const { rotate } = anim;
   if (!rotate.active) {
     syncAppliedFromOrbit(orbit, anim);
@@ -76,11 +73,7 @@ const addButtonRotation = (
   rotate.active = true;
 };
 
-const stepButtonRotation = (
-  orbit: OrbitControlsImpl,
-  anim: AnimState,
-  programmaticMoveRef: MutableRefObject<boolean>,
-) => {
+const stepButtonRotation = (orbit: OrbitControlsImpl, anim: AnimState, programmaticMoveRef: MutableRefObject<boolean>) => {
   const { rotate } = anim;
   const diff = rotate.target - rotate.applied;
 
@@ -149,8 +142,7 @@ const ViewControls = () => {
       needsRender = true;
     }
 
-    const animRunning =
-      anim.holdRotate !== 0 || anim.rotate.active || anim.zoom.active;
+    const animRunning = anim.holdRotate !== 0 || anim.rotate.active || anim.zoom.active;
     if (needsRender || animRunning) invalidate();
   });
 
@@ -166,14 +158,9 @@ const ViewControls = () => {
         if (!orbitRef.current) return;
         const { object: camera, target } = orbitRef.current;
         const anim = animRef.current;
-        const currentDist = anim.zoom.active
-          ? anim.zoom.targetDistance
-          : camera.position.distanceTo(target);
+        const currentDist = anim.zoom.active ? anim.zoom.targetDistance : camera.position.distanceTo(target);
         const factor = direction > 0 ? ZOOM_FACTOR : 1 / ZOOM_FACTOR;
-        anim.zoom.targetDistance = Math.max(
-          MIN_DISTANCE,
-          Math.min(MAX_DISTANCE, currentDist * factor),
-        );
+        anim.zoom.targetDistance = Math.max(MIN_DISTANCE, Math.min(MAX_DISTANCE, currentDist * factor));
         anim.zoom.active = true;
         invalidate();
       },
@@ -212,4 +199,4 @@ const ViewControls = () => {
   );
 };
 
-export { ViewControls, cameraBridge };
+export { cameraBridge, ViewControls };

@@ -1,8 +1,9 @@
-"use client";
+'use client';
 
-import { Button, Flex } from "@atoms";
-import { UserIcon } from "./UserIcon";
-import { CartIcon } from "./CartIcon";
+import { Button, Flex } from '@atoms';
+
+import { CartIcon } from './CartIcon';
+import { UserIcon } from './UserIcon';
 
 const UserBar = () => {
   return (

@@ -1,4 +1,4 @@
-import { DECAL_SCALE_MIN, DECAL_SCALE_MAX, DECAL_ASPECT, DECAL_DEPTH, FONT_SIZE_MIN, FONT_SIZE_MAX, FONTS } from "@constants";
+import { DECAL_ASPECT, DECAL_DEPTH, DECAL_SCALE_MAX, DECAL_SCALE_MIN, FONT_SIZE_MAX, FONT_SIZE_MIN, FONTS } from '@constants';
 
 const fontCssFamily = (cssVar: string) => `var(${cssVar})`;
 
@@ -12,10 +12,8 @@ const clampDecalScale = (width: number): [number, number, number] => {
   return [w, w / DECAL_ASPECT, DECAL_DEPTH];
 };
 
-const fontSizeToDecalScale = (fontSize: number): [number, number, number] =>
-  clampDecalScale(REF_DECAL_WIDTH * (fontSize / REF_FONT_SIZE));
+const fontSizeToDecalScale = (fontSize: number): [number, number, number] => clampDecalScale(REF_DECAL_WIDTH * (fontSize / REF_FONT_SIZE));
 
-const decalWidthToFontSize = (width: number): number =>
-  Math.round(Math.min(FONT_SIZE_MAX, Math.max(FONT_SIZE_MIN, REF_FONT_SIZE * (width / REF_DECAL_WIDTH))));
+const decalWidthToFontSize = (width: number): number => Math.round(Math.min(FONT_SIZE_MAX, Math.max(FONT_SIZE_MIN, REF_FONT_SIZE * (width / REF_DECAL_WIDTH))));
 
-export { fontCssFamily, fontCanvasName, clampDecalScale, fontSizeToDecalScale, decalWidthToFontSize };
+export { clampDecalScale, decalWidthToFontSize, fontCanvasName, fontCssFamily, fontSizeToDecalScale };

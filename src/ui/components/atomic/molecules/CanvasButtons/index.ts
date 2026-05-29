@@ -1,1 +1,1 @@
-export { CanvasButtons } from "./CanvasButtons";
+export { CanvasButtons } from './CanvasButtons';

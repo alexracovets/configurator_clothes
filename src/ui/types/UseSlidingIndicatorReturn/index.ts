@@ -1,1 +1,1 @@
-export type { UseSlidingIndicatorReturn } from "./UseSlidingIndicatorReturn";
+export type { UseSlidingIndicatorReturn } from './UseSlidingIndicatorReturn';

@@ -1,1 +1,1 @@
-export * from "./CrewneckModel";
+export * from './CrewneckModel';

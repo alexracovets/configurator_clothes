@@ -1,1 +1,1 @@
-export { AsideName } from "./AsideName";
+export { AsideName } from './AsideName';

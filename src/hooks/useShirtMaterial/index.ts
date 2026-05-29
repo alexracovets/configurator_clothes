@@ -1,1 +1,1 @@
-export { useShirtMaterial } from "./useShirtMaterial";
+export { useShirtMaterial } from './useShirtMaterial';

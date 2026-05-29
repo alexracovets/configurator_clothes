@@ -6,16 +6,16 @@ This project uses **Next.js App Router** with **Atomic Design Architecture**.
 
 # Core Principles
 
-* All project source code except App Router pages must be stored inside `src/`
-* Use TypeScript everywhere
-* Use named exports whenever possible
-* Every logical unit (component, hook, utility, shader, store, etc.) must live inside its own folder
-* Every folder must export through `index.ts`
-* Global layer indexes aggregate exports from child modules
-* Imports must always use TS path aliases
-* Keep components максимально ізольованими та перевикористовуваними
-* Separate UI, logic, styles, and types cleanly
-* Avoid deep relative imports
+- All project source code except App Router pages must be stored inside `src/`
+- Use TypeScript everywhere
+- Use named exports whenever possible
+- Every logical unit (component, hook, utility, shader, store, etc.) must live inside its own folder
+- Every folder must export through `index.ts`
+- Global layer indexes aggregate exports from child modules
+- Imports must always use TS path aliases
+- Keep components максимально ізольованими та перевикористовуваними
+- Separate UI, logic, styles, and types cleanly
+- Avoid deep relative imports
 
 ---
 
@@ -75,11 +75,11 @@ Small reusable UI elements.
 
 Examples:
 
-* Button
-* Input
-* Label
-* Icon
-* Badge
+- Button
+- Input
+- Label
+- Icon
+- Badge
 
 ---
 
@@ -89,9 +89,9 @@ Groups of atoms with small logic.
 
 Examples:
 
-* SearchInput
-* UserCard
-* SelectField
+- SearchInput
+- UserCard
+- SelectField
 
 ---
 
@@ -101,10 +101,10 @@ Large complex UI blocks.
 
 Examples:
 
-* Header
-* Sidebar
-* ProductConfigurator
-* HeroSection
+- Header
+- Sidebar
+- ProductConfigurator
+- HeroSection
 
 ---
 
@@ -114,8 +114,8 @@ Page layouts without business-specific content.
 
 Examples:
 
-* DashboardTemplate
-* AuthTemplate
+- DashboardTemplate
+- AuthTemplate
 
 ---
 
@@ -125,8 +125,8 @@ Composed page-level views.
 
 Examples:
 
-* HomePageView
-* ProductPageView
+- HomePageView
+- ProductPageView
 
 ---
 
@@ -155,7 +155,7 @@ Every module must export through local `index.ts`.
 Example:
 
 ```ts
-export * from './Button'
+export * from './Button';
 ```
 
 Every architecture layer must also aggregate exports.
@@ -173,8 +173,8 @@ atoms/
 `atoms/index.ts`
 
 ```ts
-export * from './Button'
-export * from './Input'
+export * from './Button';
+export * from './Input';
 ```
 
 ---
@@ -197,32 +197,33 @@ Each import statement must fit on a **single line**. Never split named imports a
 GOOD:
 
 ```ts
-import { useEffect, useRef, useState } from "react";
-import { Decal } from "@react-three/drei";
-import { useThree } from "@react-three/fiber";
-import * as THREE from "three";
+import { useEffect, useRef, useState } from 'react';
 
-import { DesignLayers } from "@organisms";
-import { PartLayers } from "@molecules";
+import { Decal } from '@react-three/drei';
+import { useThree } from '@react-three/fiber';
+import * as THREE from 'three';
 
-import { useNameStore, clampDecalScale } from "@store";
-import { useDecalTexture, buildDecalLayout } from "@hooks";
-import { setOrbitLockedByNameTool } from "@utils";
-import type { NameInstance } from "@store";
-import type { GizmoZone } from "@types";
+import { DesignLayers } from '@organisms';
+
+import { PartLayers } from '@molecules';
+
+import { clampDecalScale, useNameStore } from '@store';
+import type { NameInstance } from '@store';
+
+import { buildDecalLayout, useDecalTexture } from '@hooks';
+
+import { setOrbitLockedByNameTool } from '@utils';
+
+import type { GizmoZone } from '@types';
 ```
 
 BAD:
 
 ```ts
-import {
-  useNameStore,
-  DECAL_SCALE_MIN,
-  DECAL_SCALE_MAX,
-} from "@store";
+import { DECAL_SCALE_MAX, DECAL_SCALE_MIN, useNameStore } from '@store';
+import { useConfiguratorStore } from '@store/configuratorDesign';
 
-import { Button } from '../../../Button'
-import { useConfiguratorStore } from '@store/configuratorDesign'
+import { Button } from '../../../Button';
 ```
 
 Every layer has a single `index.ts` that aggregates all exports. Import from the alias root only.
@@ -230,20 +231,27 @@ Every layer has a single `index.ts` that aggregates all exports. Import from the
 GOOD:
 
 ```ts
-import { Button } from '@atoms'
-import { Header } from '@organisms'
-import { useConfiguratorStore } from '@store'
-import { UV0_BOUNDS } from '@utils'
-import { useDesignTexture } from '@hooks'
+import { Header } from '@organisms';
+
+import { Button } from '@atoms';
+
+import { useConfiguratorStore } from '@store';
+
+import { useDesignTexture } from '@hooks';
+
+import { UV0_BOUNDS } from '@utils';
 ```
 
 BAD:
 
 ```ts
-import { Button } from '../../../Button'
-import { useConfiguratorStore } from '@store/configuratorDesign'
-import { UV0_BOUNDS } from '@utils/designTexture'
-import { useDesignTexture } from '@hooks/useDesignTexture'
+import { useConfiguratorStore } from '@store/configuratorDesign';
+
+import { useDesignTexture } from '@hooks/useDesignTexture';
+
+import { UV0_BOUNDS } from '@utils/designTexture';
+
+import { Button } from '../../../Button';
 ```
 
 Every layer (`@store`, `@utils`, `@hooks`, etc.) has a single `index.ts` that aggregates all exports. Import from the alias root — never from a nested sub-path.
@@ -303,27 +311,28 @@ constants/
 ```
 
 Rules:
-* Constants that are used in more than one file belong in `src/constants/`
-* Local-only magic values stay local (not every number needs a constant)
-* Import always via `@constants`
-* Never duplicate a constant that already exists in `@constants`
+
+- Constants that are used in more than one file belong in `src/constants/`
+- Local-only magic values stay local (not every number needs a constant)
+- Import always via `@constants`
+- Never duplicate a constant that already exists in `@constants`
 
 ---
 
 # Comments Rules
 
-* No comments in source files.
-* Exception: `/* glsl */` tagged template literals in shader files (IDE syntax highlighting, not a comment).
-* Never write JSDoc (`/** */`), block comments (`/* */`), or line comments (`//`) in any `.ts` / `.tsx` file.
+- No comments in source files.
+- Exception: `/* glsl */` tagged template literals in shader files (IDE syntax highlighting, not a comment).
+- Never write JSDoc (`/** */`), block comments (`/* */`), or line comments (`//`) in any `.ts` / `.tsx` file.
 
 ---
 
 # Styling Rules
 
-* Prefer TailwindCSS
-* Avoid inline styles unless necessary
-* Keep reusable styles isolated
-* Shared styles belong in:
+- Prefer TailwindCSS
+- Avoid inline styles unless necessary
+- Keep reusable styles isolated
+- Shared styles belong in:
 
 ```txt
 src/ui/styles/
@@ -366,10 +375,10 @@ hooks/
 
 Utilities must be:
 
-* pure
-* reusable
-* isolated
-* framework-independent whenever possible
+- pure
+- reusable
+- isolated
+- framework-independent whenever possible
 
 Example:
 
@@ -459,12 +468,12 @@ configurator.store.ts
 
 # Architecture Principles
 
-* Reusability first
-* Separation of concerns
-* Minimal coupling
-* Predictable structure
-* Scalable architecture
-* No deep relative imports
-* Business logic should not live directly inside UI files
-* Components should remain small whenever possible
-* Each module must have isolated responsibility
+- Reusability first
+- Separation of concerns
+- Minimal coupling
+- Predictable structure
+- Scalable architecture
+- No deep relative imports
+- Business logic should not live directly inside UI files
+- Components should remain small whenever possible
+- Each module must have isolated responsibility

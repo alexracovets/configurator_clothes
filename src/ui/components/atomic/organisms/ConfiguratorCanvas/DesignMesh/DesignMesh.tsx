@@ -1,9 +1,9 @@
-﻿"use client";
- 
-import * as THREE from "three";
+﻿'use client';
 
-import { usePartDesignMaterial } from "@hooks";
-import type { PrintZoneKey } from "@types";
+import * as THREE from 'three';
+
+import { usePartDesignMaterial } from '@hooks';
+import type { PrintZoneKey } from '@types';
 
 interface DesignMeshProps {
   geometry: THREE.BufferGeometry;

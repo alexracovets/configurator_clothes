@@ -1,5 +1,5 @@
-export { ScrollArea } from "./ScrollArea";
-export { Input } from "./Input";
-export { Slider } from "./Slider";
-export * from "./Acordion";
-export * from "./Select";
+export * from './Acordion';
+export { Input } from './Input';
+export { ScrollArea } from './ScrollArea';
+export * from './Select';
+export { Slider } from './Slider';

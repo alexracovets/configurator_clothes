@@ -1,7 +1,8 @@
-﻿import { create } from "zustand";
-import type { Mesh } from "three";
+﻿import type { Mesh } from 'three';
 
-import type { ShirtPart, MeshRefs } from "@types";
+import { create } from 'zustand';
+
+import type { MeshRefs, ShirtPart } from '@types';
 
 interface SelectionStore {
   selectedParts: Set<ShirtPart>;
@@ -15,12 +16,11 @@ interface SelectionStore {
 }
 
 const useSelectionStore = create<SelectionStore>((set) => ({
-  selectedParts: new Set<ShirtPart>(["front"]),
+  selectedParts: new Set<ShirtPart>(['front']),
   hoveredPart: null,
   meshRefs: {},
 
-  registerMesh: (part, mesh) =>
-    set(({ meshRefs }) => ({ meshRefs: { ...meshRefs, [part]: mesh } })),
+  registerMesh: (part, mesh) => set(({ meshRefs }) => ({ meshRefs: { ...meshRefs, [part]: mesh } })),
 
   setHoveredPart: (part) => set({ hoveredPart: part }),
 

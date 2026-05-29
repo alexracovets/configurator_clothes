@@ -1,2 +1,2 @@
-export { CanvasControl } from "./CanvasControl";
-export { cameraBridge } from "./ViewControls";
+export { CanvasControl } from './CanvasControl';
+export { cameraBridge } from './ViewControls';

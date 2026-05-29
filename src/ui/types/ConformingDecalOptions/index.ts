@@ -1,1 +1,1 @@
-export type { ConformingDecalOptions } from "./ConformingDecalOptions";
+export type { ConformingDecalOptions } from './ConformingDecalOptions';

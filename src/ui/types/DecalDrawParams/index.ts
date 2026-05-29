@@ -1,1 +1,1 @@
-export type { DecalDrawParams } from "./DecalDrawParams";
+export type { DecalDrawParams } from './DecalDrawParams';

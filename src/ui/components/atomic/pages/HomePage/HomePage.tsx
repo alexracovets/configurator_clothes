@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 const HomePage = () => {
   return <main className="bg-background">HOME</main>;

@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import { IoMdUndo, IoMdRedo } from "react-icons/io";
+import { IoMdRedo, IoMdUndo } from 'react-icons/io';
 
-import { useStepsStore } from "@store";
-import { Flex, Button } from "@atoms";
+import { Button, Flex } from '@atoms';
+import { useStepsStore } from '@store';
 
 const StepsControl = () => {
   const { currentStep, prevStep, nextStep } = useStepsStore();

@@ -1,22 +1,24 @@
-import type { ChildrenType } from "@types";
-import { inter, oswald, bebasNeue, anton, russoOne, blackOpsOne } from "@fonts";
+import { Geist } from 'next/font/google';
 
-import "@styles/globals.css";
-import { Geist } from "next/font/google";
-import { cn } from "@/src/utils/cn/cn";
+import '@styles/globals.css';
 
-const geist = Geist({ subsets: ["latin"], variable: "--font-sans" });
+import { anton, bebasNeue, blackOpsOne, inter, oswald, russoOne } from '@fonts';
+import type { ChildrenType } from '@types';
+
+import { cn } from '@/src/utils/cn/cn';
+
+const geist = Geist({ subsets: ['latin'], variable: '--font-sans' });
 
 const RootLayout = ({ children }: ChildrenType) => {
   return (
     <html
       lang="en"
       className={cn(
-        "h-full",
-        "antialiased",
-        "bg-white",
+        'h-full',
+        'antialiased',
+        'bg-white',
         inter.variable,
-        "font-sans",
+        'font-sans',
         geist.variable,
         oswald.variable,
         bebasNeue.variable,

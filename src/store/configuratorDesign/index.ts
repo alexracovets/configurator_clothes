@@ -1,1 +1,1 @@
-export * from "./configuratorDesign.store";
+export * from './configuratorDesign.store';

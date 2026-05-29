@@ -1,1 +1,1 @@
-export { AcordionAtom } from "./AcordionAtom";
+export { AcordionAtom } from './AcordionAtom';

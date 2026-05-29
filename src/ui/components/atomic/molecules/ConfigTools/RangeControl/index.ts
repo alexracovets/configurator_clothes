@@ -1,1 +1,1 @@
-export { RangeControl } from "./RangeControl";
+export { RangeControl } from './RangeControl';

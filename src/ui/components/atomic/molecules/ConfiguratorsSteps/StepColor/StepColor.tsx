@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { useColorStore, SHIRT_PARTS } from "@store";
-import { Flex, AcordionAtom } from "@atoms";
-import { ColorControl, PartColorSwatch } from "@molecules";
+import { ColorControl, PartColorSwatch } from '@molecules';
+import { AcordionAtom, Flex } from '@atoms';
+import { SHIRT_PARTS, useColorStore } from '@store';
 
 const StepColor = () => {
   const { partColors, setPartColor } = useColorStore();
@@ -15,7 +15,7 @@ const StepColor = () => {
 
   return (
     <Flex variant="step_design">
-      <AcordionAtom items={items} defaultValue={["front"]} />
+      <AcordionAtom items={items} defaultValue={['front']} />
     </Flex>
   );
 };

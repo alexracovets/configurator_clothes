@@ -1,10 +1,11 @@
-﻿"use client";
+﻿'use client';
 
-import { useEffect, useRef, useState, useMemo } from "react";
-import { OverlayScrollbars } from "overlayscrollbars";
-import "overlayscrollbars/overlayscrollbars.css";
+import { useEffect, useMemo, useRef, useState } from 'react';
 
-import { cn } from "@utils";
+import 'overlayscrollbars/overlayscrollbars.css';
+import { OverlayScrollbars } from 'overlayscrollbars';
+
+import { cn } from '@utils';
 
 interface ScrollAreaProps {
   children: React.ReactNode;
@@ -37,8 +38,7 @@ const ScrollArea = ({ children, className }: ScrollAreaProps) => {
   );
 
   useEffect(() => {
-    if (!targetRef.current || !viewportRef.current || !contentRef.current)
-      return;
+    if (!targetRef.current || !viewportRef.current || !contentRef.current) return;
 
     const instance = OverlayScrollbars(
       {
@@ -50,8 +50,8 @@ const ScrollArea = ({ children, className }: ScrollAreaProps) => {
       },
       {
         scrollbars: {
-          theme: "os-theme-custom",
-          visibility: "auto",
+          theme: 'os-theme-custom',
+          visibility: 'auto',
         },
       },
     );
@@ -74,20 +74,17 @@ const ScrollArea = ({ children, className }: ScrollAreaProps) => {
   return (
     <div
       ref={targetRef}
-      className={cn("h-full w-full", className)}
+      className={cn('h-full w-full', className)}
       style={{
         paddingRight: hasVerticalScroll ? 8 : 0,
-        transition: "padding-right 0.1s ease-in-out",
+        transition: 'padding-right 0.1s ease-in-out',
       }}
     >
-      <div
-        ref={viewportRef}
-        className="h-full w-full overflow-y-scroll overflow-x-hidden"
-      >
+      <div ref={viewportRef} className="h-full w-full overflow-y-scroll overflow-x-hidden">
         <div ref={contentRef}>{children}</div>
       </div>
     </div>
   );
-}
+};
 
 export { ScrollArea };

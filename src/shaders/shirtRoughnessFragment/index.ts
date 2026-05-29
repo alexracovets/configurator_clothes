@@ -1,1 +1,1 @@
-export { shirtRoughnessFragment } from "./shirtRoughnessFragment";
+export { shirtRoughnessFragment } from './shirtRoughnessFragment';

@@ -1,1 +1,1 @@
-export { MenuStepSeparator } from "./MenuStepSeparator";
+export { MenuStepSeparator } from './MenuStepSeparator';

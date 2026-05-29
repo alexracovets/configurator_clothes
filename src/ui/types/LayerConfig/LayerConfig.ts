@@ -1,6 +1,6 @@
-﻿import * as THREE from "three";
+﻿import * as THREE from 'three';
 
-import type { ShirtPart } from "@types";
+import type { ShirtPart } from '@types';
 
 export interface LayerConfig {
   part: ShirtPart;

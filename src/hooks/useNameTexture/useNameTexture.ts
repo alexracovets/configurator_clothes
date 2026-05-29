@@ -1,11 +1,12 @@
-﻿"use client";
+﻿'use client';
 
-import { useMemo } from "react";
-import * as THREE from "three";
+import { useMemo } from 'react';
 
-import type { GizmoZone } from "@types";
+import * as THREE from 'three';
 
-import { drawDecal } from "./decalCanvas";
+import type { GizmoZone } from '@types';
+
+import { drawDecal } from './decalCanvas';
 
 interface UseNameTextureParams {
   text: string;
@@ -18,9 +19,18 @@ interface UseNameTextureParams {
   hoveredZone?: GizmoZone | null;
 }
 
-const useNameTexture = ({ text, font, fontSize, textColor, strokeColor, strokeWidth, showGizmo, hoveredZone = null }: UseNameTextureParams): THREE.CanvasTexture => {
+const useNameTexture = ({
+  text,
+  font,
+  fontSize,
+  textColor,
+  strokeColor,
+  strokeWidth,
+  showGizmo,
+  hoveredZone = null,
+}: UseNameTextureParams): THREE.CanvasTexture => {
   return useMemo(() => {
-    const canvas = document.createElement("canvas");
+    const canvas = document.createElement('canvas');
     canvas.width = 1024;
     canvas.height = 256;
     drawDecal(canvas, { text, font, fontSize, textColor, strokeColor, strokeWidth, showGizmo, hoveredZone });

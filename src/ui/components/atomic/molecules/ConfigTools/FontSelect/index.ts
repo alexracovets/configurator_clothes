@@ -1,1 +1,1 @@
-export { FontSelect } from "./FontSelect";
+export { FontSelect } from './FontSelect';

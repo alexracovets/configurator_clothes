@@ -1,11 +1,11 @@
-﻿import type { ConformingDecalOptions } from "@types";
+﻿import * as THREE from 'three';
+import { DecalGeometry } from 'three-stdlib';
+
+import type { ConformingDecalOptions } from '@types';
+
+import { computeDecalOrientation } from './computeDecalOrientation';
+
 export type { ConformingDecalOptions };
-
-import * as THREE from "three";
-import { DecalGeometry } from "three-stdlib";
-
-import { computeDecalOrientation } from "./computeDecalOrientation";
-
 
 const _raycaster = new THREE.Raycaster();
 const _projector = new THREE.Object3D();
@@ -25,11 +25,7 @@ const getMeshWorldCenter = (mesh: THREE.Mesh): THREE.Vector3 => {
   return _bbox.getCenter(_meshCenter);
 };
 
-const orientExteriorNormal = (
-  normal: THREE.Vector3,
-  worldPoint: THREE.Vector3,
-  meshCenter: THREE.Vector3,
-): THREE.Vector3 => {
+const orientExteriorNormal = (normal: THREE.Vector3, worldPoint: THREE.Vector3, meshCenter: THREE.Vector3): THREE.Vector3 => {
   _radial.copy(worldPoint).sub(meshCenter);
   const n = normal.clone();
   if (_radial.lengthSq() > 1e-10) {
@@ -39,12 +35,8 @@ const orientExteriorNormal = (
   return n;
 };
 
-const resolveRotation = (
-  mesh: THREE.Mesh,
-  position: THREE.Vector3,
-  rotation: number | [number, number, number] | THREE.Euler,
-): THREE.Euler => {
-  if (typeof rotation === "number") {
+const resolveRotation = (mesh: THREE.Mesh, position: THREE.Vector3, rotation: number | [number, number, number] | THREE.Euler): THREE.Euler => {
+  if (typeof rotation === 'number') {
     return computeDecalOrientation(mesh, position, rotation);
   }
   if (Array.isArray(rotation)) {
@@ -53,12 +45,7 @@ const resolveRotation = (
   return rotation.clone();
 };
 
-const createFallbackDecalGeometry = (
-  targetMesh: THREE.Mesh,
-  position: THREE.Vector3,
-  euler: THREE.Euler,
-  scale: THREE.Vector3,
-): THREE.BufferGeometry => {
+const createFallbackDecalGeometry = (targetMesh: THREE.Mesh, position: THREE.Vector3, euler: THREE.Euler, scale: THREE.Vector3): THREE.BufferGeometry => {
   const matrixWorld = targetMesh.matrixWorld.clone();
   targetMesh.updateMatrixWorld(true);
   targetMesh.matrixWorld.identity();
@@ -72,11 +59,7 @@ type GridHit = {
   normal: THREE.Vector3;
 };
 
-const pickHit = (
-  targetMesh: THREE.Mesh,
-  hits: THREE.Intersection[],
-  meshCenter: THREE.Vector3,
-): GridHit | null => {
+const pickHit = (targetMesh: THREE.Mesh, hits: THREE.Intersection[], meshCenter: THREE.Vector3): GridHit | null => {
   if (!hits.length || !hits[0].face) return null;
 
   const faceNormal = hits[0].face.normal.clone();
@@ -108,13 +91,7 @@ const castAlongDirection = (
   return null;
 };
 
-const raycastOnSurface = (
-  targetMesh: THREE.Mesh,
-  worldHint: THREE.Vector3,
-  castDir: THREE.Vector3,
-  meshCenter: THREE.Vector3,
-  far: number,
-): GridHit | null => {
+const raycastOnSurface = (targetMesh: THREE.Mesh, worldHint: THREE.Vector3, castDir: THREE.Vector3, meshCenter: THREE.Vector3, far: number): GridHit | null => {
   const projectorHit = castAlongDirection(targetMesh, worldHint, castDir, meshCenter, far);
   if (projectorHit) return projectorHit;
 
@@ -168,19 +145,10 @@ const createConformingDecalGeometry = (
   size: THREE.Vector3 | [number, number, number],
   options: ConformingDecalOptions = {},
 ): THREE.BufferGeometry => {
-  const {
-    segmentsX = 48,
-    segmentsY = 18,
-    surfaceOffset = 0.0035,
-    minHitRatio = 0.35,
-  } = options;
+  const { segmentsX = 48, segmentsY = 18, surfaceOffset = 0.0035, minHitRatio = 0.35 } = options;
 
-  const pos = Array.isArray(position)
-    ? new THREE.Vector3(position[0], position[1], position[2])
-    : position.clone();
-  const scale = Array.isArray(size)
-    ? new THREE.Vector3(size[0], size[1], size[2])
-    : size.clone();
+  const pos = Array.isArray(position) ? new THREE.Vector3(position[0], position[1], position[2]) : position.clone();
+  const scale = Array.isArray(size) ? new THREE.Vector3(size[0], size[1], size[2]) : size.clone();
   const euler = resolveRotation(targetMesh, pos, rotation);
 
   _projector.position.copy(pos);
@@ -280,12 +248,7 @@ const createConformingDecalGeometry = (
       const nc = new THREE.Vector3(normals[c * 3], normals[c * 3 + 1], normals[c * 3 + 2]);
       const nd = new THREE.Vector3(normals[d * 3], normals[d * 3 + 1], normals[d * 3 + 2]);
 
-      const maxDot = Math.max(
-        na.dot(nb),
-        na.dot(nc),
-        nb.dot(nd),
-        nc.dot(nd),
-      );
+      const maxDot = Math.max(na.dot(nb), na.dot(nc), nb.dot(nd), nc.dot(nd));
 
       if (maxDot >= curvatureThreshold) {
         indices.push(a, c, b, b, c, d);
@@ -324,9 +287,9 @@ const createConformingDecalGeometry = (
   }
 
   const geometry = new THREE.BufferGeometry();
-  geometry.setAttribute("position", new THREE.Float32BufferAttribute(positions, 3));
-  geometry.setAttribute("uv", new THREE.Float32BufferAttribute(uvs, 2));
-  geometry.setAttribute("normal", new THREE.Float32BufferAttribute(normals, 3));
+  geometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+  geometry.setAttribute('uv', new THREE.Float32BufferAttribute(uvs, 2));
+  geometry.setAttribute('normal', new THREE.Float32BufferAttribute(normals, 3));
   geometry.setIndex(indices);
   geometry.computeBoundingSphere();
   return geometry;

@@ -1,10 +1,10 @@
-﻿import { create } from "zustand";
+﻿import { create } from 'zustand';
 
-import type { DesignLayer, TextureSettings, PrintZoneKey } from "@types";
-import { PRINT_ZONES, TEXTURE_SIZE_EDITOR } from "@utils";
-import { FONTS } from "@constants";
+import { PRINT_ZONES, TEXTURE_SIZE_EDITOR } from '@utils';
+import { FONTS } from '@constants';
+import type { DesignLayer, PrintZoneKey, TextureSettings } from '@types';
 
-export type FontValue = (typeof FONTS)[number]["value"];
+export type FontValue = (typeof FONTS)[number]['value'];
 
 const MAX_HISTORY = 50;
 
@@ -19,8 +19,8 @@ interface ConfiguratorState {
 }
 
 interface ConfiguratorActions {
-  addLayer: (layer: Omit<DesignLayer, "id">, options?: { select?: boolean }) => string;
-  updateLayer: (id: string, patch: Partial<Omit<DesignLayer, "id">>) => void;
+  addLayer: (layer: Omit<DesignLayer, 'id'>, options?: { select?: boolean }) => string;
+  updateLayer: (id: string, patch: Partial<Omit<DesignLayer, 'id'>>) => void;
   removeLayer: (id: string) => void;
   duplicateLayer: (id: string) => void;
   selectLayer: (id: string | null) => void;
@@ -42,9 +42,7 @@ interface ConfiguratorActions {
 type ConfiguratorStore = ConfiguratorState & ConfiguratorActions;
 
 const newId = (): string =>
-  typeof crypto !== "undefined" && crypto.randomUUID
-    ? crypto.randomUUID()
-    : `layer-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
+  typeof crypto !== 'undefined' && crypto.randomUUID ? crypto.randomUUID() : `layer-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
 
 const zoneCentre = (zone: PrintZoneKey): { x: number; y: number } => {
   const z = PRINT_ZONES[zone];
@@ -53,7 +51,7 @@ const zoneCentre = (zone: PrintZoneKey): { x: number; y: number } => {
 
 const snapshot = (state: ConfiguratorState): DesignLayer[] => state.layers.map((l) => ({ ...l }));
 
-const pushHistory = (state: ConfiguratorState): Pick<ConfiguratorState, "_past" | "_future"> => {
+const pushHistory = (state: ConfiguratorState): Pick<ConfiguratorState, '_past' | '_future'> => {
   const past = [...state._past, snapshot(state)].slice(-MAX_HISTORY);
   return { _past: past, _future: [] };
 };
@@ -61,7 +59,7 @@ const pushHistory = (state: ConfiguratorState): Pick<ConfiguratorState, "_past" 
 export const useConfiguratorStore = create<ConfiguratorStore>((set, get) => ({
   layers: [],
   selectedId: null,
-  activeZone: "front",
+  activeZone: 'front',
   textureSettings: { resolution: TEXTURE_SIZE_EDITOR, transparentBackground: true },
   isInteracting: false,
   _past: [],
@@ -75,9 +73,13 @@ export const useConfiguratorStore = create<ConfiguratorStore>((set, get) => ({
     return id;
   },
 
-  updateLayer: (id, patch) => { set((s) => ({ ...pushHistory(s), layers: s.layers.map((l) => (l.id === id ? { ...l, ...patch } : l)) })); },
+  updateLayer: (id, patch) => {
+    set((s) => ({ ...pushHistory(s), layers: s.layers.map((l) => (l.id === id ? { ...l, ...patch } : l)) }));
+  },
 
-  removeLayer: (id) => { set((s) => ({ ...pushHistory(s), layers: s.layers.filter((l) => l.id !== id), selectedId: s.selectedId === id ? null : s.selectedId })); },
+  removeLayer: (id) => {
+    set((s) => ({ ...pushHistory(s), layers: s.layers.filter((l) => l.id !== id), selectedId: s.selectedId === id ? null : s.selectedId }));
+  },
 
   duplicateLayer: (id) => {
     const source = get().layers.find((l) => l.id === id);
@@ -92,37 +94,41 @@ export const useConfiguratorStore = create<ConfiguratorStore>((set, get) => ({
   toggleVisible: (id) => set((s) => ({ layers: s.layers.map((l) => (l.id === id ? { ...l, visible: !l.visible } : l)) })),
   toggleLocked: (id) => set((s) => ({ layers: s.layers.map((l) => (l.id === id ? { ...l, locked: !l.locked } : l)) })),
 
-  bringForward: (id) => set((s) => {
-    const idx = s.layers.findIndex((l) => l.id === id);
-    if (idx === -1 || idx === s.layers.length - 1) return s;
-    const layers = [...s.layers];
-    [layers[idx], layers[idx + 1]] = [layers[idx + 1], layers[idx]];
-    return { layers };
-  }),
+  bringForward: (id) =>
+    set((s) => {
+      const idx = s.layers.findIndex((l) => l.id === id);
+      if (idx === -1 || idx === s.layers.length - 1) return s;
+      const layers = [...s.layers];
+      [layers[idx], layers[idx + 1]] = [layers[idx + 1], layers[idx]];
+      return { layers };
+    }),
 
-  sendBackward: (id) => set((s) => {
-    const idx = s.layers.findIndex((l) => l.id === id);
-    if (idx <= 0) return s;
-    const layers = [...s.layers];
-    [layers[idx - 1], layers[idx]] = [layers[idx], layers[idx - 1]];
-    return { layers };
-  }),
+  sendBackward: (id) =>
+    set((s) => {
+      const idx = s.layers.findIndex((l) => l.id === id);
+      if (idx <= 0) return s;
+      const layers = [...s.layers];
+      [layers[idx - 1], layers[idx]] = [layers[idx], layers[idx - 1]];
+      return { layers };
+    }),
 
-  undo: () => set((s) => {
-    if (!s._past.length) return s;
-    const past = [...s._past];
-    const layers = past.pop()!;
-    const _future = [snapshot(s), ...s._future].slice(0, MAX_HISTORY);
-    return { layers, _past: past, _future };
-  }),
+  undo: () =>
+    set((s) => {
+      if (!s._past.length) return s;
+      const past = [...s._past];
+      const layers = past.pop()!;
+      const _future = [snapshot(s), ...s._future].slice(0, MAX_HISTORY);
+      return { layers, _past: past, _future };
+    }),
 
-  redo: () => set((s) => {
-    if (!s._future.length) return s;
-    const future = [...s._future];
-    const layers = future.shift()!;
-    const _past = [...s._past, snapshot(s)].slice(-MAX_HISTORY);
-    return { layers, _past, _future: future };
-  }),
+  redo: () =>
+    set((s) => {
+      if (!s._future.length) return s;
+      const future = [...s._future];
+      const layers = future.shift()!;
+      const _past = [...s._past, snapshot(s)].slice(-MAX_HISTORY);
+      return { layers, _past, _future: future };
+    }),
 
   canUndo: () => get()._past.length > 0,
   canRedo: () => get()._future.length > 0,
@@ -133,4 +139,3 @@ export const useConfiguratorStore = create<ConfiguratorStore>((set, get) => ({
   getLayer: (id) => get().layers.find((l) => l.id === id),
   getLayersForZone: (zone) => get().layers.filter((l) => l.zone === zone && l.visible),
 }));
-

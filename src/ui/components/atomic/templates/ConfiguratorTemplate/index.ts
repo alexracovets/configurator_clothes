@@ -1,1 +1,1 @@
-export { ConfiguratorTemplate } from "./ConfiguratorTemplate";
+export { ConfiguratorTemplate } from './ConfiguratorTemplate';

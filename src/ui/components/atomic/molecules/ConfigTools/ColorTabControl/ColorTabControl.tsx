@@ -1,12 +1,11 @@
-﻿"use client";
+﻿'use client';
 
-import { useState } from "react";
+import { useState } from 'react';
 
-import { Flex, Text, SvgIcon } from "@atoms";
-import { cn } from "@utils";
-
-import type { ColorTab } from "@types";
-import { ColorControl, COLOR_TABS } from "@molecules";
+import { COLOR_TABS, ColorControl } from '@molecules';
+import { Flex, SvgIcon, Text } from '@atoms';
+import { cn } from '@utils';
+import type { ColorTab } from '@types';
 
 interface ColorTabControlProps {
   textColor: string;
@@ -16,8 +15,8 @@ interface ColorTabControlProps {
   label?: string;
 }
 
-const ColorTabControl = ({ textColor, strokeColor, onTextColor, onStrokeColor, label = "Colore" }: ColorTabControlProps) => {
-  const [colorTab, setColorTab] = useState<ColorTab>("colori");
+const ColorTabControl = ({ textColor, strokeColor, onTextColor, onStrokeColor, label = 'Colore' }: ColorTabControlProps) => {
+  const [colorTab, setColorTab] = useState<ColorTab>('colori');
 
   return (
     <Flex variant="configurator_part">
@@ -28,9 +27,9 @@ const ColorTabControl = ({ textColor, strokeColor, onTextColor, onStrokeColor, l
             key={id}
             onClick={() => setColorTab(id)}
             className={cn(
-              "flex-1 flex items-center justify-center gap-1.5 py-2.5 text-sm font-inter font-medium",
-              "border-b-2 -mb-px transition-colors duration-200 cursor-pointer",
-              colorTab === id ? "border-default text-default" : "border-transparent text-gray hover:text-default",
+              'flex-1 flex items-center justify-center gap-1.5 py-2.5 text-sm font-inter font-medium',
+              'border-b-2 -mb-px transition-colors duration-200 cursor-pointer',
+              colorTab === id ? 'border-default text-default' : 'border-transparent text-gray hover:text-default',
             )}
           >
             <SvgIcon name={id} />
@@ -38,8 +37,8 @@ const ColorTabControl = ({ textColor, strokeColor, onTextColor, onStrokeColor, l
           </button>
         ))}
       </div>
-      {colorTab === "colori" && <ColorControl activeColor={textColor} onSelect={onTextColor} />}
-      {colorTab === "contorno" && <ColorControl activeColor={strokeColor} onSelect={onStrokeColor} />}
+      {colorTab === 'colori' && <ColorControl activeColor={textColor} onSelect={onTextColor} />}
+      {colorTab === 'contorno' && <ColorControl activeColor={strokeColor} onSelect={onStrokeColor} />}
     </Flex>
   );
 };

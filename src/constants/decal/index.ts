@@ -1,1 +1,1 @@
-export * from "./decal";
+export * from './decal';

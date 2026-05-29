@@ -1,17 +1,23 @@
-﻿"use client";
+﻿'use client';
 
-import { useLayoutEffect, useMemo, useRef } from "react";
-import * as THREE from "three";
+import { useLayoutEffect, useMemo, useRef } from 'react';
 
-import { FABRIC_REPEAT } from "@constants";
-import type { PartGradient } from "@types";
-import { UV0_BOUNDS } from "@utils";
-import { shirtVertexUvParsVertex, shirtVertexUvVertex, shirtFragmentUniforms, shirtNormalFragment, shirtGradientFragment, shirtRoughnessFragment } from "@shaders";
-import type { ShirtPart, PBRMaps } from "@types";
-import type { PrintZoneKey } from "@types";
+import * as THREE from 'three';
+
+import { UV0_BOUNDS } from '@utils';
+import {
+  shirtFragmentUniforms,
+  shirtGradientFragment,
+  shirtNormalFragment,
+  shirtRoughnessFragment,
+  shirtVertexUvParsVertex,
+  shirtVertexUvVertex,
+} from '@shaders';
+import { FABRIC_REPEAT } from '@constants';
+import type { PartGradient, PBRMaps, PrintZoneKey, ShirtPart } from '@types';
 
 const PART_POLYGON_OFFSET: Partial<Record<ShirtPart, { factor: number; units: number }>> = {
-  sleeve_left:  { factor: -1, units: -1 },
+  sleeve_left: { factor: -1, units: -1 },
   sleeve_right: { factor: -1, units: -1 },
 };
 
@@ -66,16 +72,24 @@ const createFabricRoughnessMap = (fabricRoughness: THREE.Texture): THREE.Texture
   return tex;
 };
 
-const useShirtDesignMaterial = (baseColorTexture: THREE.CanvasTexture, maps: PBRMaps, gradient: PartGradient, part: ShirtPart | undefined, designTexture: THREE.CanvasTexture): THREE.MeshStandardMaterial => {
+const useShirtDesignMaterial = (
+  baseColorTexture: THREE.CanvasTexture,
+  maps: PBRMaps,
+  gradient: PartGradient,
+  part: ShirtPart | undefined,
+  designTexture: THREE.CanvasTexture,
+): THREE.MeshStandardMaterial => {
   const bounds = UV0_BOUNDS[part as PrintZoneKey] ?? { minX: 0, minY: 0, maxX: 1, maxY: 1 };
 
   const designUniforms = useRef({
-    uDesignMap:      { value: designTexture as THREE.Texture },
-    uDesignOpacity:  { value: 1.0 },
+    uDesignMap: { value: designTexture as THREE.Texture },
+    uDesignOpacity: { value: 1.0 },
     uDesignUvBounds: { value: new THREE.Vector4(bounds.minX, bounds.minY, bounds.maxX, bounds.maxY) },
   });
 
-  useLayoutEffect(() => { designUniforms.current.uDesignMap.value = designTexture; }, [designTexture]);
+  useLayoutEffect(() => {
+    designUniforms.current.uDesignMap.value = designTexture;
+  }, [designTexture]);
 
   return useMemo(() => {
     const offset = part ? PART_POLYGON_OFFSET[part] : undefined;
@@ -86,38 +100,47 @@ const useShirtDesignMaterial = (baseColorTexture: THREE.CanvasTexture, maps: PBR
     const fabricRough = createFabricRoughnessMap(maps.fabricRoughness);
     const fabricBump = createFabricRoughnessMap(maps.fabricRoughness);
     const m = new THREE.MeshStandardMaterial({
-      map: colorTex, aoMap: bakeAo, aoMapIntensity: 0.58, roughnessMap: fabricRough,
-      bumpMap: fabricBump, bumpScale: 0.006, roughness: 1, metalness: 0.0, envMapIntensity: 0.28,
-      normalMap: createDummyNormal(), normalMapType: THREE.TangentSpaceNormalMap,
-      normalScale: new THREE.Vector2(0.5, 0.5), side: THREE.FrontSide,
+      map: colorTex,
+      aoMap: bakeAo,
+      aoMapIntensity: 0.58,
+      roughnessMap: fabricRough,
+      bumpMap: fabricBump,
+      bumpScale: 0.006,
+      roughness: 1,
+      metalness: 0.0,
+      envMapIntensity: 0.28,
+      normalMap: createDummyNormal(),
+      normalMapType: THREE.TangentSpaceNormalMap,
+      normalScale: new THREE.Vector2(0.5, 0.5),
+      side: THREE.FrontSide,
       ...(offset && { polygonOffset: true, polygonOffsetFactor: offset.factor, polygonOffsetUnits: offset.units }),
     });
     const uBakeNormal = createBakeNormalUniform(maps.bakeNormal);
     const du = designUniforms.current;
-    m.customProgramCacheKey = () => gradient.enabled ? `shirt-design-gradient-${part ?? "x"}` : `shirt-design-base-${part ?? "x"}`;
+    m.customProgramCacheKey = () => (gradient.enabled ? `shirt-design-gradient-${part ?? 'x'}` : `shirt-design-base-${part ?? 'x'}`);
     m.onBeforeCompile = (shader) => {
-      shader.defines = { ...shader.defines, USE_UV1: "" };
+      shader.defines = { ...shader.defines, USE_UV1: '' };
       shader.uniforms.uBakeNormal = uBakeNormal;
       if (gradient.enabled) {
-        shader.defines = { ...shader.defines, USE_GRADIENT: "" };
-        shader.uniforms.uGradientColor2   = { value: new THREE.Color(gradient.color2) };
+        shader.defines = { ...shader.defines, USE_GRADIENT: '' };
+        shader.uniforms.uGradientColor2 = { value: new THREE.Color(gradient.color2) };
         shader.uniforms.uGradientRotation = { value: (gradient.rotation * Math.PI) / 180 };
         shader.uniforms.uGradientPosition = { value: gradient.position / 100 };
         shader.uniforms.uGradientSoftness = { value: gradient.softness / 100 };
-        shader.uniforms.uGradientOpacity  = { value: gradient.opacity / 100 };
+        shader.uniforms.uGradientOpacity = { value: gradient.opacity / 100 };
       }
-      shader.uniforms.uDesignMap      = du.uDesignMap;
-      shader.uniforms.uDesignOpacity  = du.uDesignOpacity;
+      shader.uniforms.uDesignMap = du.uDesignMap;
+      shader.uniforms.uDesignOpacity = du.uDesignOpacity;
       shader.uniforms.uDesignUvBounds = du.uDesignUvBounds;
       shader.vertexShader = shader.vertexShader
-        .replace("#include <uv_pars_vertex>", shirtVertexUvParsVertex)
-        .replace("#include <uv_vertex>", shirtVertexUvVertex);
+        .replace('#include <uv_pars_vertex>', shirtVertexUvParsVertex)
+        .replace('#include <uv_vertex>', shirtVertexUvVertex);
       let frag = shader.fragmentShader
-        .replace("#include <uv_pars_fragment>", shirtFragmentUniforms + "\n" + DESIGN_FRAG_UNIFORMS)
-        .replace("#include <normal_fragment_maps>", shirtNormalFragment)
-        .replace("#include <roughnessmap_fragment>", shirtRoughnessFragment);
-      if (gradient.enabled) frag = frag.replace("#include <map_fragment>", shirtGradientFragment);
-      frag = frag.replace("#include <opaque_fragment>", `${DESIGN_FRAG_BLEND}\n#include <opaque_fragment>`);
+        .replace('#include <uv_pars_fragment>', shirtFragmentUniforms + '\n' + DESIGN_FRAG_UNIFORMS)
+        .replace('#include <normal_fragment_maps>', shirtNormalFragment)
+        .replace('#include <roughnessmap_fragment>', shirtRoughnessFragment);
+      if (gradient.enabled) frag = frag.replace('#include <map_fragment>', shirtGradientFragment);
+      frag = frag.replace('#include <opaque_fragment>', `${DESIGN_FRAG_BLEND}\n#include <opaque_fragment>`);
       shader.fragmentShader = frag;
     };
     m.needsUpdate = true;

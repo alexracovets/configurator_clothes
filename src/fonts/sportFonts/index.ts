@@ -1,1 +1,1 @@
-export { oswald, bebasNeue, anton, russoOne, blackOpsOne } from "./sportFonts";
+export { anton, bebasNeue, blackOpsOne, oswald, russoOne } from './sportFonts';

@@ -1,1 +1,1 @@
-export type { NameInstance } from "./NameInstance";
+export type { NameInstance } from './NameInstance';

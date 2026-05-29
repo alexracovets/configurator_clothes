@@ -1,1 +1,1 @@
-export { AsideConfigurator } from "./AsideConfigurator";
+export { AsideConfigurator } from './AsideConfigurator';

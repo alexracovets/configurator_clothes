@@ -1,1 +1,1 @@
-export type { DesignOverlayMaterialOptions, DesignOverlayMaterial } from "./DesignOverlayMaterial";
+export type { DesignOverlayMaterial, DesignOverlayMaterialOptions } from './DesignOverlayMaterial';

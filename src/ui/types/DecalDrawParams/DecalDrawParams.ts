@@ -1,4 +1,4 @@
-import type { GizmoZone } from "@types";
+import type { GizmoZone } from '@types';
 
 export interface DecalDrawParams {
   text: string;

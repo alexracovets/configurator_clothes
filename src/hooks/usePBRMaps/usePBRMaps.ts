@@ -1,8 +1,9 @@
-import { useMemo } from "react";
-import * as THREE from "three";
-import { useTexture } from "@react-three/drei";
+import { useMemo } from 'react';
 
-import type { PBRTexturePaths, PBRMaps } from "@types";
+import { useTexture } from '@react-three/drei';
+import * as THREE from 'three';
+
+import type { PBRMaps, PBRTexturePaths } from '@types';
 
 const usePBRMaps = (paths: PBRTexturePaths): PBRMaps => {
   const textures = useTexture(paths as unknown as Record<string, string>) as Record<string, THREE.Texture>;

@@ -1,10 +1,10 @@
-﻿import { create } from "zustand";
+﻿import { create } from 'zustand';
 
-import type { NameInstance } from "@types";
+import { clampDecalScale, decalWidthToFontSize, fontSizeToDecalScale } from '@utils';
+import { DECAL_DEPTH, DEFAULT_NAME_TEXT, FONTS } from '@constants';
+import type { NameInstance } from '@types';
+
 export type { NameInstance };
-import { DEFAULT_NAME_TEXT, DECAL_DEPTH, FONTS } from "@constants";
-import { clampDecalScale, fontSizeToDecalScale, decalWidthToFontSize } from "@utils";
-
 
 const NAME_DECAL_DEPTH = DECAL_DEPTH;
 
@@ -13,18 +13,15 @@ const createDefaultInstance = (id: string): NameInstance => ({
   text: DEFAULT_NAME_TEXT,
   font: FONTS[0].value,
   fontSize: 64,
-  textColor: "#FFFFFF",
-  strokeColor: "#1A2744",
+  textColor: '#FFFFFF',
+  strokeColor: '#1A2744',
   strokeWidth: 4,
   decalPosition: [0, 1.37, -0.063],
   decalRotation: [Math.PI, 0, Math.PI],
   decalScale: fontSizeToDecalScale(64),
 });
 
-const newId = () =>
-  typeof crypto !== "undefined" && crypto.randomUUID
-    ? crypto.randomUUID()
-    : `name-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
+const newId = () => (typeof crypto !== 'undefined' && crypto.randomUUID ? crypto.randomUUID() : `name-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`);
 
 interface NameStore {
   isVisible: boolean;
@@ -33,8 +30,8 @@ interface NameStore {
 
   setVisible: (visible: boolean) => void;
   setActiveId: (id: string) => void;
-  updateInstance: (id: string, patch: Partial<Omit<NameInstance, "id">>) => void;
-  updateActive: (patch: Partial<Omit<NameInstance, "id">>) => void;
+  updateInstance: (id: string, patch: Partial<Omit<NameInstance, 'id'>>) => void;
+  updateActive: (patch: Partial<Omit<NameInstance, 'id'>>) => void;
   duplicateInstance: (id: string) => void;
   removeInstance: (id: string) => void;
 
@@ -102,11 +99,7 @@ const useNameStore = create<NameStore>((set, get) => ({
     const copy: NameInstance = {
       ...source,
       id: newInstId,
-      decalPosition: [
-        source.decalPosition[0] + 0.12,
-        source.decalPosition[1] - 0.06,
-        source.decalPosition[2],
-      ],
+      decalPosition: [source.decalPosition[0] + 0.12, source.decalPosition[1] - 0.06, source.decalPosition[2]],
     };
 
     set(({ instances }) => ({ instances: [...instances, copy], activeId: newInstId }));
@@ -115,14 +108,12 @@ const useNameStore = create<NameStore>((set, get) => ({
   removeInstance: (id) =>
     set(({ instances: prev, activeId: prevActiveId }) => {
       const instances = prev.filter((inst) => inst.id !== id);
-      const activeId =
-        prevActiveId === id ? (instances[instances.length - 1]?.id ?? null) : prevActiveId;
+      const activeId = prevActiveId === id ? (instances[instances.length - 1]?.id ?? null) : prevActiveId;
 
       return { instances, activeId, isVisible: instances.length > 0 };
     }),
 }));
 
-const useActiveNameInstance = () =>
-  useNameStore(({ instances, activeId }) => instances.find(({ id }) => id === activeId));
+const useActiveNameInstance = () => useNameStore(({ instances, activeId }) => instances.find(({ id }) => id === activeId));
 
-export { DEFAULT_NAME_TEXT, NAME_DECAL_DEPTH, useNameStore, useActiveNameInstance };
+export { DEFAULT_NAME_TEXT, NAME_DECAL_DEPTH, useActiveNameInstance, useNameStore };

@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { FONTS } from "@constants";
-import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@shared";
-import { cn } from "@utils";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@shared';
+import { cn } from '@utils';
+import { FONTS } from '@constants';
 
 type FontOption = (typeof FONTS)[number];
 
@@ -22,11 +22,7 @@ const FontSelect = ({ options, value, onChange }: FontSelectProps) => {
       }}
     >
       <SelectTrigger
-        className={cn(
-          "w-full justify-between",
-          "border border-gray-200 rounded-[8px] px-4 py-3",
-          "text-sm font-inter text-default bg-white",
-        )}
+        className={cn('w-full justify-between', 'border border-gray-200 rounded-[8px] px-4 py-3', 'text-sm font-inter text-default bg-white')}
         icon
       >
         <SelectValue>
@@ -36,22 +32,10 @@ const FontSelect = ({ options, value, onChange }: FontSelectProps) => {
         </SelectValue>
       </SelectTrigger>
 
-      <SelectContent
-        className="bg-white border border-gray-200 rounded-[8px] shadow-lg"
-        side="bottom"
-        align="start"
-        alignItemWithTrigger={true}
-      >
+      <SelectContent className="bg-white border border-gray-200 rounded-[8px] shadow-lg" side="bottom" align="start" alignItemWithTrigger={true}>
         {options.map((font) => (
-          <SelectItem
-            key={font.value}
-            value={font.value}
-            className="px-4 py-3 bg-white hover:bg-gray-50"
-            style={{ fontFamily: font.value }}
-          >
-            <span className="uppercase tracking-wide text-sm text-default">
-              {font.label}
-            </span>
+          <SelectItem key={font.value} value={font.value} className="px-4 py-3 bg-white hover:bg-gray-50" style={{ fontFamily: font.value }}>
+            <span className="uppercase tracking-wide text-sm text-default">{font.label}</span>
           </SelectItem>
         ))}
       </SelectContent>

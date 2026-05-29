@@ -1,1 +1,1 @@
-export * from "./usePartDesignMaterial";
+export * from './usePartDesignMaterial';

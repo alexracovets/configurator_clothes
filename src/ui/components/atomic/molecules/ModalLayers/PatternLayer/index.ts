@@ -1,1 +1,1 @@
-export { PatternLayer } from "./PatternLayer";
+export { PatternLayer } from './PatternLayer';

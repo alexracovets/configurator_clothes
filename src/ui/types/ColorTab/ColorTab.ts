@@ -1,1 +1,1 @@
-export type ColorTab = "colori" | "contorno";
+export type ColorTab = 'colori' | 'contorno';

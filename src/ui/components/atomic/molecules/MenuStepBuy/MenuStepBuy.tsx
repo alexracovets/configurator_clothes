@@ -1,43 +1,43 @@
-"use client";
+'use client';
 
-import { Fragment } from "react";
+import { Fragment } from 'react';
 
-import { useSlidingIndicator } from "@hooks";
-import { useStepsStore } from "@store";
-import { MenuStepSeparator } from "./MenuStepSeparator";
-import { Flex, Text } from "@atoms";
+import { Flex, Text } from '@atoms';
+import { useStepsStore } from '@store';
+import { useSlidingIndicator } from '@hooks';
+
+import { MenuStepSeparator } from './MenuStepSeparator';
 
 const steps = [
   {
-    name: "design",
-    value: "design",
+    name: 'design',
+    value: 'design',
   },
   {
-    name: "colore",
-    value: "color",
+    name: 'colore',
+    value: 'color',
   },
   {
-    name: "sfumatura",
-    value: "shading",
+    name: 'sfumatura',
+    value: 'shading',
   },
   {
-    name: "nome",
-    value: "name",
+    name: 'nome',
+    value: 'name',
   },
   {
-    name: "numero",
-    value: "number",
+    name: 'numero',
+    value: 'number',
   },
   {
-    name: "logo",
-    value: "logo",
+    name: 'logo',
+    value: 'logo',
   },
 ];
 
 const MenuStepBuy = () => {
   const { currentStep, setStep } = useStepsStore();
-  const { wrapperRef, getItemRef, indicator } =
-    useSlidingIndicator(currentStep);
+  const { wrapperRef, getItemRef, indicator } = useSlidingIndicator(currentStep);
 
   return (
     <div ref={wrapperRef} className="relative w-fit pt-2">
@@ -45,15 +45,9 @@ const MenuStepBuy = () => {
         <ul>
           {steps.map((step, index) => (
             <Fragment key={step.value}>
-              {index > 0 && (
-                <MenuStepSeparator isActive={index <= currentStep} />
-              )}
+              {index > 0 && <MenuStepSeparator isActive={index <= currentStep} />}
               <li ref={getItemRef(index)} onClick={() => setStep(index)}>
-                <Text
-                  data-active={index <= currentStep}
-                  variant="menu_step_buy"
-                  asChild
-                >
+                <Text data-active={index <= currentStep} variant="menu_step_buy" asChild>
                   <span>{step.name}</span>
                 </Text>
               </li>
@@ -61,11 +55,7 @@ const MenuStepBuy = () => {
           ))}
         </ul>
       </Flex>
-      <Text
-        variant="menu_step_buy_line"
-        asChild
-        style={{ left: indicator.left, width: indicator.width }}
-      >
+      <Text variant="menu_step_buy_line" asChild style={{ left: indicator.left, width: indicator.width }}>
         <span />
       </Text>
     </div>

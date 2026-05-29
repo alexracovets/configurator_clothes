@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { ConfiguratorCanvas, AsideConfigurator } from "@organisms";
-import { MenuStepBuy, StepsControl, CanvasButtons } from "@molecules";
-import { Container, Box, Flex } from "@atoms";
+import { AsideConfigurator, ConfiguratorCanvas } from '@organisms';
+import { CanvasButtons, MenuStepBuy, StepsControl } from '@molecules';
+import { Box, Container, Flex } from '@atoms';
 
 const ConfiguratorPage = () => {
   return (

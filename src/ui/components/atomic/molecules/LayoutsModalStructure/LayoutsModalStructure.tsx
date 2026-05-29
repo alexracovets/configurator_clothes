@@ -1,14 +1,13 @@
-"use client";
+'use client';
 
-import type { ThreeElements } from "@react-three/fiber";
+import type { ThreeElements } from '@react-three/fiber';
 
-import { DesignLayers } from "@organisms";
-import { PartLayers } from "@molecules";
+import { DesignLayers } from '@organisms';
+import { PartLayers } from '@molecules';
+import { usePBRMaps } from '@hooks';
+import type { LayerConfig, PBRTexturePaths } from '@types';
 
-import { usePBRMaps } from "@hooks";
-import type { LayerConfig, PBRTexturePaths } from "@types";
-
-type GroupProps = ThreeElements["group"];
+type GroupProps = ThreeElements['group'];
 
 interface LayoutsModalStructureProps extends GroupProps {
   layerConfigs: LayerConfig[];

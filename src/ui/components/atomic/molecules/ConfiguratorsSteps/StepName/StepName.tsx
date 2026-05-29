@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { useNameStore, useActiveNameInstance } from "@store";
-import { Flex, Text, Button } from "@atoms";
-import { ColorTabControl, DeleteButton, FontSelectRow, RangeControl } from "@molecules";
+import { ColorTabControl, DeleteButton, FontSelectRow, RangeControl } from '@molecules';
+import { Button, Flex, Text } from '@atoms';
+import { useActiveNameInstance, useNameStore } from '@store';
 
 const StepName = () => {
   const isVisible = useNameStore(({ isVisible }) => isVisible);

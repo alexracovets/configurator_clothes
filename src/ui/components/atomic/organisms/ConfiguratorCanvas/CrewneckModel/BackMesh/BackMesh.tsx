@@ -1,6 +1,6 @@
-﻿"use client";
+﻿'use client';
 
-import * as THREE from "three";
+import * as THREE from 'three';
 
 interface BackMeshProps {
   geometry: THREE.BufferGeometry;

@@ -1,1 +1,1 @@
-export * from "./useDesignTexture";
+export * from './useDesignTexture';

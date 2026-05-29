@@ -1,1 +1,1 @@
-export { AtomImage } from "./AtomImage";
+export { AtomImage } from './AtomImage';

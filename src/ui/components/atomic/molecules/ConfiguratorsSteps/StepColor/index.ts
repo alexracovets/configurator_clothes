@@ -1,1 +1,1 @@
-export { StepColor } from "./StepColor";
+export { StepColor } from './StepColor';

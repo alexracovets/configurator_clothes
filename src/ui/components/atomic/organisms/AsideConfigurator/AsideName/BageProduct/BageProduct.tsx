@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { Flex, Text } from "@atoms";
+import { Flex, Text } from '@atoms';
 
 interface BageProductProps {
   min_buy: number;

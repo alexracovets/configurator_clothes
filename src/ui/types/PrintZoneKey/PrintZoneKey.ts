@@ -1,1 +1,1 @@
-export type { PrintZoneKey } from "@utils";
+export type { PrintZoneKey } from '@utils';

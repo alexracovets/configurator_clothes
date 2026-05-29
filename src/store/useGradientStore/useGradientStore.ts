@@ -1,13 +1,13 @@
-﻿import { create } from "zustand";
+﻿import { create } from 'zustand';
 
-import type { PartGradient, PartGradients } from "@types";
+import { useSelectionStore } from '@store';
+import type { PartGradient, PartGradients, ShirtPart } from '@types';
+
 export type { PartGradient, PartGradients };
-import { useSelectionStore } from "@store";
-import type { ShirtPart } from "@types";
 
 const DEFAULT_GRADIENT: PartGradient = {
   enabled: false,
-  color2: "#111111",
+  color2: '#111111',
   rotation: 180,
   position: 50,
   softness: 20,
@@ -32,12 +32,13 @@ const useGradientStore = create<GradientStore>((set) => ({
     set(({ partGradients }) => {
       const { selectedParts } = useSelectionStore.getState();
       const next = { ...partGradients };
-      selectedParts.forEach((part) => { next[part] = { ...next[part], ...gradient }; });
+      selectedParts.forEach((part) => {
+        next[part] = { ...next[part], ...gradient };
+      });
       return { partGradients: next };
     }),
 
-  setPartGradient: (part, gradient) =>
-    set(({ partGradients }) => ({ partGradients: { ...partGradients, [part]: { ...partGradients[part], ...gradient } } })),
+  setPartGradient: (part, gradient) => set(({ partGradients }) => ({ partGradients: { ...partGradients, [part]: { ...partGradients[part], ...gradient } } })),
 }));
 
 export { useGradientStore };

@@ -1,5 +1,5 @@
-export { shirtVertexUvParsVertex, shirtVertexUvVertex } from "./shirtVertexUv";
-export { shirtFragmentUniforms } from "./shirtFragmentUniforms";
-export { shirtNormalFragment } from "./shirtNormalFragment";
-export { shirtGradientFragment } from "./shirtGradientFragment";
-export { shirtRoughnessFragment } from "./shirtRoughnessFragment";
+export { shirtFragmentUniforms } from './shirtFragmentUniforms';
+export { shirtGradientFragment } from './shirtGradientFragment';
+export { shirtNormalFragment } from './shirtNormalFragment';
+export { shirtRoughnessFragment } from './shirtRoughnessFragment';
+export { shirtVertexUvParsVertex, shirtVertexUvVertex } from './shirtVertexUv';

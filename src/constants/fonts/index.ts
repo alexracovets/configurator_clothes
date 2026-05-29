@@ -1,1 +1,1 @@
-export { FONTS } from "./fonts";
+export { FONTS } from './fonts';

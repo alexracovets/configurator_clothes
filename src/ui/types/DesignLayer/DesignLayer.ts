@@ -1,6 +1,6 @@
-import type { PrintZoneKey } from "@types";
+import type { PrintZoneKey } from '@types';
 
-export type LayerType = "text" | "number" | "logo";
+export type LayerType = 'text' | 'number' | 'logo';
 
 export interface DesignLayer {
   id: string;

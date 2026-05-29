@@ -1,1 +1,1 @@
-export type { IndicatorStyle } from "./IndicatorStyle";
+export type { IndicatorStyle } from './IndicatorStyle';

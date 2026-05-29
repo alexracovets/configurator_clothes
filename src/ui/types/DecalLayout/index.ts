@@ -1,1 +1,1 @@
-export * from "./DecalLayout";
+export * from './DecalLayout';

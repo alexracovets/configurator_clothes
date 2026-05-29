@@ -1,1 +1,1 @@
-export type { PrintZoneKey } from "./PrintZoneKey";
+export type { PrintZoneKey } from './PrintZoneKey';

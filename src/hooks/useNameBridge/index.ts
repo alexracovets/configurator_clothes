@@ -1,1 +1,1 @@
-export * from "./useNameBridge";
+export * from './useNameBridge';

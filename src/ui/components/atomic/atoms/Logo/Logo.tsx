@@ -1,12 +1,13 @@
-"use client";
+'use client';
 
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { AtomImage, Flex } from "@atoms";
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+
+import { AtomImage, Flex } from '@atoms';
 
 const Logo = () => {
   const pathname = usePathname();
-  const href = pathname === "/configurator" ? "/" : "/configurator";
+  const href = pathname === '/configurator' ? '/' : '/configurator';
 
   return (
     <Flex className="w-full">

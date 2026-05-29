@@ -1,11 +1,10 @@
-﻿"use client";
+﻿'use client';
 
-import { useColorStore, usePatternStore, useGradientStore } from "@store";
-import { useBaseColorTexture, useSvgTexture, useDesignTexture } from "@hooks";
-import { getPartRenderOrder } from "@utils";
-import type { PrintZoneKey } from "@types";
-import { ColorLayer, DesignOverlayLayer, PatternLayer } from "@molecules";
-import type { PBRMaps, LayerConfig } from "@types";
+import { ColorLayer, DesignOverlayLayer, PatternLayer } from '@molecules';
+import { useColorStore, useGradientStore, usePatternStore } from '@store';
+import { useBaseColorTexture, useDesignTexture, useSvgTexture } from '@hooks';
+import { getPartRenderOrder } from '@utils';
+import type { LayerConfig, PBRMaps, PrintZoneKey } from '@types';
 
 interface PartLayersProps {
   layer: LayerConfig;
@@ -17,9 +16,9 @@ const PartLayers = ({ layer, maps }: PartLayersProps) => {
   const { partPatterns, patternOpacity, patternColor } = usePatternStore();
   const { partGradients } = useGradientStore();
 
-  const baseColor = (partColors as Record<string, string>)[layer.part] ?? "#ffffff";
+  const baseColor = (partColors as Record<string, string>)[layer.part] ?? '#ffffff';
   const gradient = partGradients[layer.part];
-  const patternUrl = (partPatterns as Record<string, string>)[layer.part] || layer.defaultPatternUrl || "";
+  const patternUrl = (partPatterns as Record<string, string>)[layer.part] || layer.defaultPatternUrl || '';
 
   const baseColorTexture = useBaseColorTexture(baseColor);
   const patternTexture = useSvgTexture(patternUrl);
@@ -29,9 +28,22 @@ const PartLayers = ({ layer, maps }: PartLayersProps) => {
 
   return (
     <>
-      <ColorLayer part={layer.part} geometry={layer.geometry} baseColorTexture={baseColorTexture} gradient={gradient} maps={maps} renderOrder={partRenderOrder} />
+      <ColorLayer
+        part={layer.part}
+        geometry={layer.geometry}
+        baseColorTexture={baseColorTexture}
+        gradient={gradient}
+        maps={maps}
+        renderOrder={partRenderOrder}
+      />
       {patternTexture && (
-        <PatternLayer geometry={layer.geometry} texture={patternTexture} patternOpacity={patternOpacity} patternColor={patternColor} renderOrder={partRenderOrder + 1} />
+        <PatternLayer
+          geometry={layer.geometry}
+          texture={patternTexture}
+          patternOpacity={patternOpacity}
+          patternColor={patternColor}
+          renderOrder={partRenderOrder + 1}
+        />
       )}
       <DesignOverlayLayer part={layer.part} geometry={layer.geometry} designTexture={designTexture} renderOrder={partRenderOrder + 2} />
     </>

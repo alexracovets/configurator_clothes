@@ -1,8 +1,8 @@
-﻿import { create } from "zustand";
+﻿import { create } from 'zustand';
 
-import { DEFAULT_PART_COLOR } from "@constants";
-import type { ShirtPart, PartColors } from "@types";
-import { useSelectionStore } from "@store";
+import { useSelectionStore } from '@store';
+import { DEFAULT_PART_COLOR } from '@constants';
+import type { PartColors, ShirtPart } from '@types';
 
 interface ColorStore {
   partColors: PartColors;
@@ -22,12 +22,13 @@ const useColorStore = create<ColorStore>((set) => ({
     set(({ partColors }) => {
       const { selectedParts } = useSelectionStore.getState();
       const updates: Partial<PartColors> = {};
-      selectedParts.forEach((part) => { updates[part] = color; });
+      selectedParts.forEach((part) => {
+        updates[part] = color;
+      });
       return { partColors: { ...partColors, ...updates } };
     }),
 
-  setPartColor: (part, color) =>
-    set(({ partColors }) => ({ partColors: { ...partColors, [part]: color } })),
+  setPartColor: (part, color) => set(({ partColors }) => ({ partColors: { ...partColors, [part]: color } })),
 }));
 
 export { useColorStore };

@@ -1,10 +1,11 @@
-﻿"use client";
+﻿'use client';
 
-import { useLayoutEffect, useRef } from "react";
-import * as THREE from "three";
+import { useLayoutEffect, useRef } from 'react';
 
-import { useDesignOverlayMaterial } from "@hooks";
-import type { ShirtPart } from "@types";
+import * as THREE from 'three';
+
+import { useDesignOverlayMaterial } from '@hooks';
+import type { ShirtPart } from '@types';
 
 interface DesignOverlayLayerProps {
   part: ShirtPart;

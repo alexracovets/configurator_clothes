@@ -1,22 +1,24 @@
-﻿import { useMemo } from "react";
-import * as THREE from "three";
+﻿import { useMemo } from 'react';
 
-import { FABRIC_REPEAT } from "@constants";
-import type { PartGradient } from "@types";
-import type { ShirtPart, PBRMaps } from "@types";
-import { shirtVertexUvParsVertex, shirtVertexUvVertex, shirtFragmentUniforms, shirtNormalFragment, shirtGradientFragment, shirtRoughnessFragment } from "@shaders";
+import * as THREE from 'three';
 
+import {
+  shirtFragmentUniforms,
+  shirtGradientFragment,
+  shirtNormalFragment,
+  shirtRoughnessFragment,
+  shirtVertexUvParsVertex,
+  shirtVertexUvVertex,
+} from '@shaders';
+import { FABRIC_REPEAT } from '@constants';
+import type { PartGradient, PBRMaps, ShirtPart } from '@types';
 
-const PART_POLYGON_OFFSET: Partial<
-  Record<ShirtPart, { factor: number; units: number }>
-> = {
+const PART_POLYGON_OFFSET: Partial<Record<ShirtPart, { factor: number; units: number }>> = {
   sleeve_left: { factor: -1, units: -1 },
   sleeve_right: { factor: -1, units: -1 },
 };
 
-const createBakeOrmTexture = (
-  bakeAoRoughness: THREE.Texture,
-): THREE.Texture => {
+const createBakeOrmTexture = (bakeAoRoughness: THREE.Texture): THREE.Texture => {
   const tex = bakeAoRoughness.clone();
   tex.channel = 1;
   tex.flipY = false;
@@ -26,12 +28,7 @@ const createBakeOrmTexture = (
 };
 
 const createDummyNormal = (): THREE.DataTexture => {
-  const tex = new THREE.DataTexture(
-    new Uint8Array([128, 128, 255, 255]),
-    1,
-    1,
-    THREE.RGBAFormat,
-  );
+  const tex = new THREE.DataTexture(new Uint8Array([128, 128, 255, 255]), 1, 1, THREE.RGBAFormat);
   tex.needsUpdate = true;
   return tex;
 };
@@ -44,9 +41,7 @@ const createBakeNormalUniform = (bakeNormal: THREE.Texture) => {
   return { value: tex };
 };
 
-const createFabricRoughnessMap = (
-  fabricRoughness: THREE.Texture,
-): THREE.Texture => {
+const createFabricRoughnessMap = (fabricRoughness: THREE.Texture): THREE.Texture => {
   const tex = fabricRoughness.clone();
   tex.wrapS = THREE.RepeatWrapping;
   tex.wrapT = THREE.RepeatWrapping;
@@ -57,12 +52,7 @@ const createFabricRoughnessMap = (
   return tex;
 };
 
-const useShirtMaterial = (
-  baseColorTexture: THREE.CanvasTexture,
-  maps: PBRMaps,
-  gradient: PartGradient,
-  part?: ShirtPart,
-): THREE.MeshStandardMaterial => {
+const useShirtMaterial = (baseColorTexture: THREE.CanvasTexture, maps: PBRMaps, gradient: PartGradient, part?: ShirtPart): THREE.MeshStandardMaterial => {
   return useMemo(() => {
     const offset = part ? PART_POLYGON_OFFSET[part] : undefined;
     const colorTex = baseColorTexture.clone() as THREE.CanvasTexture;
@@ -96,18 +86,15 @@ const useShirtMaterial = (
 
     const uBakeNormal = createBakeNormalUniform(maps.bakeNormal);
 
-    m.customProgramCacheKey = () =>
-      gradient.enabled
-        ? `shirt-gradient-rough-${part ?? "x"}`
-        : `shirt-base-rough-${part ?? "x"}`;
+    m.customProgramCacheKey = () => (gradient.enabled ? `shirt-gradient-rough-${part ?? 'x'}` : `shirt-base-rough-${part ?? 'x'}`);
 
     m.onBeforeCompile = (shader) => {
-      shader.defines = { ...shader.defines, USE_UV1: "" };
+      shader.defines = { ...shader.defines, USE_UV1: '' };
 
       shader.uniforms.uBakeNormal = uBakeNormal;
 
       if (gradient.enabled) {
-        shader.defines = { ...shader.defines, USE_GRADIENT: "" };
+        shader.defines = { ...shader.defines, USE_GRADIENT: '' };
         shader.uniforms.uGradientColor2 = {
           value: new THREE.Color(gradient.color2),
         };
@@ -120,19 +107,16 @@ const useShirtMaterial = (
       }
 
       shader.vertexShader = shader.vertexShader
-        .replace("#include <uv_pars_vertex>", shirtVertexUvParsVertex)
-        .replace("#include <uv_vertex>", shirtVertexUvVertex);
+        .replace('#include <uv_pars_vertex>', shirtVertexUvParsVertex)
+        .replace('#include <uv_vertex>', shirtVertexUvVertex);
 
       let fragmentShader = shader.fragmentShader
-        .replace("#include <uv_pars_fragment>", shirtFragmentUniforms)
-        .replace("#include <normal_fragment_maps>", shirtNormalFragment)
-        .replace("#include <roughnessmap_fragment>", shirtRoughnessFragment);
+        .replace('#include <uv_pars_fragment>', shirtFragmentUniforms)
+        .replace('#include <normal_fragment_maps>', shirtNormalFragment)
+        .replace('#include <roughnessmap_fragment>', shirtRoughnessFragment);
 
       if (gradient.enabled) {
-        fragmentShader = fragmentShader.replace(
-          "#include <map_fragment>",
-          shirtGradientFragment,
-        );
+        fragmentShader = fragmentShader.replace('#include <map_fragment>', shirtGradientFragment);
       }
 
       shader.fragmentShader = fragmentShader;

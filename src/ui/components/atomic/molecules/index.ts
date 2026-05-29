@@ -1,12 +1,11 @@
-export { LayoutsModalStructure } from "./LayoutsModalStructure";
-export { CanvasButtons } from "./CanvasButtons";
-export { LangSwitcher } from "./LangSwitcher";
-export { StepsControl } from "./StepsControl";
-export { Notification } from "./Notification";
-export { MenuStepBuy } from "./MenuStepBuy";
-export { UserBar } from "./UserBar";
-export { Search } from "./Search";
-
-export * from "./ConfiguratorsSteps";
-export * from "./ConfigTools";
-export * from "./ModalLayers";
+export { CanvasButtons } from './CanvasButtons';
+export * from './ConfigTools';
+export * from './ConfiguratorsSteps';
+export { LangSwitcher } from './LangSwitcher';
+export { LayoutsModalStructure } from './LayoutsModalStructure';
+export { MenuStepBuy } from './MenuStepBuy';
+export * from './ModalLayers';
+export { Notification } from './Notification';
+export { Search } from './Search';
+export { StepsControl } from './StepsControl';
+export { UserBar } from './UserBar';

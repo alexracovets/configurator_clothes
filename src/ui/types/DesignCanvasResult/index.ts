@@ -1,1 +1,1 @@
-export type { DesignCanvasResult } from "./DesignCanvasResult";
+export type { DesignCanvasResult } from './DesignCanvasResult';

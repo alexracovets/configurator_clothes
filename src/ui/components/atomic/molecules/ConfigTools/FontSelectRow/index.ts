@@ -1,1 +1,1 @@
-export * from "./FontSelectRow";
+export * from './FontSelectRow';

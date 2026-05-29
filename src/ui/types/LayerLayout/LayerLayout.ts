@@ -1,4 +1,4 @@
-import type { GizmoHandle } from "@types";
+import type { GizmoHandle } from '@types';
 
 export interface LayerLayout {
   textBox: { x: number; y: number; w: number; h: number };

@@ -1,1 +1,1 @@
-export type { ColorTab } from "./ColorTab";
+export type { ColorTab } from './ColorTab';

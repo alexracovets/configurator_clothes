@@ -1,4 +1,4 @@
-import type { ShirtPart } from "@types";
+import type { ShirtPart } from '@types';
 
 export interface PartGradient {
   enabled: boolean;

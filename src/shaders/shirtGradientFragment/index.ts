@@ -1,1 +1,1 @@
-export { shirtGradientFragment } from "./shirtGradientFragment";
+export { shirtGradientFragment } from './shirtGradientFragment';

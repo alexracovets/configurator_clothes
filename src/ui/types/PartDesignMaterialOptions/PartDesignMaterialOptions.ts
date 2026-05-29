@@ -1,6 +1,6 @@
-import * as THREE from "three";
+import * as THREE from 'three';
 
-import type { PrintZoneKey } from "@types";
+import type { PrintZoneKey } from '@types';
 
 export interface PartDesignMaterialOptions {
   zone: PrintZoneKey;

@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef } from 'react';
 
-import { useNameStore, useConfiguratorStore } from "@store";
+import { useConfiguratorStore, useNameStore } from '@store';
 
-const BACK_ZONE = "back" as const;
+const BACK_ZONE = 'back' as const;
 const DEFAULT_UV = { x: 0.5, y: 0.35 };
 
 const useNameBridge = () => {
@@ -33,10 +33,36 @@ const useNameBridge = () => {
       for (const inst of instances) {
         const existing = idMap.current.get(inst.id);
         if (!existing) {
-          const configId = addLayer({ type: "text", zone: BACK_ZONE, x: DEFAULT_UV.x, y: DEFAULT_UV.y, rotation: 0, scaleX: 0.5, scaleY: 0.08, visible: true, locked: false, text: inst.text, font: inst.font, fontSize: inst.fontSize, textColor: inst.textColor, strokeColor: inst.strokeColor, strokeWidth: inst.strokeWidth }, { select: false });
+          const configId = addLayer(
+            {
+              type: 'text',
+              zone: BACK_ZONE,
+              x: DEFAULT_UV.x,
+              y: DEFAULT_UV.y,
+              rotation: 0,
+              scaleX: 0.5,
+              scaleY: 0.08,
+              visible: true,
+              locked: false,
+              text: inst.text,
+              font: inst.font,
+              fontSize: inst.fontSize,
+              textColor: inst.textColor,
+              strokeColor: inst.strokeColor,
+              strokeWidth: inst.strokeWidth,
+            },
+            { select: false },
+          );
           idMap.current.set(inst.id, configId);
         } else {
-          updateLayer(existing, { text: inst.text, font: inst.font, fontSize: inst.fontSize, textColor: inst.textColor, strokeColor: inst.strokeColor, strokeWidth: inst.strokeWidth });
+          updateLayer(existing, {
+            text: inst.text,
+            font: inst.font,
+            fontSize: inst.fontSize,
+            textColor: inst.textColor,
+            strokeColor: inst.strokeColor,
+            strokeWidth: inst.strokeWidth,
+          });
         }
       }
     };

@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { PALETTE_COLORS } from "@constants";
-import { Flex, Text, Grid, Button } from "@atoms";
+import { Button, Flex, Grid, Text } from '@atoms';
+import { PALETTE_COLORS } from '@constants';
 
 interface ColorControlProps {
   activeColor: string;
@@ -15,7 +15,13 @@ const ColorControl = ({ activeColor, onSelect, label }: ColorControlProps) => {
       {label && <Text variant="configurator_part_label">{label}</Text>}
       <Grid variant="select_parts">
         {PALETTE_COLORS.map((color, idx) => (
-          <Button key={idx} variant="select_part_short" data-active={activeColor === color} style={{ backgroundColor: color }} onClick={() => onSelect(color)} />
+          <Button
+            key={idx}
+            variant="select_part_short"
+            data-active={activeColor === color}
+            style={{ backgroundColor: color }}
+            onClick={() => onSelect(color)}
+          />
         ))}
       </Grid>
     </Flex>

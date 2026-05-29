@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { useNumberStore } from "@store";
-import { Flex, Text, Button } from "@atoms";
-import { ColorTabControl, DeleteButton, FontSelectRow, RangeControl } from "@molecules";
+import { ColorTabControl, DeleteButton, FontSelectRow, RangeControl } from '@molecules';
+import { Button, Flex, Text } from '@atoms';
+import { useNumberStore } from '@store';
 
 const StepNumber = () => {
   const isVisible = useNumberStore(({ isVisible }) => isVisible);
@@ -34,7 +34,10 @@ const StepNumber = () => {
           inputMode="numeric"
           value={instance.text}
           maxLength={2}
-          onChange={(e) => { const digits = e.target.value.replace(/\D/g, ""); update({ text: digits }); }}
+          onChange={(e) => {
+            const digits = e.target.value.replace(/\D/g, '');
+            update({ text: digits });
+          }}
           className="w-full h-10 bg-white border border-input-border rounded-[8px] px-3 text-sm font-inter text-default outline-none focus:border-active transition-colors"
           placeholder="9"
         />

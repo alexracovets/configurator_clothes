@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import { usePathname } from "next/navigation";
+import { usePathname } from 'next/navigation';
 
-import { Container, Flex, Grid, Box } from "@atoms";
-import { Notification } from "@molecules";
+import { Notification } from '@molecules';
+import { Box, Container, Flex, Grid } from '@atoms';
 
 const Footer = () => {
   const pathname = usePathname();
-  const isHidden = pathname === "/configurator" || pathname === "/uv-debug";
+  const isHidden = pathname === '/configurator' || pathname === '/uv-debug';
 
   if (isHidden) return null;
 

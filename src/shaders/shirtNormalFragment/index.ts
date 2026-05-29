@@ -1,1 +1,1 @@
-export { shirtNormalFragment } from "./shirtNormalFragment";
+export { shirtNormalFragment } from './shirtNormalFragment';

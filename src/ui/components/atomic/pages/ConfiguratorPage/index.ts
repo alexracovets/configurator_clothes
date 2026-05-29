@@ -1,1 +1,1 @@
-export { ConfiguratorPage } from "./ConfiguratorPage";
+export { ConfiguratorPage } from './ConfiguratorPage';

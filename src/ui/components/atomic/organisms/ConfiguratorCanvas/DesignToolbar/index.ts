@@ -1,1 +1,1 @@
-export * from "./DesignToolbar";
+export * from './DesignToolbar';

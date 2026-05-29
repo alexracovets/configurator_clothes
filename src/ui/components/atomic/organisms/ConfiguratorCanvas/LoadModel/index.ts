@@ -1,1 +1,1 @@
-export { LoadModel } from "./LoadModel";
+export { LoadModel } from './LoadModel';

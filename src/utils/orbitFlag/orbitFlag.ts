@@ -1,4 +1,4 @@
-﻿import type { OrbitControls as OrbitControlsImpl } from "three-stdlib";
+﻿import type { OrbitControls as OrbitControlsImpl } from 'three-stdlib';
 
 const orbitFlag = {
   enabled: true,
@@ -27,4 +27,4 @@ const setOrbitLockedByToolPanel = (locked: boolean) => {
 
 const setOrbitLockedByNameTool = setOrbitLockedByToolPanel;
 
-export { orbitFlag, orbitControlsRef, isOrbitControlsEnabled, setAsidePointerOver, setOrbitLockedByToolPanel, setOrbitLockedByNameTool };
+export { isOrbitControlsEnabled, orbitControlsRef, orbitFlag, setAsidePointerOver, setOrbitLockedByNameTool, setOrbitLockedByToolPanel };

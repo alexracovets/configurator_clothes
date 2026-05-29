@@ -1,22 +1,23 @@
-﻿"use client";
+﻿'use client';
 
-import { useMemo } from "react";
-import { ThreeElements } from "@react-three/fiber";
-import { useGLTF, useTexture } from "@react-three/drei";
-import * as THREE from "three";
+import { useMemo } from 'react';
 
-import { LayoutsModalStructure } from "@molecules";
-import { NECK_DEFAULT_COLOR } from "@store";
-import type { LayerConfig } from "@types";
+import { useGLTF, useTexture } from '@react-three/drei';
+import { ThreeElements } from '@react-three/fiber';
+import * as THREE from 'three';
 
-const MODEL_PATH = "/models/pbr/crewneck.gltf";
+import { LayoutsModalStructure } from '@molecules';
+import { NECK_DEFAULT_COLOR } from '@store';
+import type { LayerConfig } from '@types';
+
+const MODEL_PATH = '/models/pbr/crewneck.gltf';
 const FABRIC_REPEAT = 6;
 
 const PBR_TEXTURE_PATHS = {
-  bakeNormal: "/models/pbr/bake_normal.jpg",
-  bakeAoRoughness: "/models/pbr/bake_ao-bake_roughness.jpg",
-  fabricNormal: "/models/pbr/cotton_jersey_nor_gl.jpg",
-  fabricRoughness: "/models/pbr/cotton_jersey_rough.jpg",
+  bakeNormal: '/models/pbr/bake_normal.jpg',
+  bakeAoRoughness: '/models/pbr/bake_ao-bake_roughness.jpg',
+  fabricNormal: '/models/pbr/cotton_jersey_nor_gl.jpg',
+  fabricRoughness: '/models/pbr/cotton_jersey_rough.jpg',
 };
 
 interface CrewneckGLTF {
@@ -28,15 +29,15 @@ interface CrewneckGLTF {
   };
 }
 
-const CrewneckModel = (props: ThreeElements["group"]) => {
+const CrewneckModel = (props: ThreeElements['group']) => {
   const { nodes, materials } = useGLTF(MODEL_PATH) as unknown as CrewneckGLTF;
-  const { insideAo } = useTexture({ insideAo: "/models/pbr/inside_ao.jpg" });
+  const { insideAo } = useTexture({ insideAo: '/models/pbr/inside_ao.jpg' });
 
   const layerConfigs: LayerConfig[] = [
-    { part: "front", geometry: nodes.crewneck_front.geometry },
-    { part: "back", geometry: nodes.crewneck_back.geometry },
-    { part: "sleeve_left", geometry: nodes.crewneck_sleeve_left.geometry },
-    { part: "sleeve_right", geometry: nodes.crewneck_sleeve_right.geometry },
+    { part: 'front', geometry: nodes.crewneck_front.geometry },
+    { part: 'back', geometry: nodes.crewneck_back.geometry },
+    { part: 'sleeve_left', geometry: nodes.crewneck_sleeve_left.geometry },
+    { part: 'sleeve_right', geometry: nodes.crewneck_sleeve_right.geometry },
   ];
 
   const neckMat = useMemo(
@@ -78,11 +79,7 @@ const CrewneckModel = (props: ThreeElements["group"]) => {
   }, [materials.crewneck_inside, insideAo]);
 
   return (
-    <LayoutsModalStructure
-      {...props}
-      layerConfigs={layerConfigs}
-      pbrTexturePaths={PBR_TEXTURE_PATHS}
-    >
+    <LayoutsModalStructure {...props} layerConfigs={layerConfigs} pbrTexturePaths={PBR_TEXTURE_PATHS}>
       <mesh geometry={nodes.Mesh002.geometry} material={insideMat} />
       <mesh geometry={nodes.crewneck_collar.geometry} material={neckMat} />
       <mesh geometry={nodes.Mesh002_1.geometry} material={materials.sweatband} />

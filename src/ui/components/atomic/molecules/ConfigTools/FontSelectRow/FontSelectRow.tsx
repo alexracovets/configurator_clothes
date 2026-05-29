@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { FONTS } from "@constants";
-import { fontCssFamily } from "@utils";
-import { Flex, Text, AtomSelect } from "@atoms";
+import { AtomSelect, Flex, Text } from '@atoms';
+import { fontCssFamily } from '@utils';
+import { FONTS } from '@constants';
 
 interface FontSelectRowProps {
   font: string;

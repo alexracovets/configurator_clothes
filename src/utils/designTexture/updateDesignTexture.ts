@@ -1,5 +1,5 @@
-import * as THREE from "three";
-import Konva from "konva";
+import * as THREE from 'three';
+import Konva from 'konva';
 
 const updateDesignTexture = (stage: Konva.Stage, texture: THREE.CanvasTexture): void => {
   const canvas = stage.toCanvas() as HTMLCanvasElement;
@@ -20,4 +20,4 @@ const createCanvasTexture = (canvas: HTMLCanvasElement): THREE.CanvasTexture => 
   return texture;
 };
 
-export { updateDesignTexture, createCanvasTexture };
+export { createCanvasTexture, updateDesignTexture };

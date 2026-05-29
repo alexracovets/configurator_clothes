@@ -1,8 +1,7 @@
-"use client";
+'use client';
 
-import { Grid, Text } from "@atoms";
-
-import { priceFormat } from "@utils";
+import { Grid, Text } from '@atoms';
+import { priceFormat } from '@utils';
 
 interface AsidePriceProps {
   price: number;
@@ -10,11 +9,7 @@ interface AsidePriceProps {
   bonus_discount: number;
 }
 
-const AsidePrice = ({
-  price,
-  bounus_count,
-  bonus_discount,
-}: AsidePriceProps) => {
+const AsidePrice = ({ price, bounus_count, bonus_discount }: AsidePriceProps) => {
   return (
     <Grid variant="configurator_price">
       <Text variant="product_price">{priceFormat(price)}</Text>

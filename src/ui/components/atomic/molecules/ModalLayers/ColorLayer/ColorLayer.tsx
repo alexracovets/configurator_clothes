@@ -1,12 +1,11 @@
-﻿"use client";
+﻿'use client';
 
-import { useLayoutEffect, useRef } from "react";
-import * as THREE from "three";
+import { useLayoutEffect, useRef } from 'react';
 
-import type { PartGradient } from "@types";
-import type { ShirtPart } from "@types";
-import { useShirtMaterial } from "@hooks";
-import type { PBRMaps } from "@types";
+import * as THREE from 'three';
+
+import { useShirtMaterial } from '@hooks';
+import type { PartGradient, PBRMaps, ShirtPart } from '@types';
 
 interface ColorLayerProps {
   part: ShirtPart;
@@ -19,14 +18,7 @@ interface ColorLayerProps {
 
 const meshRaycast = THREE.Mesh.prototype.raycast;
 
-const ColorLayer = ({
-  part,
-  geometry,
-  baseColorTexture,
-  gradient,
-  maps,
-  renderOrder = 0,
-}: ColorLayerProps) => {
+const ColorLayer = ({ part, geometry, baseColorTexture, gradient, maps, renderOrder = 0 }: ColorLayerProps) => {
   const material = useShirtMaterial(baseColorTexture, maps, gradient, part);
 
   const meshRef = useRef<THREE.Mesh>(null);
@@ -37,15 +29,7 @@ const ColorLayer = ({
     mesh.raycast = meshRaycast;
   }, []);
 
-  return (
-    <mesh
-      ref={meshRef}
-      name={part}
-      geometry={geometry}
-      material={material}
-      renderOrder={renderOrder}
-    />
-  );
+  return <mesh ref={meshRef} name={part} geometry={geometry} material={material} renderOrder={renderOrder} />;
 };
 
 export { ColorLayer };

@@ -1,7 +1,8 @@
-﻿"use client";
+﻿'use client';
 
-import { useMemo } from "react";
-import * as THREE from "three";
+import { useMemo } from 'react';
+
+import * as THREE from 'three';
 
 interface PatternLayerProps {
   geometry: THREE.BufferGeometry;
@@ -11,13 +12,7 @@ interface PatternLayerProps {
   renderOrder?: number;
 }
 
-const PatternLayer = ({
-  geometry,
-  texture,
-  patternOpacity,
-  patternColor,
-  renderOrder = 2,
-}: PatternLayerProps) => {
+const PatternLayer = ({ geometry, texture, patternOpacity, patternColor, renderOrder = 2 }: PatternLayerProps) => {
   const mat = useMemo(() => {
     const m = new THREE.MeshStandardMaterial({
       map: texture,

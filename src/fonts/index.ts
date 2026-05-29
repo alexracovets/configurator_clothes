@@ -1,2 +1,2 @@
-export { inter } from "./inter";
-export { oswald, bebasNeue, anton, russoOne, blackOpsOne } from "./sportFonts";
+export { inter } from './inter';
+export { anton, bebasNeue, blackOpsOne, oswald, russoOne } from './sportFonts';

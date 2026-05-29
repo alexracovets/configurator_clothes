@@ -1,1 +1,1 @@
-export type { LayerConfig } from "./LayerConfig";
+export type { LayerConfig } from './LayerConfig';

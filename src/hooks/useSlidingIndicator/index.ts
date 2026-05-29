@@ -1,1 +1,1 @@
-export { useSlidingIndicator } from "./useSlidingIndicator";
+export { useSlidingIndicator } from './useSlidingIndicator';

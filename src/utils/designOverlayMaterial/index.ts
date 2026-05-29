@@ -1,1 +1,1 @@
-export * from "./designOverlayMaterial";
+export * from './designOverlayMaterial';

@@ -1,1 +1,1 @@
-export { useBaseColorTexture } from "./useBaseColorTexture";
+export { useBaseColorTexture } from './useBaseColorTexture';

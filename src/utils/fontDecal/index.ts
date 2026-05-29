@@ -1,1 +1,1 @@
-export { fontCssFamily, fontCanvasName, clampDecalScale, fontSizeToDecalScale, decalWidthToFontSize } from "./fontDecal";
+export { clampDecalScale, decalWidthToFontSize, fontCanvasName, fontCssFamily, fontSizeToDecalScale } from './fontDecal';

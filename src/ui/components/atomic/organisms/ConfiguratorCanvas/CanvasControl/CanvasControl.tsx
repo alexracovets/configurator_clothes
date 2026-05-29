@@ -1,7 +1,8 @@
-"use client";
+'use client';
 
-import { Environment } from "@react-three/drei";
-import { ViewControls } from "./ViewControls";
+import { Environment } from '@react-three/drei';
+
+import { ViewControls } from './ViewControls';
 
 const CanvasControl = () => {
   return (

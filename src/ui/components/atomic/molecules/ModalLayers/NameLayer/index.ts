@@ -1,1 +1,1 @@
-export { NameLayer } from "./NameLayer";
+export { NameLayer } from './NameLayer';

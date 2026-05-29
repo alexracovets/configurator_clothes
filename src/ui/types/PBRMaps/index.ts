@@ -1,1 +1,1 @@
-export type { PBRMaps } from "./PBRMaps";
+export type { PBRMaps } from './PBRMaps';

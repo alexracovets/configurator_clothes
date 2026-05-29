@@ -1,28 +1,21 @@
-"use client";
+'use client';
 
-import { StepDesign, StepColor, StepSfumatura, StepName, StepNumber } from "@molecules";
-import { AsidePrice } from "./AsidePrice";
-import { AsideName } from "./AsideName";
-import { Flex, Grid } from "@atoms";
-import { ScrollArea } from "@shared";
+import { StepColor, StepDesign, StepName, StepNumber, StepSfumatura } from '@molecules';
+import { Flex, Grid } from '@atoms';
+import { ScrollArea } from '@shared';
+import { useStepsStore } from '@store';
+import { setAsidePointerOver } from '@utils';
 
-import { useStepsStore } from "@store";
-import { setAsidePointerOver } from "@utils";
+import { AsideName } from './AsideName';
+import { AsidePrice } from './AsidePrice';
 
-const STEP_PANELS = [
-  StepDesign,
-  StepColor,
-  StepSfumatura,
-  StepName,
-  StepNumber,
-  null,
-];
+const STEP_PANELS = [StepDesign, StepColor, StepSfumatura, StepName, StepNumber, null];
 
 const AsideConfigurator = () => {
   const currentStep = useStepsStore(({ currentStep }) => currentStep);
 
   const data = {
-    name: "Maglia Federer",
+    name: 'Maglia Federer',
     min_buy: 5,
     bounus_count: 25,
     bonus_discount: 10,
@@ -34,18 +27,10 @@ const AsideConfigurator = () => {
 
   return (
     <Grid variant="aside_configurator" asChild>
-      <aside
-        className="pointer-events-auto"
-        onPointerEnter={() => setAsidePointerOver(true)}
-        onPointerLeave={() => setAsidePointerOver(false)}
-      >
+      <aside className="pointer-events-auto" onPointerEnter={() => setAsidePointerOver(true)} onPointerLeave={() => setAsidePointerOver(false)}>
         <Flex className="flex-col items-start shrink-0">
           <AsideName name={data.name} min_buy={data.min_buy} id={data.id} />
-          <AsidePrice
-            price={data.price}
-            bounus_count={data.bounus_count}
-            bonus_discount={data.bonus_discount}
-          />
+          <AsidePrice price={data.price} bounus_count={data.bounus_count} bonus_discount={data.bonus_discount} />
         </Flex>
         {StepPanel && (
           <Flex variant="aside_configurator_content">

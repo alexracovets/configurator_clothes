@@ -1,1 +1,1 @@
-export * from "./useNumberBridge";
+export * from './useNumberBridge';

@@ -1,1 +1,1 @@
-export * from "./ShirtPart";
+export * from './ShirtPart';

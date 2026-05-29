@@ -1,1 +1,1 @@
-export { hexToRgb } from "./hexToRgb";
+export { hexToRgb } from './hexToRgb';

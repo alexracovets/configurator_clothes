@@ -1,16 +1,17 @@
-import { useMemo } from "react";
-import * as THREE from "three";
+import { useMemo } from 'react';
 
-import { hexToRgb } from "@utils";
-import type { PartGradient } from "@types";
+import * as THREE from 'three';
+
+import { hexToRgb } from '@utils';
+import type { PartGradient } from '@types';
 
 const useColorGradientTexture = (gradient: PartGradient, baseColor: string): THREE.CanvasTexture => {
   return useMemo(() => {
     const size = 1024;
-    const canvas = document.createElement("canvas");
+    const canvas = document.createElement('canvas');
     canvas.width = size;
     canvas.height = size;
-    const ctx = canvas.getContext("2d")!;
+    const ctx = canvas.getContext('2d')!;
     ctx.fillStyle = baseColor;
     ctx.fillRect(0, 0, size, size);
     if (gradient.enabled) {
@@ -25,8 +26,8 @@ const useColorGradientTexture = (gradient: PartGradient, baseColor: string): THR
       const stop1 = Math.min(1, Math.max(mid + spread, stop0 + 0.001));
       const alpha = gradient.opacity / 100;
       const [r, g, b] = hexToRgb(gradient.color2);
-      grad.addColorStop(0, "rgba(0,0,0,0)");
-      grad.addColorStop(stop0, "rgba(0,0,0,0)");
+      grad.addColorStop(0, 'rgba(0,0,0,0)');
+      grad.addColorStop(stop0, 'rgba(0,0,0,0)');
       grad.addColorStop(stop1, `rgba(${r},${g},${b},${alpha})`);
       grad.addColorStop(1, `rgba(${r},${g},${b},${alpha})`);
       ctx.fillStyle = grad;

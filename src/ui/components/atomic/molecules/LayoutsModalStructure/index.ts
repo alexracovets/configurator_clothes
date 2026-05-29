@@ -1,1 +1,1 @@
-export { LayoutsModalStructure } from "./LayoutsModalStructure";
+export { LayoutsModalStructure } from './LayoutsModalStructure';

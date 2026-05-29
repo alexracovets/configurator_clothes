@@ -1,1 +1,1 @@
-export type { PartDesignMaterialOptions } from "./PartDesignMaterialOptions";
+export type { PartDesignMaterialOptions } from './PartDesignMaterialOptions';

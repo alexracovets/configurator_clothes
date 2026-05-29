@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { Footer, Header } from "@organisms";
-import type { ChildrenType } from "@types";
+import { Footer, Header } from '@organisms';
+import type { ChildrenType } from '@types';
 
 const MainTemplate = ({ children }: ChildrenType) => {
   return (

@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { Flex, Text, Range } from "@atoms";
+import { Flex, Range, Text } from '@atoms';
 
 interface RangeControlProps {
   label?: string;
@@ -11,14 +11,7 @@ interface RangeControlProps {
   unit?: string;
 }
 
-const RangeControl = ({
-  label,
-  value,
-  onChange,
-  min = 0,
-  max = 100,
-  unit = "",
-}: RangeControlProps) => {
+const RangeControl = ({ label, value, onChange, min = 0, max = 100, unit = '' }: RangeControlProps) => {
   const safeMin = Math.min(min, max);
   const safeMax = Math.max(min, max);
   const clampedValue = Math.min(Math.max(value, safeMin), safeMax);
@@ -42,27 +35,24 @@ const RangeControl = ({
         variant="default"
       />
       <Flex variant="slider_labels">
-        <Text
-          variant="slider_label"
-          style={{ opacity: hideMin ? 0 : 1, transition: "opacity 0.15s" }}
-        >
-          {safeMin}{unit}
+        <Text variant="slider_label" style={{ opacity: hideMin ? 0 : 1, transition: 'opacity 0.15s' }}>
+          {safeMin}
+          {unit}
         </Text>
         <Text
           variant="slider_label"
           data-thumb={true}
           style={{
             left: `clamp(0%, ${percent}%, 100%)`,
-            translate: percent < 5 ? "0" : percent > 95 ? "-100%" : "-50% 0",
+            translate: percent < 5 ? '0' : percent > 95 ? '-100%' : '-50% 0',
           }}
         >
-          {clampedValue}{unit}
+          {clampedValue}
+          {unit}
         </Text>
-        <Text
-          variant="slider_label"
-          style={{ opacity: hideMax ? 0 : 1, transition: "opacity 0.15s" }}
-        >
-          {safeMax}{unit}
+        <Text variant="slider_label" style={{ opacity: hideMax ? 0 : 1, transition: 'opacity 0.15s' }}>
+          {safeMax}
+          {unit}
         </Text>
       </Flex>
     </Flex>

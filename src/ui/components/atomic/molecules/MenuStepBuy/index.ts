@@ -1,1 +1,1 @@
-export { MenuStepBuy } from "./MenuStepBuy";
+export { MenuStepBuy } from './MenuStepBuy';
