@@ -27,6 +27,7 @@ src/
 ├── constants/
 ├── fonts/
 ├── hooks/
+├── providers/
 ├── shaders/
 ├── store/
 ├── utils/
@@ -189,7 +190,7 @@ Imports must be sorted in this order, with a blank line between each group:
 
 1. **External libraries** — sorted from widest scope to narrowest (react → react-three → three → other)
 2. **Atomic components** — from widest to narrowest (`@organisms` → `@molecules` → `@atoms` → `@shared`)
-3. **App modules** — from widest to narrowest (`@store` → `@hooks` → `@utils` → `@shaders` → `@fonts` → `@types`)
+3. **App modules** — from widest to narrowest (`@store` → `@hooks` → `@providers` → `@utils` → `@shaders` → `@fonts` → `@types`)
 4. **Relative imports** — local files within the same folder
 
 Each import statement must fit on a **single line**. Never split named imports across multiple lines.
@@ -275,6 +276,7 @@ Example:
   "@shared": ["src/ui/components/shared"],
 
   "@hooks": ["src/hooks"],
+  "@providers": ["src/providers"],
   "@store": ["src/store"],
   "@utils": ["src/utils"],
   "@shaders": ["src/shaders"],
@@ -353,6 +355,30 @@ Local component types:
 ```txt
 Component.types.ts
 ```
+
+---
+
+# Providers Rules
+
+React context factories and providers live in `src/providers/`.
+
+Each provider must live inside its own folder with an `index.ts`.
+
+Example:
+
+```txt
+providers/
+└── getStrictContext/
+    ├── getStrictContext.tsx
+    └── index.ts
+```
+
+Rules:
+
+- Use `getStrictContext` to create typed React contexts
+- Each context factory or provider must be isolated in its own folder
+- Import always via `@providers`
+- Never use `React.createContext` directly outside of `src/providers/`
 
 ---
 

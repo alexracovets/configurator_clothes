@@ -3,6 +3,9 @@
 import { Button, Flex, Grid, SvgIcon, Text } from '@atoms';
 import { PALETTE_COLORS } from '@constants';
 
+import { ColorPicker } from './ColorPicker';
+import { HexInput } from './HexInput';
+
 interface ColorControlProps {
   activeColor: string;
   onSelect: (color: string) => void;
@@ -13,10 +16,19 @@ const ColorControl = ({ activeColor, onSelect, label }: ColorControlProps) => {
   return (
     <Flex variant="configurator_part">
       {label && <Text variant="configurator_part_label">{label}</Text>}
-      <Button variant="destructive" size="icon">
-        <span>Seleziona il colore</span>
-        <SvgIcon name="select_color" />
-      </Button>
+      <Grid className="grid-cols-[auto_auto] items-center justify-between gap-2 w-full">
+        <ColorPicker
+          color={activeColor}
+          onChange={onSelect}
+          trigger={
+            <Button variant="destructive" size="icon">
+              <span>Seleziona il colore</span>
+              <SvgIcon name="select_color" />
+            </Button>
+          }
+        />
+        <HexInput value={activeColor} onChange={onSelect} />
+      </Grid>
       <Grid variant="select_parts">
         {PALETTE_COLORS.map((color, idx) => (
           <Button

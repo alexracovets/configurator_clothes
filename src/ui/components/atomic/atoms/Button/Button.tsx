@@ -39,7 +39,7 @@ const buttonVariants = cva(
           'transition-all duration-200 ease-in',
         ),
         destructive: cn(
-          'text-[14px] leading-[16px] font-semibold text-default gap-2',
+          'text-[14px] leading-[16px] font-semibold text-default gap-2 items-center',
           'hover:text-active',
           '[&_span]:underline underline-offset-4',
           '[&_svg]:size-4 [&_svg]:shrink-0',

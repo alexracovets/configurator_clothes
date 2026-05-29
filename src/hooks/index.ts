@@ -1,4 +1,5 @@
 export { useBaseColorTexture } from './useBaseColorTexture';
+export { useControlledState } from './useControlledState';
 export { useDesignOverlayMaterial } from './useDesignOverlayMaterial';
 export * from './useDesignTexture';
 export * from './useNameBridge';
