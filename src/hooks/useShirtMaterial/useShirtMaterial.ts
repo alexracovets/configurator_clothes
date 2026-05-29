@@ -1,5 +1,6 @@
-﻿import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 
+import { useThree } from '@react-three/fiber';
 import * as THREE from 'three';
 
 import {
@@ -53,18 +54,15 @@ const createFabricRoughnessMap = (fabricRoughness: THREE.Texture): THREE.Texture
 };
 
 const useShirtMaterial = (baseColorTexture: THREE.CanvasTexture, maps: PBRMaps, gradient: PartGradient, part?: ShirtPart): THREE.MeshStandardMaterial => {
-  return useMemo(() => {
+  const material = useMemo(() => {
     const offset = part ? PART_POLYGON_OFFSET[part] : undefined;
-    const colorTex = baseColorTexture.clone() as THREE.CanvasTexture;
-    colorTex.colorSpace = THREE.SRGBColorSpace;
-    colorTex.needsUpdate = true;
 
     const bakeAo = createBakeOrmTexture(maps.bakeAoRoughness);
     const fabricRough = createFabricRoughnessMap(maps.fabricRoughness);
     const fabricBump = createFabricRoughnessMap(maps.fabricRoughness);
 
     const m = new THREE.MeshStandardMaterial({
-      map: colorTex,
+      map: baseColorTexture,
       aoMap: bakeAo,
       aoMapIntensity: 0.58,
       roughnessMap: fabricRough,
@@ -124,7 +122,18 @@ const useShirtMaterial = (baseColorTexture: THREE.CanvasTexture, maps: PBRMaps, 
 
     m.needsUpdate = true;
     return m;
-  }, [baseColorTexture, maps, gradient, part]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [maps, gradient, part]);
+
+  const invalidate = useThree((s) => s.invalidate);
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/immutability
+    material.map = baseColorTexture;
+    invalidate();
+  }, [baseColorTexture, material, invalidate]);
+
+  return material;
 };
 
 export { useShirtMaterial };

@@ -36,12 +36,12 @@ const ColorPicker = ({ color, onChange, trigger }: ColorPickerProps) => {
       <PopoverAtomContent variant="color_picker">
         <style>
           {`
-            .w-color-wheel-fill { width: 25px!important; height: 25px!important; border: 2px solid #fff!important; transform: none!important;}
+            .w-color-wheel-fill { width: 25px!important; height: 25px!important; border: 2px solid #fff!important;}
             .w-color-alpha-horizontal div {border-radius: 999px!important;}
             .w-color-interactive {left: 0!important; top: -20%!important;}
           `}
         </style>
-        <Wheel color={wheelHsva} onChange={handleWheelChange} width={241} height={241} />
+        <Wheel color={{ ...wheelHsva, v: brightness }} onChange={handleWheelChange} width={241} height={241} />
         <ShadeSlider hsva={{ ...wheelHsva, v: brightness }} onChange={handleShadeChange} style={{ width: '100%', height: 12 }} />
       </PopoverAtomContent>
     </PopoverAtom>

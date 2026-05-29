@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import { useLayoutEffect, useRef } from 'react';
 
@@ -20,7 +20,6 @@ const meshRaycast = THREE.Mesh.prototype.raycast;
 
 const ColorLayer = ({ part, geometry, baseColorTexture, gradient, maps, renderOrder = 0 }: ColorLayerProps) => {
   const material = useShirtMaterial(baseColorTexture, maps, gradient, part);
-
   const meshRef = useRef<THREE.Mesh>(null);
 
   useLayoutEffect(() => {
