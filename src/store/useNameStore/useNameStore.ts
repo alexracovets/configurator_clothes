@@ -4,8 +4,6 @@ import { clampDecalScale, decalWidthToFontSize, fontSizeToDecalScale } from '@ut
 import { DECAL_DEPTH, DEFAULT_NAME_TEXT, FONTS } from '@constants';
 import type { NameInstance } from '@types';
 
-export type { NameInstance };
-
 const NAME_DECAL_DEPTH = DECAL_DEPTH;
 
 const createDefaultInstance = (id: string): NameInstance => ({

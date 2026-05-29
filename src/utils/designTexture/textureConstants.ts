@@ -1,3 +1,5 @@
+import type { PrintZoneKey } from '@types';
+
 const TEXTURE_SIZE_EDITOR = 2048;
 const TEXTURE_SIZE_EXPORT = 4096;
 const TEXTURE_SIZE_MOBILE = 1024;
@@ -9,8 +11,6 @@ const UV0_BOUNDS = {
   sleeve_left: { minX: 0.0026, maxX: 0.2625, minY: 0.7191, maxY: 0.9967 },
   sleeve_right: { minX: 0.3125, maxX: 0.5711, minY: 0.7182, maxY: 0.998 },
 } as const;
-
-export type PrintZoneKey = keyof typeof UV0_BOUNDS;
 
 const PRINT_ZONES = {
   front: { x: 0.15, y: 0.1, w: 0.7, h: 0.65 },

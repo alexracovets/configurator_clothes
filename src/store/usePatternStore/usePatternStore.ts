@@ -3,8 +3,6 @@
 import { useSelectionStore } from '@store';
 import type { PartPatterns, PatternItem, ShirtPart } from '@types';
 
-export type { PatternItem };
-
 const SHIRT_PARTS: { key: ShirtPart; label: string; italianLabel: string }[] = [
   { key: 'front', label: 'Front', italianLabel: 'Davanti' },
   { key: 'back', label: 'Back', italianLabel: 'Retro' },

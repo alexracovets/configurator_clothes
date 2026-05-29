@@ -5,8 +5,6 @@ import type { ConformingDecalOptions } from '@types';
 
 import { computeDecalOrientation } from './computeDecalOrientation';
 
-export type { ConformingDecalOptions };
-
 const _raycaster = new THREE.Raycaster();
 const _projector = new THREE.Object3D();
 const _projectorWorld = new THREE.Matrix4();

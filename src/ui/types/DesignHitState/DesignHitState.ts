@@ -1,4 +1,4 @@
-import type { DesignLayer } from '../DesignLayer';
+import type { DesignLayer } from '@types';
 
 export type DesignHitState = {
   layers: DesignLayer[];

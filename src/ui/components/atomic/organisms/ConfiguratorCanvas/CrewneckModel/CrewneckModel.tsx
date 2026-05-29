@@ -7,7 +7,7 @@ import { ThreeElements } from '@react-three/fiber';
 import * as THREE from 'three';
 
 import { LayoutsModalStructure } from '@molecules';
-import { NECK_DEFAULT_COLOR } from '@store';
+import { NECK_DEFAULT_COLOR } from '@constants';
 import type { LayerConfig } from '@types';
 
 const MODEL_PATH = '/models/pbr/crewneck.gltf';

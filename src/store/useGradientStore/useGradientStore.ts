@@ -3,8 +3,6 @@
 import { useSelectionStore } from '@store';
 import type { PartGradient, PartGradients, ShirtPart } from '@types';
 
-export type { PartGradient, PartGradients };
-
 const DEFAULT_GRADIENT: PartGradient = {
   enabled: false,
   color2: '#111111',
