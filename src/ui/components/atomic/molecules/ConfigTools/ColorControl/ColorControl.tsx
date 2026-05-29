@@ -1,16 +1,18 @@
 'use client';
 
-import { Button, Flex, Grid, SvgIcon } from '@atoms';
+import { Button, Flex, Grid, SvgIcon, Text } from '@atoms';
 import { PALETTE_COLORS } from '@constants';
 
 interface ColorControlProps {
   activeColor: string;
   onSelect: (color: string) => void;
+  label?: string;
 }
 
-const ColorControl = ({ activeColor, onSelect }: ColorControlProps) => {
+const ColorControl = ({ activeColor, onSelect, label }: ColorControlProps) => {
   return (
     <Flex variant="configurator_part">
+      {label && <Text variant="configurator_part_label">{label}</Text>}
       <Button variant="destructive" size="icon">
         <span>Seleziona il colore</span>
         <SvgIcon name="select_color" />
