@@ -4,8 +4,6 @@ export { useColorStore } from "./useColorStore";
 export { usePatternStore, PATTERNS, SHIRT_PARTS } from "./usePatternStore";
 export { useGradientStore } from "./useGradientStore";
 
-export { FONTS, fontCssFamily, fontCanvasName, DECAL_SCALE_MIN, DECAL_SCALE_MAX, DECAL_DEPTH, clampDecalScale, fontSizeToDecalScale, decalWidthToFontSize } from "./decal";
-
 export { useNameStore, useActiveNameInstance, DEFAULT_NAME_TEXT, NAME_DECAL_DEPTH } from "./useNameStore";
 export type { NameInstance } from "./useNameStore";
 

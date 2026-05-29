@@ -6,7 +6,8 @@ import { Decal } from "@react-three/drei";
 import { useThree } from "@react-three/fiber";
 
 import { DECAL_SCALE_MIN, DECAL_SCALE_MAX } from "@constants";
-import { useNumberStore, clampDecalScale } from "@store";
+import { useNumberStore } from "@store";
+import { clampDecalScale } from "@utils";
 import { useDecalTexture, buildDecalLayout, hitTestDecal, gizmoCursor } from "@hooks";
 import { setOrbitLockedByNameTool } from "@utils";
 import type { NumberInstance } from "@types";

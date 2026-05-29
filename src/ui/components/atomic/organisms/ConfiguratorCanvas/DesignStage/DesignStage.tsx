@@ -4,7 +4,8 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Stage, Layer, Text, Image as KonvaImage, Transformer } from "react-konva";
 import type Konva from "konva";
 
-import { useConfiguratorStore, resolveCanvasFont } from "@store";
+import { useConfiguratorStore } from "@store";
+import { fontCanvasName } from "@utils";
 import { PRINT_ZONES, TEXTURE_SIZE_EDITOR } from "@utils";
 import type { DesignLayer } from "@types";
 import type { PrintZoneKey } from "@types";
@@ -17,7 +18,7 @@ interface DesignStageProps {
 const EditableTextNode = ({ layer, isSelected, stageSize, onSelect, onChange }: { layer: DesignLayer; isSelected: boolean; stageSize: number; onSelect: () => void; onChange: (patch: Partial<DesignLayer>) => void }) => {
   const shapeRef = useRef<Konva.Text>(null);
   const trRef = useRef<Konva.Transformer>(null);
-  const font = resolveCanvasFont(layer.font ?? "--font-oswald");
+  const font = fontCanvasName(layer.font ?? "--font-oswald");
   const fontSize = Math.round((layer.fontSize ?? 128) * (stageSize / TEXTURE_SIZE_EDITOR));
   const px = layer.x * stageSize;
   const py = layer.y * stageSize;
@@ -114,8 +115,7 @@ const DesignStage = ({ zone, displaySize = 480 }: DesignStageProps) => {
   const stageRef = useRef<Konva.Stage>(null);
 
   const handleStageClick = useCallback(
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (e: Konva.KonvaEventObject<any>) => { if (e.target === stageRef.current) selectLayer(null); },
+    (e: Konva.KonvaEventObject<MouseEvent | TouchEvent>) => { if (e.target === stageRef.current) selectLayer(null); },
     [selectLayer],
   );
 

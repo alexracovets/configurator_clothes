@@ -2,7 +2,7 @@
 
 import type { PartGradient, PartGradients } from "@types";
 export type { PartGradient, PartGradients };
-import { useSelectionStore } from "../useSelectionStore";
+import { useSelectionStore } from "@store";
 import type { ShirtPart } from "@types";
 
 const DEFAULT_GRADIENT: PartGradient = {

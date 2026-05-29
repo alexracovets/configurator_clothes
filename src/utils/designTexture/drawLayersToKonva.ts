@@ -1,6 +1,6 @@
 ﻿import Konva from "konva";
 
-import { resolveCanvasFont } from "@store";
+import { fontCanvasName } from "../fontDecal";
 import type { DesignLayer } from "@types";
 
 import type { DesignCanvasResult } from "./createDesignCanvas";
@@ -21,7 +21,7 @@ const drawLayersToKonva = (dc: DesignCanvasResult, layers: DesignLayer[]): void 
       case "number":
       case "text": {
         const text = layer.text ?? (layer.type === "number" ? "9" : "NAME");
-        const font = resolveCanvasFont(layer.font ?? "--font-oswald");
+        const font = fontCanvasName(layer.font ?? "--font-oswald");
         const fontSize = Math.round((layer.fontSize ?? 128) * (size / TEXTURE_SIZE_EDITOR));
         const strokeWidth = (layer.strokeWidth ?? 4) * (size / TEXTURE_SIZE_EDITOR);
         const kText = new Konva.Text({ x: px, y: py, text, fontFamily: font, fontStyle: "bold", fontSize, fill: layer.textColor ?? "#FFFFFF", stroke: layer.strokeColor ?? "#1A2744", strokeWidth, align: "center", rotation: layer.rotation, offsetX: 0, offsetY: 0, listening: false, perfectDrawEnabled: true });

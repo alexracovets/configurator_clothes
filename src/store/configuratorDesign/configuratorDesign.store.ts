@@ -2,12 +2,9 @@
 
 import type { DesignLayer, TextureSettings, PrintZoneKey } from "@types";
 import { PRINT_ZONES, TEXTURE_SIZE_EDITOR } from "@utils";
-import { FONTS, fontCanvasName } from "../decal";
+import { FONTS } from "@constants";
 
 export type FontValue = (typeof FONTS)[number]["value"];
-
-const resolveCanvasFont = (cssVar: string): string => fontCanvasName(cssVar);
-
 
 const MAX_HISTORY = 50;
 
@@ -137,4 +134,3 @@ export const useConfiguratorStore = create<ConfiguratorStore>((set, get) => ({
   getLayersForZone: (zone) => get().layers.filter((l) => l.zone === zone && l.visible),
 }));
 
-export { resolveCanvasFont };

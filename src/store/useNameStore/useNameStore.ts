@@ -2,10 +2,8 @@
 
 import type { NameInstance } from "@types";
 export type { NameInstance };
-import { DEFAULT_NAME_TEXT } from "@constants";
-import { FONTS, fontCssFamily, fontCanvasName, DECAL_DEPTH, clampDecalScale, fontSizeToDecalScale, decalWidthToFontSize } from "../decal";
-
-export { FONTS, fontCssFamily, fontCanvasName, fontSizeToDecalScale, decalWidthToFontSize };
+import { DEFAULT_NAME_TEXT, DECAL_DEPTH, FONTS } from "@constants";
+import { clampDecalScale, fontSizeToDecalScale, decalWidthToFontSize } from "@utils";
 
 
 const NAME_DECAL_DEPTH = DECAL_DEPTH;

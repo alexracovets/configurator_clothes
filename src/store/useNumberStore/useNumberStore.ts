@@ -1,10 +1,8 @@
 ﻿import { create } from "zustand";
 
 import type { NumberInstance } from "@types";
-import { DEFAULT_NUMBER_TEXT } from "@constants";
-import { FONTS, fontCssFamily, fontCanvasName, DECAL_DEPTH, clampDecalScale, fontSizeToDecalScale, decalWidthToFontSize, DECAL_SCALE_MIN, DECAL_SCALE_MAX } from "../decal";
-
-export { FONTS, fontCssFamily, fontCanvasName };
+import { DEFAULT_NUMBER_TEXT, DECAL_DEPTH, DECAL_SCALE_MIN, DECAL_SCALE_MAX, FONTS } from "@constants";
+import { clampDecalScale, fontSizeToDecalScale, decalWidthToFontSize } from "@utils";
 
 
 

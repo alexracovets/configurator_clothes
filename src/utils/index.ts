@@ -1,5 +1,6 @@
 export { priceFormat } from "./priceFormat";
 export { cn } from "./cn";
+export { fontCssFamily, fontCanvasName, clampDecalScale, fontSizeToDecalScale, decalWidthToFontSize } from "./fontDecal";
 export {
   orbitFlag,
   orbitControlsRef,

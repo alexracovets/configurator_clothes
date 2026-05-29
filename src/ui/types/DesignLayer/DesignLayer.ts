@@ -1,4 +1,4 @@
-import type { PrintZoneKey } from "../PrintZoneKey";
+import type { PrintZoneKey } from "@types";
 
 export type LayerType = "text" | "number" | "logo";
 

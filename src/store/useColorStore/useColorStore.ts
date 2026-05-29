@@ -2,7 +2,7 @@
 
 import { DEFAULT_PART_COLOR } from "@constants";
 import type { ShirtPart, PartColors } from "@types";
-import { useSelectionStore } from "../useSelectionStore";
+import { useSelectionStore } from "@store";
 
 interface ColorStore {
   partColors: PartColors;

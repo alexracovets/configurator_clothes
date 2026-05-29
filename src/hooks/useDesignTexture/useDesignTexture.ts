@@ -3,7 +3,8 @@
 import { useCallback, useEffect, useSyncExternalStore } from "react";
 import * as THREE from "three";
 
-import { useConfiguratorStore, fontCanvasName } from "@store";
+import { useConfiguratorStore } from "@store";
+import { fontCanvasName } from "@utils";
 import { TEXTURE_SIZE_DRAG, TEXTURE_SIZE_EDITOR, UV0_BOUNDS } from "@utils"; 
 import type { DesignLayer } from "@types";
 import { GizmoHandle, GizmoZone, LayerLayout, LayerGlyph, PrintZoneKey } from "@types";

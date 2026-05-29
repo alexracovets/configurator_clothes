@@ -23,3 +23,4 @@ export type { NumberInstance } from "./NumberInstance";
 export type { PatternItem } from "./PatternItem";
 export type { ColorTab } from "./ColorTab";
 export type { LayerType, DesignLayer, TextureSettings } from "./DesignLayer";
+export type { DesignHitState } from "./DesignHitState";

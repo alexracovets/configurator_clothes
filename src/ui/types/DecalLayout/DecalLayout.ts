@@ -1,4 +1,4 @@
-import type { GizmoHandle } from "../GizmoZone";
+import type { GizmoHandle } from "@types";
 
 export interface DecalLayout {
   textBox: { x: number; y: number; w: number; h: number };

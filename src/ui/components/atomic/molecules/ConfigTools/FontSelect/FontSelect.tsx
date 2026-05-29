@@ -1,6 +1,6 @@
 "use client";
 
-import { FONTS } from "@store";
+import { FONTS } from "@constants";
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@shared";
 import { cn } from "@utils";
 

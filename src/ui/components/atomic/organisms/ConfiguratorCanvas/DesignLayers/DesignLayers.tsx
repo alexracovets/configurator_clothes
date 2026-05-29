@@ -88,10 +88,10 @@ const PointerHandler = () => {
 
     function onPointerDown(e: PointerEvent) {
       wasDrag = false; pendingDragMode = null;
-      const hits = getHits(e, gl, camera, scene);
-      const found = findLayerHit(hits);
-      if (!found) { useConfiguratorStore.getState().selectLayer(null); return; }
       const state = useConfiguratorStore.getState();
+      const hits = getHits(e, gl, camera, scene);
+      const found = findLayerHit(hits, state);
+      if (!found) { state.selectLayer(null); return; }
       const gz = found.result.gizmoZone;
       const id = found.result.id;
       if (gz === "delete") { useConfiguratorStore.getState().removeLayer(id); e.stopPropagation(); return; }
@@ -111,7 +111,7 @@ const PointerHandler = () => {
           const state = useConfiguratorStore.getState();
           const layer = state.layers.find((l) => l.id === dragId);
           const hits = getHits(e, gl, camera, scene);
-          const found = findLayerHit(hits);
+          const found = findLayerHit(hits, state);
           if (layer && found && found.result.id === dragId) { cancelOrbitGesture(e); beginDrag(pendingDragMode, dragId, dragZone, layer, found.uv); e.stopPropagation(); }
           else { pendingDragMode = null; dragId = null; dragZone = null; }
         }

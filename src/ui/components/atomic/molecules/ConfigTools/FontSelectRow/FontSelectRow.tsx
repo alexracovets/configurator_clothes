@@ -1,6 +1,7 @@
 "use client";
 
-import { FONTS, fontCssFamily } from "@store";
+import { FONTS } from "@constants";
+import { fontCssFamily } from "@utils";
 import { Flex, Text, AtomSelect } from "@atoms";
 
 interface FontSelectRowProps {

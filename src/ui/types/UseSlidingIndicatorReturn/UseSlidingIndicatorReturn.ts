@@ -1,6 +1,6 @@
 import type { RefObject } from "react";
 
-import type { IndicatorStyle } from "../IndicatorStyle";
+import type { IndicatorStyle } from "@types";
 
 export interface UseSlidingIndicatorReturn {
   wrapperRef: RefObject<HTMLDivElement | null>;

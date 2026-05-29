@@ -1,9 +1,8 @@
 ﻿import * as THREE from "three";
 
 import { buildLayerLayout, hitTestLayout } from "@hooks";
-import { useConfiguratorStore } from "@store";
 import { UV0_BOUNDS } from "@utils";
-import type { PrintZoneKey } from "@types";
+import type { DesignHitState, PrintZoneKey } from "@types";
 
 const zoneFromName = (name: string): PrintZoneKey | null => {
   const n = (name ?? "").toLowerCase();
@@ -100,10 +99,9 @@ const getHitCanvas = (): HTMLCanvasElement => {
   return _hitCanvas!;
 };
 
-const atlasHitTest = (uvX: number, uvY: number, zone: PrintZoneKey) => {
+const atlasHitTest = (uvX: number, uvY: number, zone: PrintZoneKey, state: DesignHitState) => {
   const { nx, ny } = normaliseUV(uvX, uvY, zone);
   if (nx < -0.15 || nx > 1.15 || ny < -0.15 || ny > 1.15) return null;
-  const state = useConfiguratorStore.getState();
   const selectedId = state.selectedId;
   const layers = state.layers.filter((l) => l.zone === zone && l.visible && (l.type === "text" || l.type === "number"));
   const canvas = getHitCanvas();
@@ -124,9 +122,9 @@ const atlasHitTest = (uvX: number, uvY: number, zone: PrintZoneKey) => {
   return null;
 };
 
-const findLayerHit = (hits: Array<{ uv: THREE.Vector2; zone: PrintZoneKey }>) => {
+const findLayerHit = (hits: Array<{ uv: THREE.Vector2; zone: PrintZoneKey }>, state: DesignHitState) => {
   for (const { uv, zone } of hits) {
-    const result = atlasHitTest(uv.x, uv.y, zone);
+    const result = atlasHitTest(uv.x, uv.y, zone, state);
     if (result) return { result, uv, zone };
   }
   return null;
