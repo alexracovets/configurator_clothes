@@ -1,4 +1,4 @@
-import { create } from "zustand";
+﻿import { create } from "zustand";
 
 import type { ShirtPart, PartColors } from "../types";
 import { useSelectionStore } from "../useSelectionStore";
@@ -11,7 +11,7 @@ interface ColorStore {
   setPartColor: (part: ShirtPart, color: string) => void;
 }
 
-export const useColorStore = create<ColorStore>((set) => ({
+const useColorStore = create<ColorStore>((set) => ({
   partColors: {
     front: DEFAULT_COLOR,
     back: DEFAULT_COLOR,
@@ -30,3 +30,5 @@ export const useColorStore = create<ColorStore>((set) => ({
   setPartColor: (part, color) =>
     set(({ partColors }) => ({ partColors: { ...partColors, [part]: color } })),
 }));
+
+export { useColorStore };

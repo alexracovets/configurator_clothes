@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect } from "react";
 import { useThree } from "@react-three/fiber";
@@ -158,8 +158,10 @@ const PointerHandler = () => {
   return null;
 };
 
-export const DesignLayers = () => {
+const DesignLayers = () => {
   useNameBridge();
   useNumberBridge();
   return <PointerHandler />;
 };
+
+export { DesignLayers };

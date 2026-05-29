@@ -7,12 +7,7 @@ import { Flex, Text, Button, AtomSelect, SvgIcon } from "@atoms";
 import { ColorControl, RangeControl } from "@molecules";
 import { cn } from "@utils";
 
-type ColorTab = "colori" | "contorno";
-
-const COLOR_TABS: { id: ColorTab; label: string }[] = [
-  { id: "colori", label: "Colori" },
-  { id: "contorno", label: "Contorno" },
-];
+import { COLOR_TABS, type ColorTab } from "../colorTabs";
 
 const StepNumber = () => {
   const isVisible = useNumberStore(({ isVisible }) => isVisible);

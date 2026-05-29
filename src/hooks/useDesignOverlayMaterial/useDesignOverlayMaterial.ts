@@ -6,7 +6,7 @@ import * as THREE from "three";
 import { UV0_BOUNDS } from "@utils";
 import type { PrintZoneKey } from "@utils";
 import type { ShirtPart } from "@store";
-import { shirtFragmentUniforms, shirtVertexUv } from "@shaders";
+import { shirtFragmentUniforms, shirtVertexUvParsVertex, shirtVertexUvVertex } from "@shaders";
 
 const OVERLAY_FRAG_UNIFORMS = /* glsl */ `
   uniform sampler2D uDesignMap;
@@ -26,10 +26,7 @@ const OVERLAY_FRAG_MAIN = /* glsl */ `
   }
 `;
 
-/**
- * Transparent decal material — text/numbers only, drawn above PatternLayer.
- */
-export const useDesignOverlayMaterial = (
+const useDesignOverlayMaterial = (
   part: ShirtPart,
   designTexture: THREE.CanvasTexture,
 ): THREE.MeshBasicMaterial => {
@@ -69,8 +66,8 @@ export const useDesignOverlayMaterial = (
       shader.uniforms.uDesignUvBounds = du.uDesignUvBounds;
 
       shader.vertexShader = shader.vertexShader
-        .replace("#include <uv_pars_vertex>", shirtVertexUv.uvParsVertex)
-        .replace("#include <uv_vertex>", shirtVertexUv.uvVertex);
+        .replace("#include <uv_pars_vertex>", shirtVertexUvParsVertex)
+        .replace("#include <uv_vertex>", shirtVertexUvVertex);
 
       shader.fragmentShader = shader.fragmentShader
         .replace(
@@ -84,3 +81,5 @@ export const useDesignOverlayMaterial = (
     return m;
   }, [part]);
 };
+
+export { useDesignOverlayMaterial };

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useColorStore, usePatternStore, useGradientStore } from "@store";
 import { useBaseColorTexture, useSvgTexture, useDesignTexture } from "@hooks";
@@ -14,7 +14,7 @@ interface PartLayersProps {
   maps: PBRMaps;
 }
 
-export const PartLayers = ({ layer, maps }: PartLayersProps) => {
+const PartLayers = ({ layer, maps }: PartLayersProps) => {
   const { partColors } = useColorStore();
   const { partPatterns, patternOpacity, patternColor } = usePatternStore();
   const { partGradients } = useGradientStore();
@@ -39,3 +39,5 @@ export const PartLayers = ({ layer, maps }: PartLayersProps) => {
     </>
   );
 };
+
+export { PartLayers };

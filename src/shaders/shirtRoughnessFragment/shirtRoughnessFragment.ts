@@ -1,4 +1,4 @@
-export const shirtRoughnessFragment = /* glsl */ `
+﻿const shirtRoughnessFragment = /* glsl */ `
 float roughnessFactor = roughness;
 #ifdef USE_ROUGHNESSMAP
   float fabricR = texture2D( roughnessMap, vRoughnessMapUv ).r;
@@ -10,3 +10,5 @@ float roughnessFactor = roughness;
   roughnessFactor *= mix( 0.5, 1.0, bakeRough );
 #endif
 `;
+
+export { shirtRoughnessFragment };

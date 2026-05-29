@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useLayoutEffect, useRef } from "react";
 import * as THREE from "three";
@@ -18,7 +18,7 @@ interface ColorLayerProps {
 
 const meshRaycast = THREE.Mesh.prototype.raycast;
 
-export const ColorLayer = ({
+const ColorLayer = ({
   part,
   geometry,
   baseColorTexture,
@@ -46,3 +46,5 @@ export const ColorLayer = ({
     />
   );
 };
+
+export { ColorLayer };

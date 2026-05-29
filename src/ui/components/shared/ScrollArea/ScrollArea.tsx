@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useRef, useState, useMemo } from "react";
 import { OverlayScrollbars } from "overlayscrollbars";
@@ -11,7 +11,7 @@ interface ScrollAreaProps {
   className?: string;
 }
 
-function ScrollArea({ children, className }: ScrollAreaProps) {
+const ScrollArea = ({ children, className }: ScrollAreaProps) => {
   const targetRef = useRef<HTMLDivElement>(null);
   const viewportRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);

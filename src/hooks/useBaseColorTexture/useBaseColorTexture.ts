@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import * as THREE from "three";
 
-export const useBaseColorTexture = (baseColor: string): THREE.CanvasTexture => {
+const useBaseColorTexture = (baseColor: string): THREE.CanvasTexture => {
   return useMemo(() => {
     const size = 1024;
     const canvas = document.createElement("canvas");
@@ -15,3 +15,5 @@ export const useBaseColorTexture = (baseColor: string): THREE.CanvasTexture => {
     return tex;
   }, [baseColor]);
 };
+
+export { useBaseColorTexture };

@@ -1,11 +1,6 @@
 "use client";
 
-import {
-  Accordion,
-  AccordionItem,
-  AccordionTrigger,
-  AccordionContent,
-} from "@shared";
+import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@shared";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@utils";
 

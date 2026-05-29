@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import type { ChildrenType } from "@types";
 import { cn } from "@utils";
@@ -7,10 +7,12 @@ interface ContainerProps extends ChildrenType {
   className?: string;
 }
 
-export const Container = ({ children, className }: ContainerProps) => {
+const Container = ({ children, className }: ContainerProps) => {
   return (
     <div className={cn("w-full max-w-[1440px] px-12 mx-auto", className)}>
       {children}
     </div>
   );
 };
+
+export { Container };

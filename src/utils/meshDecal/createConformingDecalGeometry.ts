@@ -1,4 +1,4 @@
-import * as THREE from "three";
+﻿import * as THREE from "three";
 import { DecalGeometry } from "three-stdlib";
 
 import { computeDecalOrientation } from "./computeDecalOrientation";
@@ -111,7 +111,6 @@ const castAlongDirection = (
   return null;
 };
 
-/** Проєктор + радіальний промінь (краще на плечах / складках) */
 const raycastOnSurface = (
   targetMesh: THREE.Mesh,
   worldHint: THREE.Vector3,
@@ -165,7 +164,7 @@ const fillGridGaps = (grid: (GridHit | null)[][], rows: number, cols: number): v
   }
 };
 
-export const createConformingDecalGeometry = (
+const createConformingDecalGeometry = (
   targetMesh: THREE.Mesh,
   position: THREE.Vector3 | [number, number, number],
   rotation: number | [number, number, number] | THREE.Euler,
@@ -335,3 +334,5 @@ export const createConformingDecalGeometry = (
   geometry.computeBoundingSphere();
   return geometry;
 };
+
+export { createConformingDecalGeometry };

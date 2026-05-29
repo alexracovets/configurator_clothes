@@ -1,15 +1,9 @@
-import { useMemo } from "react";
+﻿import { useMemo } from "react";
 import * as THREE from "three";
 
 import type { PartGradient, ShirtPart } from "@store";
 import type { PBRMaps } from "@types";
-import {
-  shirtVertexUv,
-  shirtFragmentUniforms,
-  shirtNormalFragment,
-  shirtGradientFragment,
-  shirtRoughnessFragment,
-} from "@shaders";
+import { shirtVertexUvParsVertex, shirtVertexUvVertex, shirtFragmentUniforms, shirtNormalFragment, shirtGradientFragment, shirtRoughnessFragment } from "@shaders";
 
 const FABRIC_REPEAT = 10;
 
@@ -20,7 +14,6 @@ const PART_POLYGON_OFFSET: Partial<
   sleeve_right: { factor: -1, units: -1 },
 };
 
-/** AO (R) + roughness (G) bake — UV1 */
 const createBakeOrmTexture = (
   bakeAoRoughness: THREE.Texture,
 ): THREE.Texture => {
@@ -51,7 +44,6 @@ const createBakeNormalUniform = (bakeNormal: THREE.Texture) => {
   return { value: tex };
 };
 
-/** Tiled fabric roughness / bump — UV0 (exterior only) */
 const createFabricRoughnessMap = (
   fabricRoughness: THREE.Texture,
 ): THREE.Texture => {
@@ -65,7 +57,7 @@ const createFabricRoughnessMap = (
   return tex;
 };
 
-export const useShirtMaterial = (
+const useShirtMaterial = (
   baseColorTexture: THREE.CanvasTexture,
   maps: PBRMaps,
   gradient: PartGradient,
@@ -128,8 +120,8 @@ export const useShirtMaterial = (
       }
 
       shader.vertexShader = shader.vertexShader
-        .replace("#include <uv_pars_vertex>", shirtVertexUv.uvParsVertex)
-        .replace("#include <uv_vertex>", shirtVertexUv.uvVertex);
+        .replace("#include <uv_pars_vertex>", shirtVertexUvParsVertex)
+        .replace("#include <uv_vertex>", shirtVertexUvVertex);
 
       let fragmentShader = shader.fragmentShader
         .replace("#include <uv_pars_fragment>", shirtFragmentUniforms)
@@ -150,3 +142,5 @@ export const useShirtMaterial = (
     return m;
   }, [baseColorTexture, maps, gradient, part]);
 };
+
+export { useShirtMaterial };

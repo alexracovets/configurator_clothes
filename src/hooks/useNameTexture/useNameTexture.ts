@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useMemo } from "react";
 import * as THREE from "three";
@@ -18,7 +18,7 @@ interface UseNameTextureParams {
   hoveredZone?: GizmoZone | null;
 }
 
-export const useNameTexture = ({ text, font, fontSize, textColor, strokeColor, strokeWidth, showGizmo, hoveredZone = null }: UseNameTextureParams): THREE.CanvasTexture => {
+const useNameTexture = ({ text, font, fontSize, textColor, strokeColor, strokeWidth, showGizmo, hoveredZone = null }: UseNameTextureParams): THREE.CanvasTexture => {
   return useMemo(() => {
     const canvas = document.createElement("canvas");
     canvas.width = 1024;
@@ -30,3 +30,5 @@ export const useNameTexture = ({ text, font, fontSize, textColor, strokeColor, s
     return texture;
   }, [text, font, fontSize, textColor, strokeColor, strokeWidth, showGizmo, hoveredZone]);
 };
+
+export { useNameTexture };

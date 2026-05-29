@@ -7,7 +7,7 @@ import { useNameStore, useConfiguratorStore } from "@store";
 const BACK_ZONE = "back" as const;
 const DEFAULT_UV = { x: 0.5, y: 0.35 };
 
-export function useNameBridge() {
+const useNameBridge = () => {
   const idMap = useRef<Map<string, string>>(new Map());
 
   useEffect(() => {
@@ -51,4 +51,6 @@ export function useNameBridge() {
       map.clear();
     };
   }, []);
-}
+};
+
+export { useNameBridge };

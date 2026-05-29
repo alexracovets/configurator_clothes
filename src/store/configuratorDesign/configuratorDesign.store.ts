@@ -1,4 +1,4 @@
-import { create } from "zustand";
+﻿import { create } from "zustand";
 
 import { PRINT_ZONES, type PrintZoneKey, TEXTURE_SIZE_EDITOR } from "@utils";
 
@@ -14,9 +14,7 @@ export type FontValue = (typeof FONTS)[number]["value"];
 
 export const CSS_VAR_TO_CANVAS_FONT: Record<string, string> = Object.fromEntries(FONTS.map((f) => [f.value, f.canvasFont]));
 
-export function resolveCanvasFont(cssVar: string): string {
-  return CSS_VAR_TO_CANVAS_FONT[cssVar] ?? cssVar;
-}
+const resolveCanvasFont = (cssVar: string): string => CSS_VAR_TO_CANVAS_FONT[cssVar] ?? cssVar;
 
 export type LayerType = "text" | "number" | "logo";
 
@@ -85,19 +83,17 @@ const newId = (): string =>
     ? crypto.randomUUID()
     : `layer-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
 
-function zoneCentre(zone: PrintZoneKey): { x: number; y: number } {
+const zoneCentre = (zone: PrintZoneKey): { x: number; y: number } => {
   const z = PRINT_ZONES[zone];
   return { x: z.x + z.w / 2, y: z.y + z.h / 2 };
-}
+};
 
-function snapshot(state: ConfiguratorState): DesignLayer[] {
-  return state.layers.map((l) => ({ ...l }));
-}
+const snapshot = (state: ConfiguratorState): DesignLayer[] => state.layers.map((l) => ({ ...l }));
 
-function pushHistory(state: ConfiguratorState): Pick<ConfiguratorState, "_past" | "_future"> {
+const pushHistory = (state: ConfiguratorState): Pick<ConfiguratorState, "_past" | "_future"> => {
   const past = [...state._past, snapshot(state)].slice(-MAX_HISTORY);
   return { _past: past, _future: [] };
-}
+};
 
 export const useConfiguratorStore = create<ConfiguratorStore>((set, get) => ({
   layers: [],
@@ -174,3 +170,5 @@ export const useConfiguratorStore = create<ConfiguratorStore>((set, get) => ({
   getLayer: (id) => get().layers.find((l) => l.id === id),
   getLayersForZone: (zone) => get().layers.filter((l) => l.zone === zone && l.visible),
 }));
+
+export { resolveCanvasFont };

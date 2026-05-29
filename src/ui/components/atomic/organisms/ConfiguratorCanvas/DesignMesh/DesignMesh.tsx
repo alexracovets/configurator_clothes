@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
  
 import * as THREE from "three";
 
@@ -15,7 +15,9 @@ interface DesignMeshProps {
   aoMap?: THREE.Texture | null;
 }
 
-export const DesignMesh = ({ geometry, zone, renderOrder = 10, colorTexture = null, normalMap = null, roughnessMap = null, aoMap = null }: DesignMeshProps) => {
+const DesignMesh = ({ geometry, zone, renderOrder = 10, colorTexture = null, normalMap = null, roughnessMap = null, aoMap = null }: DesignMeshProps) => {
   const material = usePartDesignMaterial({ zone, colorTexture, normalMap, roughnessMap, aoMap });
   return <mesh geometry={geometry} material={material} renderOrder={renderOrder} />;
 };
+
+export { DesignMesh };

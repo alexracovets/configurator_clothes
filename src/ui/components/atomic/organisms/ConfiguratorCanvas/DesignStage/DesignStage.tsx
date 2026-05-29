@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Stage, Layer, Text, Image as KonvaImage, Transformer } from "react-konva";
@@ -106,7 +106,7 @@ const SafeZoneOverlay = ({ zone, stageSize }: { zone: PrintZoneKey; stageSize: n
   );
 };
 
-export const DesignStage = ({ zone, displaySize = 480 }: DesignStageProps) => {
+const DesignStage = ({ zone, displaySize = 480 }: DesignStageProps) => {
   const layers = useConfiguratorStore((s) => s.layers.filter((l) => l.zone === zone));
   const selectedId = useConfiguratorStore((s) => s.selectedId);
   const selectLayer = useConfiguratorStore((s) => s.selectLayer);
@@ -142,3 +142,5 @@ export const DesignStage = ({ zone, displaySize = 480 }: DesignStageProps) => {
     </div>
   );
 };
+
+export { DesignStage };

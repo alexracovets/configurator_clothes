@@ -1,4 +1,4 @@
-import type { ShirtPart } from "@store";
+﻿import type { ShirtPart } from "@store";
 
 const PART_RENDER_ORDER: Record<ShirtPart, number> = {
   front: 0,
@@ -7,4 +7,6 @@ const PART_RENDER_ORDER: Record<ShirtPart, number> = {
   sleeve_right: 1,
 };
 
-export const getPartRenderOrder = (part: ShirtPart): number => PART_RENDER_ORDER[part];
+const getPartRenderOrder = (part: ShirtPart): number => PART_RENDER_ORDER[part];
+
+export { getPartRenderOrder };

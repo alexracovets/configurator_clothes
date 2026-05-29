@@ -1,1 +1,1 @@
-export { shirtVertexUv } from "./shirtVertexUv";
+export { shirtVertexUvParsVertex, shirtVertexUvVertex } from "./shirtVertexUv";

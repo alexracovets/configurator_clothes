@@ -1,12 +1,6 @@
 "use client";
 
-import {
-  Select,
-  SelectTrigger,
-  SelectContent,
-  SelectItem,
-  SelectValue,
-} from "@shared";
+import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@shared";
 import { cva, VariantProps } from "class-variance-authority";
 
 const variantTrigger = cva("font-inter", {

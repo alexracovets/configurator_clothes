@@ -2,7 +2,7 @@
 
 import { Flex, Text, Grid, Button } from "@atoms";
 
-export const COLORS = [
+const COLORS = [
   "#C0392B",
   "#2980B9",
   "#F1C40F",
@@ -47,4 +47,4 @@ const ColorControl = ({ activeColor, onSelect, label }: ColorControlProps) => {
   );
 };
 
-export { ColorControl };
+export { COLORS, ColorControl };

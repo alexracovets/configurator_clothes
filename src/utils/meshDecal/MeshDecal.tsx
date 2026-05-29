@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import * as React from "react";
 import * as THREE from "three";
@@ -28,11 +28,8 @@ const toTriple = (vec: VecInput): [number, number, number] => {
   return [0, 0, 0];
 };
 
-export const MeshDecal = React.forwardRef<THREE.Mesh, MeshDecalProps>(
-  function MeshDecal(
-    { rotation, position, scale, lowQuality = false, ...props },
-    forwardRef,
-  ) {
+const MeshDecal = React.forwardRef<THREE.Mesh, MeshDecalProps>(
+  ({ rotation, position, scale, lowQuality = false, ...props }, forwardRef) => {
     const ref = React.useRef<THREE.Mesh>(null);
 
     const [posX, posY, posZ] = toTriple(position as VecInput);
@@ -79,3 +76,5 @@ export const MeshDecal = React.forwardRef<THREE.Mesh, MeshDecalProps>(
     return <mesh ref={ref} {...props} renderOrder={props.renderOrder ?? 50} />;
   },
 );
+
+export { MeshDecal };

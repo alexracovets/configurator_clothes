@@ -1,8 +1,8 @@
-"use client";
+﻿"use client";
 
 import { Button, AtomImage, Box, Text } from "@atoms";
 
-export const Notification = () => {
+const Notification = () => {
   return (
     <Button className="relative w-fit">
       <AtomImage
@@ -19,3 +19,5 @@ export const Notification = () => {
     </Button>
   );
 };
+
+export { Notification };

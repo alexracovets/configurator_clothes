@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import * as THREE from "three";
 
@@ -7,7 +7,7 @@ interface BackMeshProps {
   onMount: (mesh: THREE.Mesh) => void;
 }
 
-export const BackMesh = ({ geometry, onMount }: BackMeshProps) => {
+const BackMesh = ({ geometry, onMount }: BackMeshProps) => {
   return (
     <mesh
       geometry={geometry}
@@ -21,3 +21,5 @@ export const BackMesh = ({ geometry, onMount }: BackMeshProps) => {
     />
   );
 };
+
+export { BackMesh };

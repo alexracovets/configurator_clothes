@@ -16,7 +16,7 @@ export interface PartDesignMaterialOptions {
   colorTexture?: THREE.Texture | null;
 }
 
-export function usePartDesignMaterial({ zone, baseMap, normalMap, roughnessMap, aoMap, colorTexture }: PartDesignMaterialOptions): DesignOverlayMaterial {
+const usePartDesignMaterial = ({ zone, baseMap, normalMap, roughnessMap, aoMap, colorTexture }: PartDesignMaterialOptions): DesignOverlayMaterial => {
   const { texture: designTexture } = useDesignTexture(zone);
 
   const mat = useMemo(
@@ -29,4 +29,6 @@ export function usePartDesignMaterial({ zone, baseMap, normalMap, roughnessMap, 
   useEffect(() => { const current = mat; return () => { current.dispose(); }; }, [mat]);
 
   return mat;
-}
+};
+
+export { usePartDesignMaterial };

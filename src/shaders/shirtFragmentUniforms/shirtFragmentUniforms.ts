@@ -1,4 +1,4 @@
-export const shirtFragmentUniforms = /* glsl */ `
+﻿const shirtFragmentUniforms = /* glsl */ `
 #include <uv_pars_fragment>
 varying vec2 vRawUv0;
 varying vec2 vRawUv1;
@@ -28,3 +28,5 @@ float shirtGradientMask( vec2 uv ) {
 }
 #endif
 `;
+
+export { shirtFragmentUniforms };

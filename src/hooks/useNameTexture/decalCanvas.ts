@@ -1,11 +1,11 @@
-import type * as THREE from "three";
+﻿import type * as THREE from "three";
 
 import type { GizmoHandle, GizmoZone, DecalLayout } from "@types";
 
 export type { GizmoHandle, GizmoZone, DecalLayout };
 
-export const DECAL_CANVAS_W = 1024;
-export const DECAL_CANVAS_H = 256;
+const DECAL_CANVAS_W = 1024;
+const DECAL_CANVAS_H = 256;
 
 const GIZMO_HANDLES: GizmoHandle[] = ["copy", "delete", "rotate", "resize"];
 
@@ -36,7 +36,7 @@ const BOX_PAD_X = 28;
 const BOX_PAD_Y = 18;
 const GIZMO_HIT_MARGIN = 56;
 
-export const buildDecalLayout = (ctx: CanvasRenderingContext2D, text: string, font: string, fontSize: number): DecalLayout => {
+const buildDecalLayout = (ctx: CanvasRenderingContext2D, text: string, font: string, fontSize: number): DecalLayout => {
   ctx.font = `bold ${fontSize}px "${resolveFont(font)}"`;
   const metrics = ctx.measureText(text);
   const textW = metrics.width;
@@ -61,7 +61,7 @@ export const buildDecalLayout = (ctx: CanvasRenderingContext2D, text: string, fo
   };
 };
 
-export const drawDecal = (canvas: HTMLCanvasElement, params: DecalDrawParams): DecalLayout => {
+const drawDecal = (canvas: HTMLCanvasElement, params: DecalDrawParams): DecalLayout => {
   const { text, font, fontSize, textColor, strokeColor, strokeWidth, showGizmo, hoveredZone = null } = params;
   const ctx = canvas.getContext("2d")!;
   ctx.clearRect(0, 0, DECAL_CANVAS_W, DECAL_CANVAS_H);
@@ -118,7 +118,7 @@ const hitTestAtCanvasPoint = (pt: { x: number; y: number }, layout: DecalLayout)
   return null;
 };
 
-export const hitTestDecal = (uv: THREE.Vector2, layout: DecalLayout): GizmoZone => {
+const hitTestDecal = (uv: THREE.Vector2, layout: DecalLayout): GizmoZone => {
   for (const pt of uvToCanvasCandidates(uv)) {
     const zone = hitTestAtCanvasPoint(pt, layout);
     if (zone !== null) return zone;
@@ -126,7 +126,7 @@ export const hitTestDecal = (uv: THREE.Vector2, layout: DecalLayout): GizmoZone 
   return null;
 };
 
-export const gizmoCursor = (zone: GizmoZone): string => (!zone ? "auto" : "pointer");
+const gizmoCursor = (zone: GizmoZone): string => (!zone ? "auto" : "pointer");
 
 const drawGizmoFrame = (ctx: CanvasRenderingContext2D, box: DecalLayout["textBox"], hovered: boolean) => {
   ctx.save();
@@ -188,3 +188,5 @@ const drawHandle = (ctx: CanvasRenderingContext2D, pos: { x: number; y: number }
   }
   ctx.restore();
 };
+
+export { DECAL_CANVAS_W, DECAL_CANVAS_H, buildDecalLayout, drawDecal, hitTestDecal, gizmoCursor };

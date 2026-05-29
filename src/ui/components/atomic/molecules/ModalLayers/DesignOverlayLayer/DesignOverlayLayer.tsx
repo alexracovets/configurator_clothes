@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useLayoutEffect, useRef } from "react";
 import * as THREE from "three";
@@ -13,7 +13,7 @@ interface DesignOverlayLayerProps {
   renderOrder?: number;
 }
 
-export const DesignOverlayLayer = ({ part, geometry, designTexture, renderOrder = 3 }: DesignOverlayLayerProps) => {
+const DesignOverlayLayer = ({ part, geometry, designTexture, renderOrder = 3 }: DesignOverlayLayerProps) => {
   const material = useDesignOverlayMaterial(part, designTexture);
   const meshRef = useRef<THREE.Mesh>(null);
 
@@ -25,3 +25,5 @@ export const DesignOverlayLayer = ({ part, geometry, designTexture, renderOrder 
 
   return <mesh ref={meshRef} name={`${part}_design_overlay`} geometry={geometry} material={material} renderOrder={renderOrder} />;
 };
+
+export { DesignOverlayLayer };

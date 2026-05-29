@@ -83,7 +83,7 @@ const Sep = () => (
   <div style={{ width: 1, height: 20, background: "#e5e7eb", margin: "0 2px" }} />
 );
 
-function layerLabel(layer: DesignLayer): string {
+const layerLabel = (layer: DesignLayer): string => {
   if (layer.type === "text" || layer.type === "number") {
     return `"${(layer.text ?? "").slice(0, 14)}"`;
   }
@@ -182,7 +182,7 @@ const ToolbarInner = ({ layer }: { layer: DesignLayer }) => {
   );
 };
 
-function uvToWorldBack(x: number, y: number): THREE.Vector3 {
+const uvToWorldBack = (x: number, y: number): THREE.Vector3 => {
   return new THREE.Vector3(
     (x - 0.5) * 0.7,
     1.5 - y * 0.8,
@@ -190,7 +190,7 @@ function uvToWorldBack(x: number, y: number): THREE.Vector3 {
   );
 }
 
-function uvToWorldFront(x: number, y: number): THREE.Vector3 {
+const uvToWorldFront = (x: number, y: number): THREE.Vector3 => {
   return new THREE.Vector3(
     (x - 0.5) * 0.7,
     1.5 - y * 0.8,
@@ -198,7 +198,7 @@ function uvToWorldFront(x: number, y: number): THREE.Vector3 {
   );
 }
 
-export const DesignToolbar = () => {
+const DesignToolbar = () => {
   const selectedId = useConfiguratorStore((s) => s.selectedId);
   const layer      = useConfiguratorStore((s) =>
     s.selectedId ? s.layers.find((l) => l.id === s.selectedId) ?? null : null,
@@ -224,3 +224,5 @@ export const DesignToolbar = () => {
     </Html>
   );
 };
+
+export { DesignToolbar };

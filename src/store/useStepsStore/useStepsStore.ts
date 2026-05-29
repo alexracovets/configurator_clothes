@@ -1,4 +1,4 @@
-import { create } from "zustand";
+﻿import { create } from "zustand";
 
 const TOTAL_STEPS = 6;
 
@@ -9,7 +9,7 @@ interface StepsStore {
   nextStep: () => void;
 }
 
-export const useStepsStore = create<StepsStore>((set) => ({
+const useStepsStore = create<StepsStore>((set) => ({
   currentStep: 0,
 
   setStep: (index) => set({ currentStep: index }),
@@ -20,3 +20,5 @@ export const useStepsStore = create<StepsStore>((set) => ({
   nextStep: () =>
     set(({ currentStep }) => ({ currentStep: Math.min(TOTAL_STEPS - 1, currentStep + 1) })),
 }));
+
+export { useStepsStore };

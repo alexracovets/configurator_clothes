@@ -1,6 +1,6 @@
-import * as THREE from "three";
+﻿import * as THREE from "three";
 
-export const computeDecalOrientation = (
+const computeDecalOrientation = (
   mesh: THREE.Mesh,
   position: THREE.Vector3,
   rotZ = 0,
@@ -47,3 +47,5 @@ export const computeDecalOrientation = (
   helper.rotateZ(rotZ);
   return helper.rotation.clone();
 };
+
+export { computeDecalOrientation };

@@ -54,7 +54,12 @@
       "Bash(git -C d:/work/configurators/configurator_clothes show HEAD:src/features/configurator/components/DesignStage/DesignStage.tsx)",
       "Bash(git -C d:/work/configurators/configurator_clothes show HEAD:src/features/configurator/components/DesignLayers/DesignLayers.tsx)",
       "Bash(cat /tmp/DesignLayers_fixed.tsx)",
-      "Read(//tmp/**)"
+      "Read(//tmp/**)",
+      "Bash(grep -n \"^//\")",
+      "Bash(grep -rn \"^//\" d:/work/configurators/configurator_clothes/src --include=\"*.ts\" --include=\"*.tsx\")",
+      "Bash(grep -rn \"^//\" src --include=\"*.ts\" --include=\"*.tsx\")",
+      "Bash(grep -rn \"^import {$\" src --include=\"*.ts\" --include=\"*.tsx\")",
+      "Bash(grep -A5 \"^import {$\" d:/work/configurators/configurator_clothes/src/ui/components/atomic/organisms/ConfiguratorCanvas/CanvasControl/ViewControls/ViewControls.tsx)"
     ]
   }
 }

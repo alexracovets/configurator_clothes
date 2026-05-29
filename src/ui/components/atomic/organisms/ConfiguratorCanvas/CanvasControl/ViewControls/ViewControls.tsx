@@ -5,10 +5,7 @@ import { useEffect, useRef, type ComponentRef, type MutableRefObject } from "rea
 import { useFrame, useThree } from "@react-three/fiber";
 import type { OrbitControls as OrbitControlsImpl } from "three-stdlib";
 
-import {
-  clearDesignDragPreview,
-  setDesignInteracting,
-} from "@hooks";
+import { clearDesignDragPreview, setDesignInteracting } from "@hooks";
 import { isOrbitControlsEnabled, orbitControlsRef } from "@utils";
 
 const MIN_DISTANCE = 0.5;

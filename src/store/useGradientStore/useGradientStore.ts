@@ -1,4 +1,4 @@
-import { create } from "zustand";
+﻿import { create } from "zustand";
 
 import { useSelectionStore } from "../useSelectionStore";
 import type { ShirtPart } from "../types";
@@ -29,7 +29,7 @@ interface GradientStore {
   setPartGradient: (part: ShirtPart, gradient: Partial<PartGradient>) => void;
 }
 
-export const useGradientStore = create<GradientStore>((set) => ({
+const useGradientStore = create<GradientStore>((set) => ({
   partGradients: {
     front: { ...DEFAULT_GRADIENT },
     back: { ...DEFAULT_GRADIENT },
@@ -48,3 +48,5 @@ export const useGradientStore = create<GradientStore>((set) => ({
   setPartGradient: (part, gradient) =>
     set(({ partGradients }) => ({ partGradients: { ...partGradients, [part]: { ...partGradients[part], ...gradient } } })),
 }));
+
+export { useGradientStore };

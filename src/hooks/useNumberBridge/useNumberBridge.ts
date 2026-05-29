@@ -7,7 +7,7 @@ import { useNumberStore, useConfiguratorStore } from "@store";
 const FRONT_ZONE = "front" as const;
 const DEFAULT_UV = { x: 0.5, y: 0.45 };
 
-export function useNumberBridge() {
+const useNumberBridge = () => {
   const configIdRef = useRef<string | null>(null);
 
   useEffect(() => {
@@ -41,4 +41,6 @@ export function useNumberBridge() {
       }
     };
   }, []);
-}
+};
+
+export { useNumberBridge };

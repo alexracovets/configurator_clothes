@@ -1,13 +1,13 @@
-import type { OrbitControls as OrbitControlsImpl } from "three-stdlib";
+﻿import type { OrbitControls as OrbitControlsImpl } from "three-stdlib";
 
-export const orbitFlag = {
+const orbitFlag = {
   enabled: true,
   toolPanelActive: false,
 };
 
-export const orbitControlsRef: { current: OrbitControlsImpl | null } = { current: null };
+const orbitControlsRef: { current: OrbitControlsImpl | null } = { current: null };
 
-export const isOrbitControlsEnabled = () => orbitFlag.enabled && !orbitFlag.toolPanelActive;
+const isOrbitControlsEnabled = () => orbitFlag.enabled && !orbitFlag.toolPanelActive;
 
 const applyOrbitEnabled = () => {
   const controls = orbitControlsRef.current;
@@ -15,14 +15,16 @@ const applyOrbitEnabled = () => {
   controls.enabled = isOrbitControlsEnabled();
 };
 
-export const setAsidePointerOver = (over: boolean) => {
+const setAsidePointerOver = (over: boolean) => {
   orbitFlag.enabled = !over;
   applyOrbitEnabled();
 };
 
-export const setOrbitLockedByToolPanel = (locked: boolean) => {
+const setOrbitLockedByToolPanel = (locked: boolean) => {
   orbitFlag.toolPanelActive = locked;
   applyOrbitEnabled();
 };
 
-export const setOrbitLockedByNameTool = setOrbitLockedByToolPanel;
+const setOrbitLockedByNameTool = setOrbitLockedByToolPanel;
+
+export { orbitFlag, orbitControlsRef, isOrbitControlsEnabled, setAsidePointerOver, setOrbitLockedByToolPanel, setOrbitLockedByNameTool };

@@ -1,4 +1,4 @@
-export const shirtNormalFragment = /* glsl */ `
+﻿const shirtNormalFragment = /* glsl */ `
 #ifdef USE_NORMALMAP_TANGENTSPACE
   vec3 bakeN = texture2D(uBakeNormal, vRawUv1).xyz;
   normal = normalize(tbn * bakeN);
@@ -11,3 +11,5 @@ export const shirtNormalFragment = /* glsl */ `
   #endif
 #endif
 `;
+
+export { shirtNormalFragment };

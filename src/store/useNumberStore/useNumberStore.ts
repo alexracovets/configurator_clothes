@@ -1,24 +1,14 @@
-import { create } from "zustand";
+﻿import { create } from "zustand";
 
-import {
-  FONTS,
-  fontCssFamily,
-  fontCanvasName,
-  DECAL_DEPTH,
-  clampDecalScale,
-  fontSizeToDecalScale,
-  decalWidthToFontSize,
-  DECAL_SCALE_MIN,
-  DECAL_SCALE_MAX,
-} from "../decal";
+import { FONTS, fontCssFamily, fontCanvasName, DECAL_DEPTH, clampDecalScale, fontSizeToDecalScale, decalWidthToFontSize, DECAL_SCALE_MIN, DECAL_SCALE_MAX } from "../decal";
 
 export { FONTS, fontCssFamily, fontCanvasName };
 
-export const DEFAULT_NUMBER_TEXT = "9";
+const DEFAULT_NUMBER_TEXT = "9";
 
-export const NUMBER_DECAL_SCALE_MIN = DECAL_SCALE_MIN;
-export const NUMBER_DECAL_SCALE_MAX = DECAL_SCALE_MAX;
-export const NUMBER_DECAL_DEPTH = DECAL_DEPTH;
+const NUMBER_DECAL_SCALE_MIN = DECAL_SCALE_MIN;
+const NUMBER_DECAL_SCALE_MAX = DECAL_SCALE_MAX;
+const NUMBER_DECAL_DEPTH = DECAL_DEPTH;
 
 export interface NumberInstance {
   text: string;
@@ -51,7 +41,7 @@ interface NumberStore {
   update: (patch: Partial<NumberInstance>) => void;
 }
 
-export const useNumberStore = create<NumberStore>((set) => ({
+const useNumberStore = create<NumberStore>((set) => ({
   isVisible: false,
   instance: null,
 
@@ -79,3 +69,5 @@ export const useNumberStore = create<NumberStore>((set) => ({
       return { instance: next };
     }),
 }));
+
+export { DEFAULT_NUMBER_TEXT, NUMBER_DECAL_SCALE_MIN, NUMBER_DECAL_SCALE_MAX, NUMBER_DECAL_DEPTH, useNumberStore };

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useMemo } from "react";
 import * as THREE from "three";
@@ -11,7 +11,7 @@ interface PatternLayerProps {
   renderOrder?: number;
 }
 
-export const PatternLayer = ({
+const PatternLayer = ({
   geometry,
   texture,
   patternOpacity,
@@ -37,3 +37,5 @@ export const PatternLayer = ({
 
   return <mesh geometry={geometry} material={mat} renderOrder={renderOrder} />;
 };
+
+export { PatternLayer };

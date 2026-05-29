@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useMemo } from "react";
 import { ThreeElements } from "@react-three/fiber";
@@ -28,7 +28,7 @@ interface CrewneckGLTF {
   };
 }
 
-export const CrewneckModel = (props: ThreeElements["group"]) => {
+const CrewneckModel = (props: ThreeElements["group"]) => {
   const { nodes, materials } = useGLTF(MODEL_PATH) as unknown as CrewneckGLTF;
   const { insideAo } = useTexture({ insideAo: "/models/pbr/inside_ao.jpg" });
 
@@ -92,3 +92,5 @@ export const CrewneckModel = (props: ThreeElements["group"]) => {
 };
 
 useGLTF.preload(MODEL_PATH);
+
+export { CrewneckModel };

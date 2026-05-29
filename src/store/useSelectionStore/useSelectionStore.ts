@@ -1,4 +1,4 @@
-import { create } from "zustand";
+﻿import { create } from "zustand";
 import type { Mesh } from "three";
 
 import type { ShirtPart, MeshRefs } from "../types";
@@ -14,7 +14,7 @@ interface SelectionStore {
   clearSelection: () => void;
 }
 
-export const useSelectionStore = create<SelectionStore>((set) => ({
+const useSelectionStore = create<SelectionStore>((set) => ({
   selectedParts: new Set<ShirtPart>(["front"]),
   hoveredPart: null,
   meshRefs: {},
@@ -39,3 +39,5 @@ export const useSelectionStore = create<SelectionStore>((set) => ({
 
   clearSelection: () => set({ selectedParts: new Set<ShirtPart>() }),
 }));
+
+export { useSelectionStore };

@@ -6,7 +6,7 @@ import type { DesignLayer } from "@store";
 import type { DesignCanvasResult } from "./createDesignCanvas";
 import { TEXTURE_SIZE_EDITOR } from "./textureConstants";
 
-export function drawLayersToKonva(dc: DesignCanvasResult, layers: DesignLayer[]): void {
+const drawLayersToKonva = (dc: DesignCanvasResult, layers: DesignLayer[]): void => {
   const size = dc.stage.width();
   dc.layers.numbers.destroyChildren();
   dc.layers.names.destroyChildren();
@@ -49,4 +49,6 @@ export function drawLayersToKonva(dc: DesignCanvasResult, layers: DesignLayer[])
 
   dc.layers.numbers.batchDraw();
   dc.layers.names.batchDraw();
-}
+};
+
+export { drawLayersToKonva };

@@ -1,13 +1,7 @@
 "use client";
 
 import { FONTS } from "@store";
-import {
-  Select,
-  SelectTrigger,
-  SelectContent,
-  SelectItem,
-  SelectValue,
-} from "@shared";
+import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@shared";
 import { cn } from "@utils";
 
 type FontOption = (typeof FONTS)[number];

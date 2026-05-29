@@ -1,20 +1,12 @@
-import { create } from "zustand";
+﻿import { create } from "zustand";
 
-import {
-  FONTS,
-  fontCssFamily,
-  fontCanvasName,
-  DECAL_DEPTH,
-  clampDecalScale,
-  fontSizeToDecalScale,
-  decalWidthToFontSize,
-} from "../decal";
+import { FONTS, fontCssFamily, fontCanvasName, DECAL_DEPTH, clampDecalScale, fontSizeToDecalScale, decalWidthToFontSize } from "../decal";
 
 export { FONTS, fontCssFamily, fontCanvasName, fontSizeToDecalScale, decalWidthToFontSize };
 
-export const DEFAULT_NAME_TEXT = "PLAYER NAME";
+const DEFAULT_NAME_TEXT = "PLAYER NAME";
 
-export const NAME_DECAL_DEPTH = DECAL_DEPTH;
+const NAME_DECAL_DEPTH = DECAL_DEPTH;
 
 export interface NameInstance {
   id: string;
@@ -62,7 +54,7 @@ interface NameStore {
   getActive: () => NameInstance | undefined;
 }
 
-export const useNameStore = create<NameStore>((set, get) => ({
+const useNameStore = create<NameStore>((set, get) => ({
   isVisible: false,
   instances: [],
   activeId: null,
@@ -143,5 +135,7 @@ export const useNameStore = create<NameStore>((set, get) => ({
     }),
 }));
 
-export const useActiveNameInstance = () =>
+const useActiveNameInstance = () =>
   useNameStore(({ instances, activeId }) => instances.find(({ id }) => id === activeId));
+
+export { DEFAULT_NAME_TEXT, NAME_DECAL_DEPTH, useNameStore, useActiveNameInstance };
