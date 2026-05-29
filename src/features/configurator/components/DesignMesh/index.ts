@@ -1,1 +1,0 @@
-export { DesignMesh } from "./DesignMesh";

@@ -1,9 +1,9 @@
 "use client";
 
-import { PDRTest } from "@molecules";
+import { CrewneckModel } from "@organisms";
 
 const LoadModel = () => {
-  return <PDRTest />;
+  return <CrewneckModel />;
 };
 
 export { LoadModel };

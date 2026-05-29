@@ -37,3 +37,4 @@ export type { PatternItem } from "./usePatternStore";
 export type { PartGradient, PartGradients } from "./useGradientStore";
 export type { ShirtPart, PartColors, PartPatterns, MeshRefs } from "./types";
 export { NECK_DEFAULT_COLOR } from "./types";
+export * from "./configuratorDesign";

@@ -4,7 +4,6 @@ import { Center } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 import * as THREE from "three";
 
-import { CanvasInterface } from "./CanvasInterface";
 import { CanvasControl } from "./CanvasControl";
 import { LoadModel } from "./LoadModel";
 
@@ -27,7 +26,6 @@ const ConfiguratorCanvas = () => {
       <Center position={[0, 0, 0]}>
         <LoadModel />
       </Center>
-      <CanvasInterface />
     </Canvas>
   );
 };

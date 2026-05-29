@@ -5,22 +5,11 @@ import * as THREE from "three";
 import { Decal } from "@react-three/drei";
 import { useThree } from "@react-three/fiber";
 
-import {
-  useNumberStore,
-  DECAL_SCALE_MIN,
-  DECAL_SCALE_MAX,
-  clampDecalScale,
-} from "@store";
+import { useNumberStore, DECAL_SCALE_MIN, DECAL_SCALE_MAX, clampDecalScale } from "@store";
+import { useDecalTexture, buildDecalLayout, hitTestDecal, gizmoCursor } from "@hooks";
 import { setOrbitLockedByNameTool } from "@utils";
-import {
-  useDecalTexture,
-  buildDecalLayout,
-  hitTestDecal,
-  gizmoCursor,
-  type GizmoHandle,
-  type GizmoZone,
-} from "@hooks";
 import type { NumberInstance } from "@store";
+import type { GizmoHandle, GizmoZone } from "@types";
 
 type DragMode = "move" | GizmoHandle | null;
 
@@ -38,42 +27,12 @@ const SCALE_SENS = 0.008;
 const _worldHit = new THREE.Vector3();
 const _localHit = new THREE.Vector3();
 
-const NumberDecalInstance = ({
-  instance,
-  hoverZone,
-  onMeshRef,
-}: {
-  instance: NumberInstance;
-  hoverZone: GizmoZone;
-  onMeshRef: (mesh: THREE.Mesh | null) => void;
-}) => {
-  const texture = useDecalTexture({
-    text: instance.text,
-    font: instance.font,
-    fontSize: instance.fontSize,
-    textColor: instance.textColor,
-    strokeColor: instance.strokeColor,
-    strokeWidth: instance.strokeWidth,
-    showGizmo: true,
-    hoveredZone: hoverZone,
-  });
+const NumberDecalInstance = ({ instance, hoverZone, onMeshRef }: { instance: NumberInstance; hoverZone: GizmoZone; onMeshRef: (mesh: THREE.Mesh | null) => void }) => {
+  const texture = useDecalTexture({ text: instance.text, font: instance.font, fontSize: instance.fontSize, textColor: instance.textColor, strokeColor: instance.strokeColor, strokeWidth: instance.strokeWidth, showGizmo: true, hoveredZone: hoverZone });
 
   return (
-    <Decal
-      ref={onMeshRef}
-      position={instance.decalPosition}
-      rotation={instance.decalRotation}
-      scale={instance.decalScale}
-      renderOrder={20}
-    >
-      <meshBasicMaterial
-        map={texture}
-        transparent
-        depthTest={true}
-        depthWrite={false}
-        polygonOffset
-        polygonOffsetFactor={-1}
-      />
+    <Decal ref={onMeshRef} position={instance.decalPosition} rotation={instance.decalRotation} scale={instance.decalScale} renderOrder={20}>
+      <meshBasicMaterial map={texture} transparent depthTest={true} depthWrite={false} polygonOffset polygonOffsetFactor={-1} />
     </Decal>
   );
 };
@@ -90,22 +49,13 @@ const NumberLayer = () => {
   const canvasElRef = useRef<HTMLCanvasElement | null>(null);
   const meshRef = useRef<THREE.Mesh | null>(null);
   const instanceRef = useRef(instance);
-  const dragRef = useRef<DragState>({
-    mode: null,
-    startX: 0,
-    startY: 0,
-    grabOffset: [0, 0, 0],
-    startRotZ: 0,
-    startScale: 0,
-  });
+  const dragRef = useRef<DragState>({ mode: null, startX: 0, startY: 0, grabOffset: [0, 0, 0], startRotZ: 0, startScale: 0 });
   const pointer = useRef(new THREE.Vector2());
 
   useEffect(() => { canvasElRef.current = gl.domElement; }, [gl]);
   useEffect(() => { instanceRef.current = instance; }, [instance]);
 
-  const registerMesh = (mesh: THREE.Mesh | null) => {
-    meshRef.current = mesh;
-  };
+  const registerMesh = (mesh: THREE.Mesh | null) => { meshRef.current = mesh; };
 
   useEffect(() => {
     if (!isVisible) {
@@ -130,14 +80,11 @@ const NumberLayer = () => {
       const decalMesh = meshRef.current;
       const mesh = decalMesh?.parent as THREE.Mesh | null;
       if (!mesh) return null;
-
       mesh.updateMatrixWorld(true);
       setPointerFromClient(clientX, clientY);
       raycaster.setFromCamera(pointer.current, camera);
-
       const hits = raycaster.intersectObject(mesh, false);
       if (!hits.length) return null;
-
       _worldHit.copy(hits[0].point);
       _localHit.copy(_worldHit);
       mesh.worldToLocal(_localHit);
@@ -147,12 +94,10 @@ const NumberLayer = () => {
     const pickZone = (clientX: number, clientY: number): GizmoZone => {
       const mesh = meshRef.current;
       if (!mesh || !instanceRef.current) return null;
-
       setPointerFromClient(clientX, clientY);
       raycaster.setFromCamera(pointer.current, camera);
       const hits = raycaster.intersectObject(mesh, false);
       if (!hits.length || !hits[0].uv) return null;
-
       const inst = instanceRef.current;
       const canvas = document.createElement("canvas");
       const ctx = canvas.getContext("2d")!;
@@ -163,36 +108,23 @@ const NumberLayer = () => {
     const applyDrag = (e: PointerEvent) => {
       const drag = dragRef.current;
       if (!drag.mode) return;
-
       const dx = e.clientX - drag.startX;
       const dy = e.clientY - drag.startY;
-
       if (drag.mode === "move") {
         const hitLocal = getHitLocal(e.clientX, e.clientY);
         if (!hitLocal) return;
         const inst = instanceRef.current;
-        update({
-          decalPosition: [
-            hitLocal.x + drag.grabOffset[0],
-            hitLocal.y + drag.grabOffset[1],
-            inst?.decalPosition[2] ?? hitLocal.z,
-          ],
-        });
+        update({ decalPosition: [hitLocal.x + drag.grabOffset[0], hitLocal.y + drag.grabOffset[1], inst?.decalPosition[2] ?? hitLocal.z] });
         return;
       }
-
       if (drag.mode === "rotate") {
         const inst = instanceRef.current;
         const r = inst?.decalRotation ?? [Math.PI, 0, 0];
         update({ decalRotation: [r[0], r[1], drag.startRotZ - dy * ROTATE_SENS] });
         return;
       }
-
       if (drag.mode === "resize") {
-        const width = Math.min(
-          DECAL_SCALE_MAX,
-          Math.max(DECAL_SCALE_MIN, drag.startScale + (dx - dy) * SCALE_SENS),
-        );
+        const width = Math.min(DECAL_SCALE_MAX, Math.max(DECAL_SCALE_MIN, drag.startScale + (dx - dy) * SCALE_SENS));
         update({ decalScale: clampDecalScale(width) });
       }
     };
@@ -207,42 +139,19 @@ const NumberLayer = () => {
 
     const startDrag = (zone: GizmoZone, inst: NumberInstance, e: PointerEvent) => {
       if (zone !== "body" && zone !== "rotate" && zone !== "resize") return;
-
       setOrbitLockedByNameTool(true);
       e.preventDefault();
       e.stopImmediatePropagation();
-
       let grabOffset: [number, number, number] = [0, 0, 0];
       if (zone === "body") {
         const hitLocal = getHitLocal(e.clientX, e.clientY);
         if (!hitLocal) return;
         grabOffset = [inst.decalPosition[0] - hitLocal.x, inst.decalPosition[1] - hitLocal.y, 0];
       }
-
-      dragRef.current = {
-        mode: zone === "body" ? "move" : zone,
-        startX: e.clientX,
-        startY: e.clientY,
-        grabOffset,
-        startRotZ: inst.decalRotation[2],
-        startScale: inst.decalScale[0],
-      };
-
+      dragRef.current = { mode: zone === "body" ? "move" : zone, startX: e.clientX, startY: e.clientY, grabOffset, startRotZ: inst.decalRotation[2], startScale: inst.decalScale[0] };
       setCursor(zone);
-
-      const onMove = (ev: PointerEvent) => {
-        ev.preventDefault();
-        ev.stopImmediatePropagation();
-        applyDrag(ev);
-      };
-      const onUp = (ev: PointerEvent) => {
-        ev.preventDefault();
-        ev.stopImmediatePropagation();
-        window.removeEventListener("pointermove", onMove, true);
-        window.removeEventListener("pointerup", onUp, true);
-        endDrag(ev);
-      };
-
+      const onMove = (ev: PointerEvent) => { ev.preventDefault(); ev.stopImmediatePropagation(); applyDrag(ev); };
+      const onUp = (ev: PointerEvent) => { ev.preventDefault(); ev.stopImmediatePropagation(); window.removeEventListener("pointermove", onMove, true); window.removeEventListener("pointerup", onUp, true); endDrag(ev); };
       window.addEventListener("pointermove", onMove, { capture: true });
       window.addEventListener("pointerup", onUp, { capture: true });
     };
@@ -258,24 +167,14 @@ const NumberLayer = () => {
     const onPointerDown = (e: PointerEvent) => {
       const zone = pickZone(e.clientX, e.clientY);
       if (!zone) return;
-
       const inst = instanceRef.current;
       if (!inst) return;
-
       e.stopImmediatePropagation();
       e.preventDefault();
       setOrbitLockedByNameTool(true);
       setCursor(zone);
-
-      if (zone === "copy") return; // no duplicate for number
-
-      if (zone === "delete") {
-        setVisible(false);
-        setOrbitLockedByNameTool(false);
-        setCursor(null);
-        return;
-      }
-
+      if (zone === "copy") return;
+      if (zone === "delete") { setVisible(false); setOrbitLockedByNameTool(false); setCursor(null); return; }
       startDrag(zone, inst, e);
     };
 
@@ -303,13 +202,7 @@ const NumberLayer = () => {
 
   if (!isVisible || !instance) return null;
 
-  return (
-    <NumberDecalInstance
-      instance={instance}
-      hoverZone={hoverZone}
-      onMeshRef={registerMesh}
-    />
-  );
+  return <NumberDecalInstance instance={instance} hoverZone={hoverZone} onMeshRef={registerMesh} />;
 };
 
 export { NumberLayer };

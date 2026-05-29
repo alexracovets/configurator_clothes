@@ -1,15 +1,15 @@
 import { create } from "zustand";
 
-import type { ShirtPart } from "../types";
 import { useSelectionStore } from "../useSelectionStore";
+import type { ShirtPart } from "../types";
 
 export interface PartGradient {
   enabled: boolean;
   color2: string;
-  rotation: number;   // 0-360 degrees
-  position: number;   // 0-100 midpoint of transition
-  softness: number;   // 0-100 width of blend zone
-  opacity: number;    // 0-100
+  rotation: number;
+  position: number;
+  softness: number;
+  opacity: number;
 }
 
 export type PartGradients = Record<ShirtPart, PartGradient>;
@@ -46,10 +46,5 @@ export const useGradientStore = create<GradientStore>((set) => ({
     }),
 
   setPartGradient: (part, gradient) =>
-    set(({ partGradients }) => ({
-      partGradients: {
-        ...partGradients,
-        [part]: { ...partGradients[part], ...gradient },
-      },
-    })),
+    set(({ partGradients }) => ({ partGradients: { ...partGradients, [part]: { ...partGradients[part], ...gradient } } })),
 }));

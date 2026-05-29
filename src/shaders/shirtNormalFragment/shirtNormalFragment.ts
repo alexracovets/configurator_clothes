@@ -1,6 +1,5 @@
 export const shirtNormalFragment = /* glsl */ `
 #ifdef USE_NORMALMAP_TANGENTSPACE
-  // UV1 — baked large-scale normals (no tiling)
   vec3 bakeN = texture2D(uBakeNormal, vRawUv1).xyz;
   normal = normalize(tbn * bakeN);
 

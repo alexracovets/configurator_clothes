@@ -1,12 +1,7 @@
 import type { Mesh } from "three";
 
-export type ShirtPart =
-  | "back"
-  | "front"
-  | "sleeve_left"
-  | "sleeve_right";
+export type ShirtPart = "back" | "front" | "sleeve_left" | "sleeve_right";
 
-/** Фіксований колір шиї (collar + sweatband) — не кастомізується */
 export const NECK_DEFAULT_COLOR = "#111111";
 
 export type PartColors = Record<ShirtPart, string>;

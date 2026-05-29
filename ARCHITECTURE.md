@@ -1,0 +1,437 @@
+# Project Architecture
+
+This project uses **Next.js App Router** with **Atomic Design Architecture**.
+
+---
+
+# Core Principles
+
+* All project source code except App Router pages must be stored inside `src/`
+* Use TypeScript everywhere
+* Use named exports whenever possible
+* Every logical unit (component, hook, utility, shader, store, etc.) must live inside its own folder
+* Every folder must export through `index.ts`
+* Global layer indexes aggregate exports from child modules
+* Imports must always use TS path aliases
+* Keep components максимально ізольованими та перевикористовуваними
+* Separate UI, logic, styles, and types cleanly
+* Avoid deep relative imports
+
+---
+
+# Root Structure
+
+```txt
+src/
+│
+├── fonts/
+├── hooks/
+├── shaders/
+├── store/
+├── utils/
+├── ui/
+│
+└── app/   # Next.js App Router pages only
+```
+
+---
+
+# UI Structure
+
+```txt
+src/ui/
+│
+├── components/
+├── styles/
+└── types/
+```
+
+---
+
+# Components Structure
+
+```txt
+src/ui/components/
+│
+├── shared/     # shadcn/ui and generic reusable UI
+│
+└── atomic/
+    │
+    ├── atoms/
+    ├── molecules/
+    ├── organisms/
+    ├── templates/
+    └── pages/
+```
+
+---
+
+# Atomic Design Layers
+
+## atoms
+
+Small reusable UI elements.
+
+Examples:
+
+* Button
+* Input
+* Label
+* Icon
+* Badge
+
+---
+
+## molecules
+
+Groups of atoms with small logic.
+
+Examples:
+
+* SearchInput
+* UserCard
+* SelectField
+
+---
+
+## organisms
+
+Large complex UI blocks.
+
+Examples:
+
+* Header
+* Sidebar
+* ProductConfigurator
+* HeroSection
+
+---
+
+## templates
+
+Page layouts without business-specific content.
+
+Examples:
+
+* DashboardTemplate
+* AuthTemplate
+
+---
+
+## pages
+
+Composed page-level views.
+
+Examples:
+
+* HomePageView
+* ProductPageView
+
+---
+
+# Component Folder Convention
+
+Every component must live inside its own folder.
+
+Example:
+
+```txt
+atoms/
+└── Button/
+    ├── Button.tsx
+    ├── Button.types.ts
+    ├── Button.styles.ts
+    ├── Button.utils.ts
+    └── index.ts
+```
+
+---
+
+# Export Rules
+
+Every module must export through local `index.ts`.
+
+Example:
+
+```ts
+export * from './Button'
+```
+
+Every architecture layer must also aggregate exports.
+
+Example:
+
+```txt
+atoms/
+│
+├── Button/
+├── Input/
+└── index.ts
+```
+
+`atoms/index.ts`
+
+```ts
+export * from './Button'
+export * from './Input'
+```
+
+---
+
+# Import Rules
+
+Always use alias imports. Always import from the **layer alias**, never from a sub-path inside it.
+
+## Import Order
+
+Imports must be sorted in this order, with a blank line between each group:
+
+1. **External libraries** — sorted from widest scope to narrowest (react → react-three → three → other)
+2. **Atomic components** — from widest to narrowest (`@organisms` → `@molecules` → `@atoms` → `@shared`)
+3. **App modules** — from widest to narrowest (`@store` → `@hooks` → `@utils` → `@shaders` → `@fonts` → `@types`)
+4. **Relative imports** — local files within the same folder
+
+Each import statement must fit on a **single line**. Never split named imports across multiple lines.
+
+GOOD:
+
+```ts
+import { useEffect, useRef, useState } from "react";
+import { Decal } from "@react-three/drei";
+import { useThree } from "@react-three/fiber";
+import * as THREE from "three";
+
+import { DesignLayers } from "@organisms";
+import { PartLayers } from "@molecules";
+
+import { useNameStore, clampDecalScale } from "@store";
+import { useDecalTexture, buildDecalLayout } from "@hooks";
+import { setOrbitLockedByNameTool } from "@utils";
+import type { NameInstance } from "@store";
+import type { GizmoZone } from "@types";
+```
+
+BAD:
+
+```ts
+import {
+  useNameStore,
+  DECAL_SCALE_MIN,
+  DECAL_SCALE_MAX,
+} from "@store";
+
+import { Button } from '../../../Button'
+import { useConfiguratorStore } from '@store/configuratorDesign'
+```
+
+Every layer has a single `index.ts` that aggregates all exports. Import from the alias root only.
+
+GOOD:
+
+```ts
+import { Button } from '@atoms'
+import { Header } from '@organisms'
+import { useConfiguratorStore } from '@store'
+import { UV0_BOUNDS } from '@utils'
+import { useDesignTexture } from '@hooks'
+```
+
+BAD:
+
+```ts
+import { Button } from '../../../Button'
+import { useConfiguratorStore } from '@store/configuratorDesign'
+import { UV0_BOUNDS } from '@utils/designTexture'
+import { useDesignTexture } from '@hooks/useDesignTexture'
+```
+
+Every layer (`@store`, `@utils`, `@hooks`, etc.) has a single `index.ts` that aggregates all exports. Import from the alias root — never from a nested sub-path.
+
+---
+
+# Path Aliases
+
+Aliases are defined inside `tsconfig.json`.
+
+Example:
+
+```json
+{
+  "@atoms": ["src/ui/components/atomic/atoms"],
+  "@molecules": ["src/ui/components/atomic/molecules"],
+  "@organisms": ["src/ui/components/atomic/organisms"],
+  "@templates": ["src/ui/components/atomic/templates"],
+  "@pages": ["src/ui/components/atomic/pages"],
+
+  "@shared": ["src/ui/components/shared"],
+
+  "@hooks": ["src/hooks"],
+  "@store": ["src/store"],
+  "@utils": ["src/utils"],
+  "@shaders": ["src/shaders"],
+
+  "@styles/*": ["src/ui/styles/*"],
+  "@types": ["src/ui/types"]
+}
+```
+
+---
+
+# Comments Rules
+
+* No comments in source files.
+* Exception: `/* glsl */` tagged template literals in shader files (IDE syntax highlighting, not a comment).
+* Never write JSDoc (`/** */`), block comments (`/* */`), or line comments (`//`) in any `.ts` / `.tsx` file.
+
+---
+
+# Styling Rules
+
+* Prefer TailwindCSS
+* Avoid inline styles unless necessary
+* Keep reusable styles isolated
+* Shared styles belong in:
+
+```txt
+src/ui/styles/
+```
+
+---
+
+# Types Rules
+
+Shared types:
+
+```txt
+src/ui/types/
+```
+
+Local component types:
+
+```txt
+Component.types.ts
+```
+
+---
+
+# Hooks Rules
+
+Each hook must live inside its own folder.
+
+Example:
+
+```txt
+hooks/
+└── useCameraControls/
+    ├── useCameraControls.ts
+    └── index.ts
+```
+
+---
+
+# Utils Rules
+
+Utilities must be:
+
+* pure
+* reusable
+* isolated
+* framework-independent whenever possible
+
+Example:
+
+```txt
+utils/
+└── formatPrice/
+    ├── formatPrice.ts
+    └── index.ts
+```
+
+---
+
+# Store Rules
+
+State management must be modular.
+
+Example:
+
+```txt
+store/
+└── configurator/
+    ├── configurator.store.ts
+    ├── configurator.types.ts
+    └── index.ts
+```
+
+---
+
+# Shader Rules
+
+Shaders live inside:
+
+```txt
+src/shaders/
+```
+
+Each shader must be isolated.
+
+Example:
+
+```txt
+shaders/
+└── gradientShader/
+    ├── fragment.glsl
+    ├── vertex.glsl
+    ├── gradientShader.ts
+    └── index.ts
+```
+
+---
+
+# Naming Conventions
+
+## Components
+
+PascalCase
+
+```txt
+ProductCard.tsx
+```
+
+---
+
+## Hooks
+
+```txt
+useConfigurator.ts
+```
+
+---
+
+## Utils
+
+```txt
+formatPrice.ts
+```
+
+---
+
+## Stores
+
+```txt
+configurator.store.ts
+```
+
+---
+
+# Architecture Principles
+
+* Reusability first
+* Separation of concerns
+* Minimal coupling
+* Predictable structure
+* Scalable architecture
+* No deep relative imports
+* Business logic should not live directly inside UI files
+* Components should remain small whenever possible
+* Each module must have isolated responsibility

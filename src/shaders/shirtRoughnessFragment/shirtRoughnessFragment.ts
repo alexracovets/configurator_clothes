@@ -1,4 +1,3 @@
-/** Micro roughness (UV0) + baked roughness from aoMap.g (UV1) */
 export const shirtRoughnessFragment = /* glsl */ `
 float roughnessFactor = roughness;
 #ifdef USE_ROUGHNESSMAP

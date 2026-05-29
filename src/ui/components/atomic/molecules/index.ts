@@ -10,5 +10,4 @@ export { Auth } from "./Auth";
 
 export * from "./ConfiguratorsSteps";
 export * from "./ConfigTools";
-export * from "./Models";
 export * from "./ModalLayers";

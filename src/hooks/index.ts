@@ -1,4 +1,8 @@
 export { useBaseColorTexture } from "./useBaseColorTexture";
+export * from "./useDesignTexture";
+export * from "./usePartDesignMaterial";
+export * from "./useNameBridge";
+export * from "./useNumberBridge";
 export { useShirtDesignMaterial } from "./useShirtDesignMaterial";
 export { useDesignOverlayMaterial } from "./useDesignOverlayMaterial";
 export { useColorGradientTexture } from "./useColorGradientTexture";

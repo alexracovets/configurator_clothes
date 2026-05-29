@@ -1,10 +1,10 @@
-"use client";
+﻿"use client";
 
 import { useLayoutEffect, useMemo, useRef } from "react";
 import * as THREE from "three";
 
-import { UV0_BOUNDS } from "@features/configurator/texture/textureConstants";
-import type { PrintZoneKey } from "@features/configurator/texture/textureConstants";
+import { UV0_BOUNDS } from "@utils";
+import type { PrintZoneKey } from "@utils";
 import type { ShirtPart } from "@store";
 import { shirtFragmentUniforms, shirtVertexUv } from "@shaders";
 

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { OrbitControls } from "@react-three/drei";
 import { useEffect, useRef, type ComponentRef, type MutableRefObject } from "react";
@@ -8,7 +8,7 @@ import type { OrbitControls as OrbitControlsImpl } from "three-stdlib";
 import {
   clearDesignDragPreview,
   setDesignInteracting,
-} from "@features/configurator/hooks/useDesignTexture";
+} from "@hooks";
 import { isOrbitControlsEnabled, orbitControlsRef } from "@utils";
 
 const MIN_DISTANCE = 0.5;
