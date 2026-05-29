@@ -1,12 +1,8 @@
 ﻿import { create } from 'zustand';
 
 import { clampDecalScale, decalWidthToFontSize, fontSizeToDecalScale } from '@utils';
-import { DECAL_DEPTH, DECAL_SCALE_MAX, DECAL_SCALE_MIN, DEFAULT_NUMBER_TEXT, FONTS } from '@constants';
+import { DEFAULT_NUMBER_TEXT, FONTS } from '@constants';
 import type { NumberInstance } from '@types';
-
-const NUMBER_DECAL_SCALE_MIN = DECAL_SCALE_MIN;
-const NUMBER_DECAL_SCALE_MAX = DECAL_SCALE_MAX;
-const NUMBER_DECAL_DEPTH = DECAL_DEPTH;
 
 const createDefaultInstance = (): NumberInstance => ({
   text: DEFAULT_NUMBER_TEXT,
@@ -56,4 +52,4 @@ const useNumberStore = create<NumberStore>((set) => ({
     }),
 }));
 
-export { DEFAULT_NUMBER_TEXT, NUMBER_DECAL_DEPTH, NUMBER_DECAL_SCALE_MAX, NUMBER_DECAL_SCALE_MIN, useNumberStore };
+export { useNumberStore };

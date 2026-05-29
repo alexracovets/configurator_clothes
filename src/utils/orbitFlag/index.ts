@@ -1,1 +1,1 @@
-export { isOrbitControlsEnabled, orbitControlsRef, orbitFlag, setAsidePointerOver, setOrbitLockedByNameTool, setOrbitLockedByToolPanel } from './orbitFlag';
+export { isOrbitControlsEnabled, orbitControlsRef, setAsidePointerOver } from './orbitFlag';

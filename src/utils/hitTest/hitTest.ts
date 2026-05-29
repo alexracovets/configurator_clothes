@@ -13,13 +13,6 @@ const zoneFromName = (name: string): PrintZoneKey | null => {
   return null;
 };
 
-const zoneFromUV = (uvX: number, uvY: number): PrintZoneKey | null => {
-  for (const [zone, b] of Object.entries(UV0_BOUNDS) as [PrintZoneKey, (typeof UV0_BOUNDS)[PrintZoneKey]][]) {
-    if (uvX >= b.minX && uvX <= b.maxX && uvY >= b.minY && uvY <= b.maxY) return zone;
-  }
-  return null;
-};
-
 const normaliseUV = (uvX: number, uvY: number, zone: PrintZoneKey) => {
   const b = UV0_BOUNDS[zone];
   return { nx: (uvX - b.minX) / (b.maxX - b.minX), ny: (uvY - b.minY) / (b.maxY - b.minY) };
@@ -59,10 +52,6 @@ const frontSurfaceHits = (hits: THREE.Intersection[]): THREE.Intersection[] => {
     out.push(hit);
   }
   return out;
-};
-
-const invalidateMeshCache = (): void => {
-  _cachedScene = null;
 };
 
 const getHits = (e: PointerEvent, gl: THREE.WebGLRenderer, camera: THREE.Camera, scene: THREE.Scene): Array<{ uv: THREE.Vector2; zone: PrintZoneKey }> => {
@@ -138,14 +127,4 @@ const findLayerHit = (hits: Array<{ uv: THREE.Vector2; zone: PrintZoneKey }>, st
   return null;
 };
 
-const getFrontSurfaceHit = (
-  e: PointerEvent,
-  gl: THREE.WebGLRenderer,
-  camera: THREE.Camera,
-  scene: THREE.Scene,
-): { uv: THREE.Vector2; zone: PrintZoneKey } | null => {
-  const hits = getHits(e, gl, camera, scene);
-  return hits[0] ?? null;
-};
-
-export { atlasHitTest, findLayerHit, getFrontSurfaceHit, getHitInZone, getHits, invalidateMeshCache, normaliseUV, zoneFromName, zoneFromUV };
+export { findLayerHit, getHitInZone, getHits, normaliseUV };

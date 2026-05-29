@@ -2,12 +2,11 @@
 
 const orbitFlag = {
   enabled: true,
-  toolPanelActive: false,
 };
 
 const orbitControlsRef: { current: OrbitControlsImpl | null } = { current: null };
 
-const isOrbitControlsEnabled = () => orbitFlag.enabled && !orbitFlag.toolPanelActive;
+const isOrbitControlsEnabled = () => orbitFlag.enabled;
 
 const applyOrbitEnabled = () => {
   const controls = orbitControlsRef.current;
@@ -20,11 +19,4 @@ const setAsidePointerOver = (over: boolean) => {
   applyOrbitEnabled();
 };
 
-const setOrbitLockedByToolPanel = (locked: boolean) => {
-  orbitFlag.toolPanelActive = locked;
-  applyOrbitEnabled();
-};
-
-const setOrbitLockedByNameTool = setOrbitLockedByToolPanel;
-
-export { isOrbitControlsEnabled, orbitControlsRef, orbitFlag, setAsidePointerOver, setOrbitLockedByNameTool, setOrbitLockedByToolPanel };
+export { isOrbitControlsEnabled, orbitControlsRef, setAsidePointerOver };

@@ -59,7 +59,6 @@ const eslintConfig = defineConfig([
           ignoreCase: true,
         },
       ],
-
       'simple-import-sort/imports': ['error', { groups: importSortGroups }],
       'simple-import-sort/exports': 'error',
     },

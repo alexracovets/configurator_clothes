@@ -1,10 +1,8 @@
 ﻿import { create } from 'zustand';
 
 import { clampDecalScale, decalWidthToFontSize, fontSizeToDecalScale } from '@utils';
-import { DECAL_DEPTH, DEFAULT_NAME_TEXT, FONTS } from '@constants';
+import { DEFAULT_NAME_TEXT, FONTS } from '@constants';
 import type { NameInstance } from '@types';
-
-const NAME_DECAL_DEPTH = DECAL_DEPTH;
 
 const createDefaultInstance = (id: string): NameInstance => ({
   id,
@@ -114,4 +112,4 @@ const useNameStore = create<NameStore>((set, get) => ({
 
 const useActiveNameInstance = () => useNameStore(({ instances, activeId }) => instances.find(({ id }) => id === activeId));
 
-export { DEFAULT_NAME_TEXT, NAME_DECAL_DEPTH, useActiveNameInstance, useNameStore };
+export { useActiveNameInstance, useNameStore };

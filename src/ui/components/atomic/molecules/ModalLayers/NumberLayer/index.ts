@@ -1,1 +1,0 @@
-export { NumberLayer } from './NumberLayer';

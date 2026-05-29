@@ -1,14 +1,9 @@
 export { useBaseColorTexture } from './useBaseColorTexture';
-export { useColorGradientTexture } from './useColorGradientTexture';
 export { useDesignOverlayMaterial } from './useDesignOverlayMaterial';
 export * from './useDesignTexture';
 export * from './useNameBridge';
-export type { DecalLayout } from './useNameTexture';
-export { buildDecalLayout, DECAL_CANVAS_H, DECAL_CANVAS_W, drawDecal, gizmoCursor, hitTestDecal, useDecalTexture } from './useNameTexture';
 export * from './useNumberBridge';
-export * from './usePartDesignMaterial';
 export { usePBRMaps } from './usePBRMaps';
-export { useShirtDesignMaterial } from './useShirtDesignMaterial';
 export { useShirtMaterial } from './useShirtMaterial';
 export { useSlidingIndicator } from './useSlidingIndicator';
 export { useSvgTexture } from './useSvgTexture';

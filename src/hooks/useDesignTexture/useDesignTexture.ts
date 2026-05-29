@@ -6,8 +6,7 @@ import * as THREE from 'three';
 
 import { useConfiguratorStore } from '@store';
 import { fontCanvasName, TEXTURE_SIZE_DRAG, TEXTURE_SIZE_EDITOR, UV0_BOUNDS } from '@utils';
-import type { DesignLayer } from '@types';
-import { GizmoHandle, GizmoZone, LayerGlyph, LayerLayout, PrintZoneKey } from '@types';
+import type { DesignLayer, GizmoHandle, GizmoZone, LayerGlyph, LayerLayout, PrintZoneKey } from '@types';
 
 const resolveFont = fontCanvasName;
 
@@ -515,7 +514,6 @@ export {
   clearDesignDragPreview,
   hitTestLayout,
   registerDesignRenderInvalidate,
-  renderLayerGlyph,
   setDesignDragPreview,
   setDesignInteracting,
   useDesignTexture,

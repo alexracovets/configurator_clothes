@@ -1,10 +1,6 @@
 export type { AcordionItem } from './AcordionItem';
 export type { ChildrenType } from './ChildrenType';
 export type { ColorTab } from './ColorTab';
-export type { ConformingDecalOptions } from './ConformingDecalOptions';
-export type { DecalDrawParams } from './DecalDrawParams';
-export type { DecalLayout } from './DecalLayout';
-export type { DesignCanvasResult } from './DesignCanvasResult';
 export type { DesignHitState } from './DesignHitState';
 export type { DesignLayer, LayerType, TextureSettings } from './DesignLayer';
 export type { DesignOverlayMaterial, DesignOverlayMaterialOptions } from './DesignOverlayMaterial';
@@ -14,7 +10,6 @@ export type { LayerConfig } from './LayerConfig';
 export type { LayerGlyph, LayerLayout } from './LayerLayout';
 export type { NameInstance } from './NameInstance';
 export type { NumberInstance } from './NumberInstance';
-export type { PartDesignMaterialOptions } from './PartDesignMaterialOptions';
 export type { PartGradient, PartGradients } from './PartGradient';
 export type { PatternItem } from './PatternItem';
 export type { PBRMaps } from './PBRMaps';

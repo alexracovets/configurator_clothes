@@ -1,10 +1,7 @@
 export { cn } from './cn';
-export * from './designOverlayMaterial';
 export * from './designTexture';
 export { clampDecalScale, decalWidthToFontSize, fontCanvasName, fontCssFamily, fontSizeToDecalScale } from './fontDecal';
-export { hexToRgb } from './hexToRgb';
 export * from './hitTest';
-export * from './meshDecal';
-export { isOrbitControlsEnabled, orbitControlsRef, orbitFlag, setAsidePointerOver, setOrbitLockedByNameTool, setOrbitLockedByToolPanel } from './orbitFlag';
+export { isOrbitControlsEnabled, orbitControlsRef, setAsidePointerOver } from './orbitFlag';
 export { getPartRenderOrder } from './partRenderOrder';
 export { priceFormat } from './priceFormat';
