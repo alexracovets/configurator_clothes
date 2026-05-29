@@ -34,6 +34,29 @@ a {
   display: inline-block;
 }
 
+@keyframes accordion-grid-down {
+  from {
+    grid-template-rows: 0fr;
+  }
+  to {
+    grid-template-rows: 1fr;
+  }
+}
+
+@keyframes accordion-grid-up {
+  from {
+    grid-template-rows: 1fr;
+  }
+  to {
+    grid-template-rows: 0fr;
+  }
+}
+
+@theme {
+  --animate-accordion-grid-down: accordion-grid-down 200ms ease-out;
+  --animate-accordion-grid-up: accordion-grid-up 200ms ease-out;
+}
+
 /* OverlayScrollbars custom theme — scrollbar appear/hide transition */
 .os-theme-custom.os-scrollbar {
   opacity: 0;
@@ -42,7 +65,7 @@ a {
 
 .os-theme-custom.os-scrollbar.os-scrollbar-visible {
   opacity: 1;
-  transition: opacity 200ms ease-in-out 500ms;
+  transition: opacity 200ms ease-in-out;
 }
 
 .os-theme-custom.os-scrollbar {

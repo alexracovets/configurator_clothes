@@ -40,10 +40,10 @@ const AccordionContent = ({ className, children, ...props }: AccordionPrimitive.
   return (
     <AccordionPrimitive.Panel
       data-slot="accordion-content"
-      className="overflow-hidden data-open:animate-accordion-down data-closed:animate-accordion-up"
+      className="grid data-open:animate-accordion-grid-down data-closed:animate-accordion-grid-up data-open:grid-rows-[1fr] data-closed:grid-rows-[0fr]"
       {...props}
     >
-      <div className={cn('h-(--accordion-panel-height) data-ending-style:h-0 data-starting-style:h-0', className)}>{children}</div>
+      <div className={cn('overflow-hidden', className)}>{children}</div>
     </AccordionPrimitive.Panel>
   );
 };

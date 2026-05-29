@@ -30,9 +30,9 @@ const ScrollArea = ({ children, className }: ScrollAreaProps) => {
         if (!hasScroll) {
           setHasVerticalScroll(false);
         } else {
-          setTimeout(() => setHasVerticalScroll(true), 50);
+          setTimeout(() => setHasVerticalScroll(true), 0);
         }
-      }, 300);
+      }, 0);
     },
     [],
   );
@@ -80,7 +80,7 @@ const ScrollArea = ({ children, className }: ScrollAreaProps) => {
         transition: 'padding-right 0.1s ease-in-out',
       }}
     >
-      <div ref={viewportRef} className="h-full w-full overflow-y-scroll overflow-x-hidden">
+      <div ref={viewportRef} className="h-full w-full overflow-y-scroll overflow-x-hidden scrollbar-none">
         <div ref={contentRef}>{children}</div>
       </div>
     </div>
