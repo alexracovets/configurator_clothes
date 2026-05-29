@@ -33,6 +33,7 @@ const HexInput = ({ value, onChange }: HexInputProps) => {
   return (
     <AtomInput
       variant="color_picker"
+      size="color_picker"
       type="text"
       value={displayValue}
       onChange={handleChange}
