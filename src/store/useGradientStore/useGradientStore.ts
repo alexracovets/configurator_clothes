@@ -1,18 +1,9 @@
 ﻿import { create } from "zustand";
 
+import type { PartGradient, PartGradients } from "@types";
+export type { PartGradient, PartGradients };
 import { useSelectionStore } from "../useSelectionStore";
-import type { ShirtPart } from "../types";
-
-export interface PartGradient {
-  enabled: boolean;
-  color2: string;
-  rotation: number;
-  position: number;
-  softness: number;
-  opacity: number;
-}
-
-export type PartGradients = Record<ShirtPart, PartGradient>;
+import type { ShirtPart } from "@types";
 
 const DEFAULT_GRADIENT: PartGradient = {
   enabled: false,

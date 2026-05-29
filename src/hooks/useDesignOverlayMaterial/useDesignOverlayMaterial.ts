@@ -4,8 +4,8 @@ import { useLayoutEffect, useMemo, useRef } from "react";
 import * as THREE from "three";
 
 import { UV0_BOUNDS } from "@utils";
-import type { PrintZoneKey } from "@utils";
-import type { ShirtPart } from "@store";
+import type { PrintZoneKey } from "@types";
+import type { ShirtPart } from "@types";
 import { shirtFragmentUniforms, shirtVertexUvParsVertex, shirtVertexUvVertex } from "@shaders";
 
 const OVERLAY_FRAG_UNIFORMS = /* glsl */ `

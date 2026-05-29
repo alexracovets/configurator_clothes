@@ -4,12 +4,11 @@ import * as React from "react";
 import * as THREE from "three";
 import type { DecalProps } from "@react-three/drei";
 
+import type { MeshDecalProps } from "@types";
+
 import { createConformingDecalGeometry } from "./createConformingDecalGeometry";
 
-export type MeshDecalProps = Omit<DecalProps, "rotation"> & {
-  rotation?: number | [number, number, number] | THREE.Euler;
-  lowQuality?: boolean;
-};
+export type { MeshDecalProps };
 
 type VecInput =
   | THREE.Vector3

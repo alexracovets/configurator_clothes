@@ -1,24 +1,13 @@
 ﻿import type * as THREE from "three";
 
-import type { GizmoHandle, GizmoZone, DecalLayout } from "@types";
+import type { GizmoHandle, GizmoZone, DecalLayout, DecalDrawParams } from "@types";
 
-export type { GizmoHandle, GizmoZone, DecalLayout };
+export type { GizmoHandle, GizmoZone, DecalLayout, DecalDrawParams };
 
 const DECAL_CANVAS_W = 1024;
 const DECAL_CANVAS_H = 256;
 
 const GIZMO_HANDLES: GizmoHandle[] = ["copy", "delete", "rotate", "resize"];
-
-export interface DecalDrawParams {
-  text: string;
-  font: string;
-  fontSize: number;
-  textColor: string;
-  strokeColor: string;
-  strokeWidth: number;
-  showGizmo: boolean;
-  hoveredZone?: GizmoZone | null;
-}
 
 const CSS_VAR_TO_FONT: Record<string, string> = {
   "--font-oswald": "Oswald",

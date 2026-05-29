@@ -1,5 +1,7 @@
 ﻿import { create } from "zustand";
 
+import type { NameInstance } from "@types";
+export type { NameInstance };
 import { DEFAULT_NAME_TEXT } from "@constants";
 import { FONTS, fontCssFamily, fontCanvasName, DECAL_DEPTH, clampDecalScale, fontSizeToDecalScale, decalWidthToFontSize } from "../decal";
 
@@ -7,19 +9,6 @@ export { FONTS, fontCssFamily, fontCanvasName, fontSizeToDecalScale, decalWidthT
 
 
 const NAME_DECAL_DEPTH = DECAL_DEPTH;
-
-export interface NameInstance {
-  id: string;
-  text: string;
-  font: string;
-  fontSize: number;
-  textColor: string;
-  strokeColor: string;
-  strokeWidth: number;
-  decalPosition: [number, number, number];
-  decalRotation: [number, number, number];
-  decalScale: [number, number, number];
-}
 
 const createDefaultInstance = (id: string): NameInstance => ({
   id,

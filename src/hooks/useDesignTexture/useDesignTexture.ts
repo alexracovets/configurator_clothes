@@ -1,15 +1,12 @@
-"use client";
+﻿"use client";
 
 import { useCallback, useEffect, useSyncExternalStore } from "react";
 import * as THREE from "three";
 
 import { useConfiguratorStore, fontCanvasName } from "@store";
-import { TEXTURE_SIZE_DRAG, TEXTURE_SIZE_EDITOR, UV0_BOUNDS } from "@utils";
-import type { PrintZoneKey } from "@utils";
-import type { DesignLayer } from "@store";
-import type { GizmoHandle, GizmoZone, LayerLayout, LayerGlyph } from "@types";
-
-export type { GizmoHandle, GizmoZone, LayerLayout, LayerGlyph };
+import { TEXTURE_SIZE_DRAG, TEXTURE_SIZE_EDITOR, UV0_BOUNDS } from "@utils"; 
+import type { DesignLayer } from "@types";
+import { GizmoHandle, GizmoZone, LayerLayout, LayerGlyph, PrintZoneKey } from "@types";
 
 const resolveFont = fontCanvasName;
 

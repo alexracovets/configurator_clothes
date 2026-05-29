@@ -7,8 +7,8 @@ import * as THREE from "three";
 import { useNameBridge, useNumberBridge, clearDesignDragPreview, registerDesignRenderInvalidate, setDesignDragPreview, setDesignInteracting } from "@hooks";
 import { useConfiguratorStore } from "@store";
 import { findLayerHit, getHitInZone, getHits, normaliseUV, isOrbitControlsEnabled, orbitControlsRef } from "@utils";
-import type { DesignLayer } from "@store";
-import type { PrintZoneKey } from "@utils";
+import type { DesignLayer } from "@types";
+import type { PrintZoneKey } from "@types";
 
 type DragMode = "body" | "rotate" | "resize";
 

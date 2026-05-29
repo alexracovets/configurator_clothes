@@ -5,7 +5,7 @@ import { Html } from "@react-three/drei";
 import * as THREE from "three";
 
 import { useConfiguratorStore } from "@store";
-import type { DesignLayer } from "@store";
+import type { DesignLayer } from "@types";
 
 const IconDelete = () => (
   <svg width="16" height="16" viewBox="0 0 16 16" fill="none">

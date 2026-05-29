@@ -1,4 +1,4 @@
-﻿import type { ShirtPart } from "@store";
+﻿import type { ShirtPart } from "@types";
 
 const PART_RENDER_ORDER: Record<ShirtPart, number> = {
   front: 0,

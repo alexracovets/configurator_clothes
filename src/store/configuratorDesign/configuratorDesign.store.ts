@@ -1,38 +1,13 @@
 ﻿import { create } from "zustand";
 
-import { PRINT_ZONES, type PrintZoneKey, TEXTURE_SIZE_EDITOR } from "@utils";
+import type { DesignLayer, TextureSettings, PrintZoneKey } from "@types";
+import { PRINT_ZONES, TEXTURE_SIZE_EDITOR } from "@utils";
 import { FONTS, fontCanvasName } from "../decal";
 
 export type FontValue = (typeof FONTS)[number]["value"];
 
 const resolveCanvasFont = (cssVar: string): string => fontCanvasName(cssVar);
 
-export type LayerType = "text" | "number" | "logo";
-
-export interface DesignLayer {
-  id: string;
-  type: LayerType;
-  zone: PrintZoneKey;
-  x: number;
-  y: number;
-  rotation: number;
-  scaleX: number;
-  scaleY: number;
-  visible: boolean;
-  locked: boolean;
-  text?: string;
-  font?: string;
-  fontSize?: number;
-  textColor?: string;
-  strokeColor?: string;
-  strokeWidth?: number;
-  src?: string;
-}
-
-export interface TextureSettings {
-  resolution: number;
-  transparentBackground: boolean;
-}
 
 const MAX_HISTORY = 50;
 

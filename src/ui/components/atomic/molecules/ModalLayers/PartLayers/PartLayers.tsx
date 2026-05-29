@@ -3,10 +3,8 @@
 import { useColorStore, usePatternStore, useGradientStore } from "@store";
 import { useBaseColorTexture, useSvgTexture, useDesignTexture } from "@hooks";
 import { getPartRenderOrder } from "@utils";
-import type { PrintZoneKey } from "@utils";
-import { ColorLayer } from "../ColorLayer";
-import { DesignOverlayLayer } from "../DesignOverlayLayer";
-import { PatternLayer } from "../PatternLayer";
+import type { PrintZoneKey } from "@types";
+import { ColorLayer, DesignOverlayLayer, PatternLayer } from "@molecules";
 import type { PBRMaps, LayerConfig } from "@types";
 
 interface PartLayersProps {

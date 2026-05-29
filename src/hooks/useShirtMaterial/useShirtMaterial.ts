@@ -2,11 +2,9 @@
 import * as THREE from "three";
 
 import { FABRIC_REPEAT } from "@constants";
-
-import type { PartGradient, ShirtPart } from "@store";
-import type { PBRMaps } from "@types";
+import type { PartGradient } from "@types";
+import type { ShirtPart, PBRMaps } from "@types";
 import { shirtVertexUvParsVertex, shirtVertexUvVertex, shirtFragmentUniforms, shirtNormalFragment, shirtGradientFragment, shirtRoughnessFragment } from "@shaders";
-
 
 
 const PART_POLYGON_OFFSET: Partial<

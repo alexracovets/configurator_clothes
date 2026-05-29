@@ -1,5 +1,6 @@
 ﻿import { create } from "zustand";
 
+import type { NumberInstance } from "@types";
 import { DEFAULT_NUMBER_TEXT } from "@constants";
 import { FONTS, fontCssFamily, fontCanvasName, DECAL_DEPTH, clampDecalScale, fontSizeToDecalScale, decalWidthToFontSize, DECAL_SCALE_MIN, DECAL_SCALE_MAX } from "../decal";
 
@@ -11,17 +12,6 @@ const NUMBER_DECAL_SCALE_MIN = DECAL_SCALE_MIN;
 const NUMBER_DECAL_SCALE_MAX = DECAL_SCALE_MAX;
 const NUMBER_DECAL_DEPTH = DECAL_DEPTH;
 
-export interface NumberInstance {
-  text: string;
-  font: string;
-  fontSize: number;
-  textColor: string;
-  strokeColor: string;
-  strokeWidth: number;
-  decalPosition: [number, number, number];
-  decalRotation: [number, number, number];
-  decalScale: [number, number, number];
-}
 
 const createDefaultInstance = (): NumberInstance => ({
   text: DEFAULT_NUMBER_TEXT,

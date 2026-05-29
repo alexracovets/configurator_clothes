@@ -1,14 +1,15 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 import { Decal } from "@react-three/drei";
 import { useThree } from "@react-three/fiber";
 
-import { useNameStore, DECAL_SCALE_MIN, DECAL_SCALE_MAX, clampDecalScale } from "@store";
+import { DECAL_SCALE_MIN, DECAL_SCALE_MAX } from "@constants";
+import { useNameStore, clampDecalScale } from "@store";
 import { useDecalTexture, buildDecalLayout, hitTestDecal, gizmoCursor } from "@hooks";
 import { setOrbitLockedByNameTool } from "@utils";
-import type { NameInstance } from "@store";
+import type { NameInstance } from "@types";
 import type { GizmoHandle, GizmoZone } from "@types";
 
 type DragMode = "move" | GizmoHandle | null;

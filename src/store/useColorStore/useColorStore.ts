@@ -1,9 +1,8 @@
 ﻿import { create } from "zustand";
 
 import { DEFAULT_PART_COLOR } from "@constants";
-import type { ShirtPart, PartColors } from "../types";
+import type { ShirtPart, PartColors } from "@types";
 import { useSelectionStore } from "../useSelectionStore";
-
 
 interface ColorStore {
   partColors: PartColors;

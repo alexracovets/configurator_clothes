@@ -1,13 +1,10 @@
 import Konva from "konva";
 
+import type { DesignCanvasResult } from "@types";
+
 import { TEXTURE_SIZE_EDITOR } from "./textureConstants";
 
-export interface DesignCanvasResult {
-  stage: Konva.Stage;
-  layers: { numbers: Konva.Layer; names: Konva.Layer; logos: Konva.Layer };
-  container: HTMLDivElement;
-  dispose: () => void;
-}
+export type { DesignCanvasResult };
 
 const createDesignCanvas = (size = TEXTURE_SIZE_EDITOR): DesignCanvasResult => {
   const container = document.createElement("div");

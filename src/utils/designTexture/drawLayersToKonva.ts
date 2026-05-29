@@ -1,7 +1,7 @@
-import Konva from "konva";
+﻿import Konva from "konva";
 
 import { resolveCanvasFont } from "@store";
-import type { DesignLayer } from "@store";
+import type { DesignLayer } from "@types";
 
 import type { DesignCanvasResult } from "./createDesignCanvas";
 import { TEXTURE_SIZE_EDITOR } from "./textureConstants";

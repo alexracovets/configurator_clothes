@@ -1,13 +1,9 @@
 ﻿import { create } from "zustand";
 
-import type { ShirtPart, PartPatterns } from "../types";
+import type { PatternItem } from "@types";
+export type { PatternItem };
+import type { ShirtPart, PartPatterns } from "@types";
 import { useSelectionStore } from "../useSelectionStore";
-
-export interface PatternItem {
-  id: string;
-  label: string;
-  url: string;
-}
 
 const SHIRT_PARTS: { key: ShirtPart; label: string; italianLabel: string }[] = [
   { key: "front",        label: "Front",       italianLabel: "Davanti"  },

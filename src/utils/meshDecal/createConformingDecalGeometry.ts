@@ -1,14 +1,11 @@
-﻿import * as THREE from "three";
+﻿import type { ConformingDecalOptions } from "@types";
+export type { ConformingDecalOptions };
+
+import * as THREE from "three";
 import { DecalGeometry } from "three-stdlib";
 
 import { computeDecalOrientation } from "./computeDecalOrientation";
 
-export interface ConformingDecalOptions {
-  segmentsX?: number;
-  segmentsY?: number;
-  surfaceOffset?: number;
-  minHitRatio?: number;
-}
 
 const _raycaster = new THREE.Raycaster();
 const _projector = new THREE.Object3D();

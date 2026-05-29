@@ -6,8 +6,8 @@ import type Konva from "konva";
 
 import { useConfiguratorStore, resolveCanvasFont } from "@store";
 import { PRINT_ZONES, TEXTURE_SIZE_EDITOR } from "@utils";
-import type { DesignLayer } from "@store";
-import type { PrintZoneKey } from "@utils";
+import type { DesignLayer } from "@types";
+import type { PrintZoneKey } from "@types";
 
 interface DesignStageProps {
   zone: PrintZoneKey;

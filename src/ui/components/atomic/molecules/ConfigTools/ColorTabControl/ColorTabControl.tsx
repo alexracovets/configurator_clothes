@@ -1,12 +1,12 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 
 import { Flex, Text, SvgIcon } from "@atoms";
 import { cn } from "@utils";
 
-import { ColorControl } from "../ColorControl";
-import { COLOR_TABS, type ColorTab } from "../../ConfiguratorsSteps/colorTabs";
+import type { ColorTab } from "@types";
+import { ColorControl, COLOR_TABS } from "@molecules";
 
 interface ColorTabControlProps {
   textColor: string;

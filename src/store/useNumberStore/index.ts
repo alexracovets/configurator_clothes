@@ -5,4 +5,4 @@ export {
   NUMBER_DECAL_SCALE_MIN,
   NUMBER_DECAL_SCALE_MAX,
 } from "./useNumberStore";
-export type { NumberInstance } from "./useNumberStore";
+export type { NumberInstance } from "@types";

@@ -4,7 +4,7 @@ import { useLayoutEffect, useRef } from "react";
 import * as THREE from "three";
 
 import { useDesignOverlayMaterial } from "@hooks";
-import type { ShirtPart } from "@store";
+import type { ShirtPart } from "@types";
 
 interface DesignOverlayLayerProps {
   part: ShirtPart;

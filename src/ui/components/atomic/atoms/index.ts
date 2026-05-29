@@ -1,6 +1,5 @@
 export { AcordionAtom } from "./AcordionAtom";
 export { SvgIcon } from "./SvgIcon";
-export type { SvgIconName } from "./SvgIcon";
 export { SearchInput } from "./SearchInput";
 export { AtomSelect } from "./AtomSelect";
 export { AtomImage } from "./AtomImage";

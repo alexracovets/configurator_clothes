@@ -1,8 +1,7 @@
 "use client";
 
+import type { SvgIconName } from "@types";
 import { cn } from "@utils";
-
-export type SvgIconName = "colori" | "contorno";
 
 interface SvgIconProps {
   name: SvgIconName;

@@ -2,7 +2,7 @@ import { useMemo } from "react";
 import * as THREE from "three";
 
 import { hexToRgb } from "@utils";
-import type { PartGradient } from "@store";
+import type { PartGradient } from "@types";
 
 const useColorGradientTexture = (gradient: PartGradient, baseColor: string): THREE.CanvasTexture => {
   return useMemo(() => {

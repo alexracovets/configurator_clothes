@@ -1,7 +1,7 @@
 ﻿import { create } from "zustand";
 import type { Mesh } from "three";
 
-import type { ShirtPart, MeshRefs } from "../types";
+import type { ShirtPart, MeshRefs } from "@types";
 
 interface SelectionStore {
   selectedParts: Set<ShirtPart>;

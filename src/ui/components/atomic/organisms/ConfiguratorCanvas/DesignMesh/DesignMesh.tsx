@@ -3,7 +3,7 @@
 import * as THREE from "three";
 
 import { usePartDesignMaterial } from "@hooks";
-import type { PrintZoneKey } from "@utils";
+import type { PrintZoneKey } from "@types";
 
 interface DesignMeshProps {
   geometry: THREE.BufferGeometry;

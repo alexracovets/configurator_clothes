@@ -1,9 +1,9 @@
-import * as THREE from "three";
+﻿import * as THREE from "three";
 
 import { buildLayerLayout, hitTestLayout } from "@hooks";
 import { useConfiguratorStore } from "@store";
 import { UV0_BOUNDS } from "@utils";
-import type { PrintZoneKey } from "@utils";
+import type { PrintZoneKey } from "@types";
 
 const zoneFromName = (name: string): PrintZoneKey | null => {
   const n = (name ?? "").toLowerCase();

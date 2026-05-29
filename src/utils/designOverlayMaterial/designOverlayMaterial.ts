@@ -1,3 +1,6 @@
+﻿import type { DesignOverlayMaterialOptions, DesignOverlayMaterial } from "@types";
+export type { DesignOverlayMaterialOptions, DesignOverlayMaterial };
+
 import * as THREE from "three";
 
 const VERT_INJECT = /* glsl */ `
@@ -19,19 +22,6 @@ const FRAG_INJECT = /* glsl */ `
   outgoingLight = mix(outgoingLight, design.rgb * design.rgb, design.a * uDesignOpacity);
   totalEmissiveRadiance = mix(totalEmissiveRadiance, vec3(0.0), design.a * uDesignOpacity);
 `;
-
-export interface DesignOverlayMaterialOptions {
-  baseMap?: THREE.Texture | null;
-  normalMap?: THREE.Texture | null;
-  roughnessMap?: THREE.Texture | null;
-  aoMap?: THREE.Texture | null;
-  bakeNormalMap?: THREE.Texture | null;
-}
-
-export interface DesignOverlayMaterial extends THREE.MeshPhysicalMaterial {
-  uniforms: { uDesignMap: { value: THREE.Texture }; uDesignOpacity: { value: number } };
-  setDesignTexture(tex: THREE.Texture | null): void;
-}
 
 const createDesignOverlayMaterial = (opts: DesignOverlayMaterialOptions = {}): DesignOverlayMaterial => {
   const fallback = new THREE.DataTexture(new Uint8Array([0, 0, 0, 0]), 1, 1, THREE.RGBAFormat);

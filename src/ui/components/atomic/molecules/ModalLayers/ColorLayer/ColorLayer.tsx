@@ -3,7 +3,8 @@
 import { useLayoutEffect, useRef } from "react";
 import * as THREE from "three";
 
-import { type PartGradient, type ShirtPart } from "@store";
+import type { PartGradient } from "@types";
+import type { ShirtPart } from "@types";
 import { useShirtMaterial } from "@hooks";
 import type { PBRMaps } from "@types";
 
