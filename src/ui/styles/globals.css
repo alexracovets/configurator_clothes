@@ -16,6 +16,7 @@ body,
   --color-white: #ffffff;
   --color-default: #0a0a0a;
   --color-active: #7f163d;
+  --color-base-black: #000000;
 
   --color-primary: #e4e4e7cc;
   --color-primary-button: #d4d4d8cc;
@@ -25,6 +26,7 @@ body,
   --color-gray: #6b7280;
   --color-gray-10: #71717a;
   --color-gray-20: #dadada;
+  --color-gray-30: #9ca3af;
   --color-gradient-primary: linear-gradient(to right, #ecd187, #cc2967, #030102);
 }
 

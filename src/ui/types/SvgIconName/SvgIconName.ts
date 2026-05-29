@@ -1,1 +1,1 @@
-export type SvgIconName = 'colori' | 'contorno';
+export type SvgIconName = 'colori' | 'contorno' | 'select_color';

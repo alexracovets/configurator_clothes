@@ -20,15 +20,15 @@ const buttonVariants = cva(
         default: 'flex items-center justify-center font-semibold bg-primary-button hover:bg-primary-button/80',
         outline: '',
         secondary: '',
-        ghost: 'bg-white ',
+        ghost: 'bg-white',
         select_part: cn(
           'w-full h-[80px] rounded-[8px] border-[2px] border-gray-200 shadow-sm',
           'data-[active=true]:border-active hover:border-active data-[active=true]:shadow-md hover:shadow-md',
           'transition-all duration-200 ease-in',
         ),
         select_part_short: cn(
-          'w-full h-[60px] rounded-[8px] border-[2px] border-gray-200 shadow-sm',
-          'data-[active=true]:border-active hover:border-active data-[active=true]:shadow-md hover:shadow-md',
+          'w-full h-[60px] rounded-[8px] border-[1px] border-transparent shadow-sm',
+          'data-[active=true]:border-gray-30 hover:border-gray-30 data-[active=true]:shadow-md hover:shadow-md',
           'transition-all duration-200 ease-in',
         ),
         select_none: cn(
@@ -38,7 +38,13 @@ const buttonVariants = cva(
           'data-[active=true]:border-active hover:border-active',
           'transition-all duration-200 ease-in',
         ),
-        destructive: '',
+        destructive: cn(
+          'text-[14px] leading-[16px] font-semibold text-default gap-2',
+          'hover:text-active',
+          '[&_span]:underline underline-offset-4',
+          '[&_svg]:size-4 [&_svg]:shrink-0',
+          'transition-all duration-200 ease-in',
+        ),
         link: '',
       },
       size: {

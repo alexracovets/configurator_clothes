@@ -24,8 +24,12 @@ const variantText = cva('font-inter font-[400] leading-none', {
         'bg-linear-to-r from-[#ECD187] via-[#CC2967] to-[#030102]',
         'transition-[left,width] duration-300 ease-in-out',
       ),
-      configurator_part_label: 'text-[14px] leading-[15px] text-gray block w-full',
       slider_label: cn('text-[14px] leading-[15px] text-gray', 'data-[thumb=true]:text-default data-[thumb=true]:absolute data-[thumb=true]:-translate-x-1/2'),
+      configurator_part_label: cn(
+        'text-[16px] leading-[16px] font-semibold text-gray-30 underline-gray-30',
+        'group-aria-expanded/accordion-trigger:text-default',
+        'transition-all duration-200 ease-in-out',
+      ),
     },
   },
   defaultVariants: {

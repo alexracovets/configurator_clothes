@@ -1,6 +1,6 @@
 'use client';
 
-import { ColorControl, PartColorSwatch, RangeControl, ToggleControl } from '@molecules';
+import { ColorControl, PartColorSwitch, RangeControl, ToggleControl } from '@molecules';
 import { AcordionAtom, Flex } from '@atoms';
 import { SHIRT_PARTS, useColorStore, useGradientStore } from '@store';
 
@@ -15,7 +15,7 @@ const StepSfumatura = () => {
 
     return {
       value: key,
-      trigger: <PartColorSwatch label={italianLabel} color={previewGrad} badge={gradient.enabled ? 'sfumatura attiva' : undefined} />,
+      trigger: <PartColorSwitch label={italianLabel} color={previewGrad} badge={gradient.enabled ? 'sfumatura attiva' : undefined} />,
       content: (
         <Flex variant="configurator_part" className="gap-7">
           <ToggleControl label="Sfumatura" value={gradient.enabled} onChange={(enabled) => setPartGradient(key, { enabled })} />
