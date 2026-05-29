@@ -1,7 +1,6 @@
 ﻿import * as THREE from 'three';
 
-import { buildLayerLayout, hitTestLayout } from '@hooks';
-import { UV0_BOUNDS } from '@utils';
+import { buildLayerLayout, hitTestLayout, UV0_BOUNDS } from '@utils';
 import type { DesignHitState, PrintZoneKey } from '@types';
 
 const zoneFromName = (name: string): PrintZoneKey | null => {

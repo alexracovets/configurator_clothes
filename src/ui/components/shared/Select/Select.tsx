@@ -8,10 +8,6 @@ import { cn } from '@utils';
 
 const Select = SelectPrimitive.Root;
 
-const SelectGroup = ({ className, ...props }: SelectPrimitive.Group.Props) => {
-  return <SelectPrimitive.Group data-slot="select-group" className={cn('', className)} {...props} />;
-};
-
 const SelectValue = ({ className, ...props }: SelectPrimitive.Value.Props) => {
   return <SelectPrimitive.Value data-slot="select-value" className={cn('', className)} {...props} />;
 };
@@ -83,10 +79,6 @@ const SelectContent = ({
   );
 };
 
-const SelectLabel = ({ className, ...props }: SelectPrimitive.GroupLabel.Props) => {
-  return <SelectPrimitive.GroupLabel data-slot="select-label" className={cn('', className)} {...props} />;
-};
-
 const SelectItem = ({ className, children, style, ...props }: SelectPrimitive.Item.Props & { style?: React.CSSProperties }) => {
   return (
     <SelectPrimitive.Item
@@ -116,10 +108,6 @@ const SelectItem = ({ className, children, style, ...props }: SelectPrimitive.It
   );
 };
 
-const SelectSeparator = ({ className, ...props }: SelectPrimitive.Separator.Props) => {
-  return <SelectPrimitive.Separator data-slot="select-separator" className={cn('', className)} {...props} />;
-};
-
 const SelectScrollUpButton = ({ className, ...props }: React.ComponentProps<typeof SelectPrimitive.ScrollUpArrow>) => {
   return (
     <SelectPrimitive.ScrollUpArrow data-slot="select-scroll-up-button" className={cn('', className)} {...props}>
@@ -136,15 +124,4 @@ const SelectScrollDownButton = ({ className, ...props }: React.ComponentProps<ty
   );
 };
 
-export {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectScrollDownButton,
-  SelectScrollUpButton,
-  SelectSeparator,
-  SelectTrigger,
-  SelectValue,
-};
+export { Select, SelectContent, SelectItem, SelectTrigger, SelectValue };

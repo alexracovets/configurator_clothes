@@ -70,4 +70,4 @@ const AtomImage = ({
   return imageElement;
 };
 
-export { AtomImage, variantAtomImage };
+export { AtomImage };

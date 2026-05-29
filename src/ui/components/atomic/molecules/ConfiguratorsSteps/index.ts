@@ -1,4 +1,3 @@
-export type { ColorTab } from './colorTabs';
 export { COLOR_TABS } from './colorTabs';
 export { StepColor } from './StepColor';
 export { StepDesign } from './StepDesign';

@@ -1,1 +1,1 @@
-export type { DesignLayer, LayerType, TextureSettings } from './DesignLayer';
+export type { DesignLayer, TextureSettings } from './DesignLayer';

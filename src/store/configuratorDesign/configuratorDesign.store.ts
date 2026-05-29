@@ -1,10 +1,7 @@
 ﻿import { create } from 'zustand';
 
 import { PRINT_ZONES, TEXTURE_SIZE_EDITOR } from '@utils';
-import { FONTS } from '@constants';
 import type { DesignLayer, PrintZoneKey, TextureSettings } from '@types';
-
-export type FontValue = (typeof FONTS)[number]['value'];
 
 const MAX_HISTORY = 50;
 

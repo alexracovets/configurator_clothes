@@ -43,4 +43,4 @@ const Range = ({ className, wrapperClassName, variant = 'default', value, onChan
   );
 };
 
-export { Range, rangeVariants };
+export { Range };
