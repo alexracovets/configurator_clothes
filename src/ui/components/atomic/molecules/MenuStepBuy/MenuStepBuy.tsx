@@ -5,35 +5,9 @@ import { Fragment } from 'react';
 import { Flex, Text } from '@atoms';
 import { useStepsStore } from '@store';
 import { useSlidingIndicator } from '@hooks';
+import { CONFIGURATOR_STEPS } from '@constants';
 
 import { MenuStepSeparator } from './MenuStepSeparator';
-
-const steps = [
-  {
-    name: 'design',
-    value: 'design',
-  },
-  {
-    name: 'colore',
-    value: 'color',
-  },
-  {
-    name: 'sfumatura',
-    value: 'shading',
-  },
-  {
-    name: 'nome',
-    value: 'name',
-  },
-  {
-    name: 'numero',
-    value: 'number',
-  },
-  {
-    name: 'logo',
-    value: 'logo',
-  },
-];
 
 const MenuStepBuy = () => {
   const { currentStep, setStep } = useStepsStore();
@@ -43,7 +17,7 @@ const MenuStepBuy = () => {
     <div ref={wrapperRef} className="relative w-fit pt-2">
       <Flex className="gap-3" asChild>
         <ul>
-          {steps.map((step, index) => (
+          {CONFIGURATOR_STEPS.map((step, index) => (
             <Fragment key={step.value}>
               {index > 0 && <MenuStepSeparator isActive={index <= currentStep} />}
               <li ref={getItemRef(index)} onClick={() => setStep(index)}>

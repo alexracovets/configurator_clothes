@@ -5,14 +5,22 @@ import { Flex, Grid } from '@atoms';
 import { ScrollArea } from '@shared';
 import { useStepsStore } from '@store';
 import { setAsidePointerOver } from '@utils';
+import type { StepValue } from '@constants';
 
 import { AsideName } from './AsideName';
 import { AsidePrice } from './AsidePrice';
 
-const STEP_PANELS = [StepDesign, StepColor, StepSfumatura, StepName, StepNumber, null];
+const STEP_PANEL_MAP: Record<StepValue, React.ComponentType | null> = {
+  color: StepColor,
+  design: StepDesign,
+  shading: StepSfumatura,
+  name: StepName,
+  number: StepNumber,
+  logo: null,
+};
 
 const AsideConfigurator = () => {
-  const currentStep = useStepsStore(({ currentStep }) => currentStep);
+  const currentStepValue = useStepsStore(({ currentStepValue }) => currentStepValue);
 
   const data = {
     name: 'Maglia Federer',
@@ -23,7 +31,7 @@ const AsideConfigurator = () => {
     id: 0,
   };
 
-  const StepPanel = STEP_PANELS[currentStep];
+  const StepPanel = STEP_PANEL_MAP[currentStepValue] ?? null;
 
   return (
     <Grid variant="aside_configurator" asChild>
