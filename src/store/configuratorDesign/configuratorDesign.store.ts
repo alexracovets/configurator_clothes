@@ -1,20 +1,11 @@
 ﻿import { create } from "zustand";
 
 import { PRINT_ZONES, type PrintZoneKey, TEXTURE_SIZE_EDITOR } from "@utils";
-
-export const FONTS = [
-  { label: "Serie EA",      value: "--font-oswald",        canvasFont: "Oswald" },
-  { label: "Bebas Neue",    value: "--font-bebas-neue",    canvasFont: "Bebas Neue" },
-  { label: "Anton",         value: "--font-anton",         canvasFont: "Anton" },
-  { label: "Russo One",     value: "--font-russo-one",     canvasFont: "Russo One" },
-  { label: "Black Ops One", value: "--font-black-ops-one", canvasFont: "Black Ops One" },
-] as const;
+import { FONTS, fontCanvasName } from "../decal";
 
 export type FontValue = (typeof FONTS)[number]["value"];
 
-export const CSS_VAR_TO_CANVAS_FONT: Record<string, string> = Object.fromEntries(FONTS.map((f) => [f.value, f.canvasFont]));
-
-const resolveCanvasFont = (cssVar: string): string => CSS_VAR_TO_CANVAS_FONT[cssVar] ?? cssVar;
+const resolveCanvasFont = (cssVar: string): string => fontCanvasName(cssVar);
 
 export type LayerType = "text" | "number" | "logo";
 

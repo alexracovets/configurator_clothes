@@ -1,10 +1,11 @@
 ﻿import { create } from "zustand";
 
+import { DEFAULT_NUMBER_TEXT } from "@constants";
 import { FONTS, fontCssFamily, fontCanvasName, DECAL_DEPTH, clampDecalScale, fontSizeToDecalScale, decalWidthToFontSize, DECAL_SCALE_MIN, DECAL_SCALE_MAX } from "../decal";
 
 export { FONTS, fontCssFamily, fontCanvasName };
 
-const DEFAULT_NUMBER_TEXT = "9";
+
 
 const NUMBER_DECAL_SCALE_MIN = DECAL_SCALE_MIN;
 const NUMBER_DECAL_SCALE_MAX = DECAL_SCALE_MAX;

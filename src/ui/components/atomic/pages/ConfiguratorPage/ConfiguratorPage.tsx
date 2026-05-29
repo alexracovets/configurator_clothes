@@ -1,7 +1,6 @@
 "use client";
 
-import { ConfiguratorCanvas } from "@organisms";
-import { AsideConfigurator } from "@organisms";
+import { ConfiguratorCanvas, AsideConfigurator } from "@organisms";
 import { MenuStepBuy, StepsControl, CanvasButtons } from "@molecules";
 import { Container, Box, Flex } from "@atoms";
 

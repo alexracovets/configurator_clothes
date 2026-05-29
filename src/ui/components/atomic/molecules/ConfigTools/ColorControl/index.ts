@@ -1,1 +1,1 @@
-export { ColorControl } from "./ColorControl";
+export * from "./ColorControl";

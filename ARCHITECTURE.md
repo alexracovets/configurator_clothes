@@ -24,6 +24,7 @@ This project uses **Next.js App Router** with **Atomic Design Architecture**.
 ```txt
 src/
 │
+├── constants/
 ├── fonts/
 ├── hooks/
 ├── shaders/
@@ -269,11 +270,43 @@ Example:
   "@store": ["src/store"],
   "@utils": ["src/utils"],
   "@shaders": ["src/shaders"],
+  "@constants": ["src/constants"],
 
   "@styles/*": ["src/ui/styles/*"],
   "@types": ["src/ui/types"]
 }
 ```
+
+---
+
+# Constants Rules
+
+Application-wide constants live in `src/constants/`.
+
+Each constant group has its own folder:
+
+```txt
+constants/
+├── colors/
+│   ├── colors.ts
+│   └── index.ts
+├── decal/
+│   ├── decal.ts
+│   └── index.ts
+├── svg/
+│   ├── svg.ts
+│   └── index.ts
+├── text/
+│   ├── text.ts
+│   └── index.ts
+└── index.ts
+```
+
+Rules:
+* Constants that are used in more than one file belong in `src/constants/`
+* Local-only magic values stay local (not every number needs a constant)
+* Import always via `@constants`
+* Never duplicate a constant that already exists in `@constants`
 
 ---
 

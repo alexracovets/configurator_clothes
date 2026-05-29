@@ -1,7 +1,9 @@
-"use client";
+﻿"use client";
 
 import { useLayoutEffect, useMemo, useRef } from "react";
 import * as THREE from "three";
+
+import { FABRIC_REPEAT } from "@constants";
 
 import type { PartGradient, ShirtPart } from "@store";
 import type { PBRMaps } from "@types";
@@ -9,7 +11,6 @@ import { UV0_BOUNDS } from "@utils";
 import { shirtVertexUvParsVertex, shirtVertexUvVertex, shirtFragmentUniforms, shirtNormalFragment, shirtGradientFragment, shirtRoughnessFragment } from "@shaders";
 import type { PrintZoneKey } from "@utils";
 
-const FABRIC_REPEAT = 10;
 
 const PART_POLYGON_OFFSET: Partial<Record<ShirtPart, { factor: number; units: number }>> = {
   sleeve_left:  { factor: -1, units: -1 },

@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useSyncExternalStore } from "react";
 import * as THREE from "three";
 
-import { useConfiguratorStore } from "@store";
+import { useConfiguratorStore, fontCanvasName } from "@store";
 import { TEXTURE_SIZE_DRAG, TEXTURE_SIZE_EDITOR, UV0_BOUNDS } from "@utils";
 import type { PrintZoneKey } from "@utils";
 import type { DesignLayer } from "@store";
@@ -11,15 +11,7 @@ import type { GizmoHandle, GizmoZone, LayerLayout, LayerGlyph } from "@types";
 
 export type { GizmoHandle, GizmoZone, LayerLayout, LayerGlyph };
 
-const CSS_VAR_TO_FONT: Record<string, string> = {
-  "--font-oswald": "Oswald",
-  "--font-bebas-neue": "Bebas Neue",
-  "--font-anton": "Anton",
-  "--font-russo-one": "Russo One",
-  "--font-black-ops-one": "Black Ops One",
-};
-
-const resolveFont = (cssVar: string): string => CSS_VAR_TO_FONT[cssVar] ?? cssVar;
+const resolveFont = fontCanvasName;
 
 const HANDLE_RADIUS = 22;
 const BOX_PAD_X = HANDLE_RADIUS + 10;

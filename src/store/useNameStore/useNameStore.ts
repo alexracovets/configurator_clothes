@@ -1,10 +1,10 @@
 ﻿import { create } from "zustand";
 
+import { DEFAULT_NAME_TEXT } from "@constants";
 import { FONTS, fontCssFamily, fontCanvasName, DECAL_DEPTH, clampDecalScale, fontSizeToDecalScale, decalWidthToFontSize } from "../decal";
 
 export { FONTS, fontCssFamily, fontCanvasName, fontSizeToDecalScale, decalWidthToFontSize };
 
-const DEFAULT_NAME_TEXT = "PLAYER NAME";
 
 const NAME_DECAL_DEPTH = DECAL_DEPTH;
 

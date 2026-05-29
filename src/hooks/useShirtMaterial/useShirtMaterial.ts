@@ -1,11 +1,13 @@
 ﻿import { useMemo } from "react";
 import * as THREE from "three";
 
+import { FABRIC_REPEAT } from "@constants";
+
 import type { PartGradient, ShirtPart } from "@store";
 import type { PBRMaps } from "@types";
 import { shirtVertexUvParsVertex, shirtVertexUvVertex, shirtFragmentUniforms, shirtNormalFragment, shirtGradientFragment, shirtRoughnessFragment } from "@shaders";
 
-const FABRIC_REPEAT = 10;
+
 
 const PART_POLYGON_OFFSET: Partial<
   Record<ShirtPart, { factor: number; units: number }>

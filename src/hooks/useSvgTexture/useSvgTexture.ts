@@ -1,8 +1,7 @@
+﻿import { SVG_RENDER_WIDTH, SVG_RENDER_HEIGHT } from "@constants";
 import { useEffect, useState } from "react";
 import * as THREE from "three";
 
-const SVG_RENDER_WIDTH = 4096;
-const SVG_RENDER_HEIGHT = 2048;
 
 type LoadedTexture = { url: string; texture: THREE.Texture };
 

@@ -6,7 +6,8 @@ import { Container, Flex, Grid, Box } from "@atoms";
 import { Notification } from "@molecules";
 
 const Footer = () => {
-  const isHidden = usePathname() === "/configurator" || "/uv-debug";
+  const pathname = usePathname();
+  const isHidden = pathname === "/configurator" || pathname === "/uv-debug";
 
   if (isHidden) return null;
 

@@ -1,9 +1,9 @@
 ﻿import { create } from "zustand";
 
+import { DEFAULT_PART_COLOR } from "@constants";
 import type { ShirtPart, PartColors } from "../types";
 import { useSelectionStore } from "../useSelectionStore";
 
-const DEFAULT_COLOR = "#ffffff";
 
 interface ColorStore {
   partColors: PartColors;
@@ -13,10 +13,10 @@ interface ColorStore {
 
 const useColorStore = create<ColorStore>((set) => ({
   partColors: {
-    front: DEFAULT_COLOR,
-    back: DEFAULT_COLOR,
-    sleeve_left: DEFAULT_COLOR,
-    sleeve_right: DEFAULT_COLOR,
+    front: DEFAULT_PART_COLOR,
+    back: DEFAULT_PART_COLOR,
+    sleeve_left: DEFAULT_PART_COLOR,
+    sleeve_right: DEFAULT_PART_COLOR,
   },
 
   setColorForSelected: (color) =>
