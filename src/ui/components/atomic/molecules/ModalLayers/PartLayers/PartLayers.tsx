@@ -4,6 +4,7 @@ import { ColorLayer, DesignOverlayLayer, PatternLayer } from '@molecules';
 import { useColorStore, useGradientStore, usePatternStore } from '@store';
 import { useBaseColorTexture, useDesignTexture, useSvgTexture } from '@hooks';
 import { getPartRenderOrder } from '@utils';
+import { PALETTE_COLORS } from '@constants';
 import type { LayerConfig, PBRMaps, PrintZoneKey } from '@types';
 
 interface PartLayersProps {
@@ -13,15 +14,15 @@ interface PartLayersProps {
 
 const PartLayers = ({ layer, maps }: PartLayersProps) => {
   const { partColors } = useColorStore();
-  const { partPatterns, patternOpacity, patternColor } = usePatternStore();
+  const { patternUrl, patternOpacity, patternColor } = usePatternStore();
   const { partGradients } = useGradientStore();
 
-  const baseColor = (partColors as Record<string, string>)[layer.part] ?? '#ffffff';
+  const baseColor = (partColors as Record<string, string>)[layer.part] ?? PALETTE_COLORS[0];
   const gradient = partGradients[layer.part];
-  const patternUrl = (partPatterns as Record<string, string>)[layer.part] || layer.defaultPatternUrl || '';
+  const effectivePatternUrl = patternUrl ?? layer.defaultPatternUrl ?? '';
 
   const baseColorTexture = useBaseColorTexture(baseColor);
-  const patternTexture = useSvgTexture(patternUrl);
+  const patternTexture = useSvgTexture(effectivePatternUrl);
   const partRenderOrder = getPartRenderOrder(layer.part);
 
   const { texture: designTexture } = useDesignTexture(layer.part as PrintZoneKey);

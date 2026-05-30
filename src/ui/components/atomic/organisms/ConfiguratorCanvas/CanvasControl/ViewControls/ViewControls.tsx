@@ -6,7 +6,6 @@ import { OrbitControls } from '@react-three/drei';
 import { useFrame, useThree } from '@react-three/fiber';
 import type { OrbitControls as OrbitControlsImpl } from 'three-stdlib';
 
-import { clearDesignDragPreview, setDesignInteracting } from '@hooks';
 import { isOrbitControlsEnabled, orbitControlsRef } from '@utils';
 
 const MIN_DISTANCE = 0.5;
@@ -191,8 +190,6 @@ const ViewControls = () => {
         const orbit = orbitRef.current;
         if (orbit) cancelButtonRotation(orbit, animRef.current);
         animRef.current.zoom.active = false;
-        clearDesignDragPreview();
-        setDesignInteracting(false);
         invalidate();
       }}
     />

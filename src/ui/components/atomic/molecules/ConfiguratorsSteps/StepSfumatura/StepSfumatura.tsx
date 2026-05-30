@@ -8,14 +8,14 @@ const StepSfumatura = () => {
   const { partGradients, setPartGradient } = useGradientStore();
   const { partColors } = useColorStore();
 
-  const items = SHIRT_PARTS.map(({ key, italianLabel }) => {
+  const items = SHIRT_PARTS.map(({ key, name }) => {
     const gradient = partGradients[key];
     const color1 = partColors[key];
     const previewGrad = gradient.enabled ? `linear-gradient(${gradient.rotation}deg, ${color1} ${gradient.position}%, ${gradient.color2})` : color1;
 
     return {
       value: key,
-      trigger: <PartColorSwitch label={italianLabel} color={previewGrad} badge={gradient.enabled ? 'sfumatura attiva' : undefined} />,
+      trigger: <PartColorSwitch label={name} color={previewGrad} badge={gradient.enabled ? 'sfumatura attiva' : undefined} />,
       content: (
         <Flex variant="configurator_part" className="gap-7">
           <ToggleControl label="Sfumatura" value={gradient.enabled} onChange={(enabled) => setPartGradient(key, { enabled })} />

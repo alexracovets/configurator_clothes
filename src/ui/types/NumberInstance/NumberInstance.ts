@@ -5,7 +5,4 @@ export interface NumberInstance {
   textColor: string;
   strokeColor: string;
   strokeWidth: number;
-  decalPosition: [number, number, number];
-  decalRotation: [number, number, number];
-  decalScale: [number, number, number];
 }

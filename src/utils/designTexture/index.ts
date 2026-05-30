@@ -1,6 +1,5 @@
-export { drawLayerFromGlyph, getDesignLayers, renderLayerGlyph, serialiseGizmo, serialiseLayersTransform, serialiseLayerStyle } from './designLayerGlyph';
-export { buildLayerLayout, drawGizmoFrame, drawGizmoHandle, GIZMO_HANDLES, hitTestLayout } from './designLayerLayout';
+export { drawLayerFromGlyph, getDesignLayers, renderLayerGlyph, serialiseLayersTransform, serialiseLayerStyle } from './designLayerGlyph';
 export { applyTextureUploadMode, createCanvasTexture } from './designTextureCanvas';
-export type { CompositeZoneOptions } from './designTextureComposite';
+export type { PositionSlot } from './designTextureComposite';
 export { compositeZone } from './designTextureComposite';
 export * from './textureConstants';

@@ -1,58 +1,34 @@
-﻿import { create } from 'zustand';
+import { create } from 'zustand';
 
-import { useSelectionStore } from '@store';
-import type { PartPatterns, PatternItem, ShirtPart } from '@types';
+import type { PatternItem, ShirtPart } from '@types';
 
-const SHIRT_PARTS: { key: ShirtPart; label: string; italianLabel: string }[] = [
-  { key: 'front', label: 'Front', italianLabel: 'Davanti' },
-  { key: 'back', label: 'Back', italianLabel: 'Retro' },
-  { key: 'sleeve_left', label: 'Left sleeve', italianLabel: 'Manica 1' },
-  { key: 'sleeve_right', label: 'Right sleeve', italianLabel: 'Manica 2' },
-];
+import { crewneckStyle } from '@data';
 
-const PATTERNS: PatternItem[] = [
-  {
-    id: 'design_0',
-    label: 'Design 0',
-    url: '/models/crewneck/designs/design_0.svg',
-  },
-];
+const shirtConfig = crewneckStyle.garments.shirt!;
+
+const SHIRT_PARTS: { key: ShirtPart; label: string; name: string }[] = shirtConfig.parts.map(({ key, label, name }) => ({
+  key: key as ShirtPart,
+  label,
+  name,
+}));
+
+const PATTERNS: PatternItem[] = shirtConfig.patterns.map(({ id, label, url }) => ({ id, label, url }));
 
 interface PatternStore {
-  partPatterns: PartPatterns;
+  patternUrl: string | null;
   patternOpacity: number;
   patternColor: string;
-  setPatternForSelected: (url: string) => void;
-  setPatternForAll: (url: string | null) => void;
+  setPattern: (url: string | null) => void;
   setPatternOpacity: (value: number) => void;
   setPatternColor: (color: string) => void;
 }
 
 const usePatternStore = create<PatternStore>((set) => ({
-  partPatterns: {
-    front: '',
-    back: '',
-    sleeve_left: '',
-    sleeve_right: '',
-  },
+  patternUrl: null,
   patternOpacity: 0.8,
   patternColor: '#000000',
 
-  setPatternForSelected: (url) =>
-    set(({ partPatterns }) => {
-      const { selectedParts } = useSelectionStore.getState();
-      const updates: Partial<PartPatterns> = {};
-      selectedParts.forEach((part) => {
-        updates[part] = url;
-      });
-      return { partPatterns: { ...partPatterns, ...updates } };
-    }),
-
-  setPatternForAll: (url) =>
-    set(({ partPatterns }) => ({
-      partPatterns: Object.fromEntries(Object.keys(partPatterns).map((k) => [k, url])) as PartPatterns,
-    })),
-
+  setPattern: (url) => set({ patternUrl: url }),
   setPatternOpacity: (value) => set({ patternOpacity: value }),
   setPatternColor: (color) => set({ patternColor: color }),
 }));

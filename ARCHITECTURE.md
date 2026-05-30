@@ -25,6 +25,7 @@ This project uses **Next.js App Router** with **Atomic Design Architecture**.
 src/
 │
 ├── constants/
+├── data/
 ├── fonts/
 ├── hooks/
 ├── providers/
@@ -281,6 +282,7 @@ Example:
   "@utils": ["src/utils"],
   "@shaders": ["src/shaders"],
   "@constants": ["src/constants"],
+  "@data": ["src/data"],
 
   "@styles/*": ["src/ui/styles/*"],
   "@types": ["src/ui/types"]
@@ -318,6 +320,47 @@ Rules:
 - Local-only magic values stay local (not every number needs a constant)
 - Import always via `@constants`
 - Never duplicate a constant that already exists in `@constants`
+
+---
+
+# Data Rules
+
+Model and garment configuration lives in `src/data/`.
+
+Structure:
+
+```txt
+data/
+├── types.ts          # shared config types (StyleConfig, GarmentConfig, PartConfig, ...)
+├── crewneck.ts       # crewneck style config (shirt + future shorts)
+└── index.ts          # STYLES registry, getStyle(), re-exports
+```
+
+Rules:
+
+- `src/data/` holds **static configuration** describing available styles and garments — not runtime state
+- Each style gets its own file (e.g. `crewneck.ts`, `polo.ts`)
+- All config types are defined in `types.ts`
+- `index.ts` aggregates styles into `STYLES` record and exports `getStyle(id)`
+- Import always via `@data`
+- Stores and components that depend on garment config must read it from `@data`, never hard-code model paths or part lists
+
+Hierarchy:
+
+```txt
+StyleConfig         — a style (crewneck, polo, ...)
+└── GarmentConfig   — a garment type within that style (shirt, shorts, ...)
+    ├── modelPaths  — GLTF and PBR texture paths
+    ├── parts       — shirt parts (front, back, sleeves, ...)
+    ├── patterns    — available design patterns
+    └── namePositions — label print zones (top/bottom back, ...)
+```
+
+Adding a new style:
+
+1. Create `src/data/polo.ts` with a `StyleConfig`
+2. Add `'polo'` to `StyleId` union in `types.ts`
+3. Register it in `STYLES` in `index.ts`
 
 ---
 

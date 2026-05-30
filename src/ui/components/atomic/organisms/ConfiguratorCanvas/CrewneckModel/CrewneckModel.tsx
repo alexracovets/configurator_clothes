@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import { useMemo } from 'react';
 
@@ -7,18 +7,14 @@ import { ThreeElements } from '@react-three/fiber';
 import * as THREE from 'three';
 
 import { LayoutsModalStructure } from '@molecules';
-import { NECK_DEFAULT_COLOR } from '@constants';
 import type { LayerConfig } from '@types';
 
-const MODEL_PATH = '/models/pbr/crewneck.gltf';
-const FABRIC_REPEAT = 6;
+import { crewneckStyle } from '@data';
 
-const PBR_TEXTURE_PATHS = {
-  bakeNormal: '/models/pbr/bake_normal.jpg',
-  bakeAoRoughness: '/models/pbr/bake_ao-bake_roughness.jpg',
-  fabricNormal: '/models/pbr/cotton_jersey_nor_gl.jpg',
-  fabricRoughness: '/models/pbr/cotton_jersey_rough.jpg',
-};
+const shirtConfig = crewneckStyle.garments.shirt!;
+const { gltf, bakeNormal, bakeAoRoughness, fabricNormal, fabricRoughness, insideAo } = shirtConfig.modelPaths;
+
+const INSIDE_FABRIC_REPEAT = 6;
 
 interface CrewneckGLTF {
   nodes: Record<string, THREE.Mesh>;
@@ -30,20 +26,25 @@ interface CrewneckGLTF {
 }
 
 const CrewneckModel = (props: ThreeElements['group']) => {
-  const { nodes, materials } = useGLTF(MODEL_PATH) as unknown as CrewneckGLTF;
-  const { insideAo } = useTexture({ insideAo: '/models/pbr/inside_ao.jpg' });
+  const { nodes, materials } = useGLTF(gltf) as unknown as CrewneckGLTF;
+  const { insideAoTex } = useTexture({ insideAoTex: insideAo });
 
-  const layerConfigs: LayerConfig[] = [
-    { part: 'front', geometry: nodes.crewneck_front.geometry },
-    { part: 'back', geometry: nodes.crewneck_back.geometry },
-    { part: 'sleeve_left', geometry: nodes.crewneck_sleeve_left.geometry },
-    { part: 'sleeve_right', geometry: nodes.crewneck_sleeve_right.geometry },
-  ];
+  const layerConfigs: LayerConfig[] = shirtConfig.parts.map(({ key }) => ({
+    part: key as LayerConfig['part'],
+    geometry: nodes[`crewneck_${key}`].geometry,
+  }));
+
+  const pbrTexturePaths = {
+    bakeNormal,
+    bakeAoRoughness,
+    fabricNormal,
+    fabricRoughness,
+  };
 
   const neckMat = useMemo(
     () =>
       new THREE.MeshStandardMaterial({
-        color: NECK_DEFAULT_COLOR,
+        color: shirtConfig.neckColor,
         roughness: 0.9,
         metalness: 0,
       }),
@@ -52,7 +53,7 @@ const CrewneckModel = (props: ThreeElements['group']) => {
 
   const insideMat = useMemo(() => {
     const m = materials.crewneck_inside.clone();
-    const aoTex = insideAo.clone() as THREE.Texture;
+    const aoTex = insideAoTex.clone() as THREE.Texture;
     aoTex.flipY = false;
     aoTex.colorSpace = THREE.NoColorSpace;
     aoTex.needsUpdate = true;
@@ -60,12 +61,12 @@ const CrewneckModel = (props: ThreeElements['group']) => {
     m.aoMapIntensity = 1.0;
     m.roughnessMap = null;
 
-    const fabricNorm = new THREE.TextureLoader().load(PBR_TEXTURE_PATHS.fabricNormal);
-    fabricNorm.wrapS = THREE.RepeatWrapping;
-    fabricNorm.wrapT = THREE.RepeatWrapping;
-    fabricNorm.repeat.set(FABRIC_REPEAT, FABRIC_REPEAT);
-    fabricNorm.colorSpace = THREE.NoColorSpace;
-    m.normalMap = fabricNorm;
+    const fabricNormTex = new THREE.TextureLoader().load(fabricNormal);
+    fabricNormTex.wrapS = THREE.RepeatWrapping;
+    fabricNormTex.wrapT = THREE.RepeatWrapping;
+    fabricNormTex.repeat.set(INSIDE_FABRIC_REPEAT, INSIDE_FABRIC_REPEAT);
+    fabricNormTex.colorSpace = THREE.NoColorSpace;
+    m.normalMap = fabricNormTex;
     m.normalMapType = THREE.TangentSpaceNormalMap;
     m.normalScale.set(0.4, 0.4);
     m.roughness = 0.95;
@@ -76,10 +77,10 @@ const CrewneckModel = (props: ThreeElements['group']) => {
     m.polygonOffsetUnits = 2;
     m.needsUpdate = true;
     return m;
-  }, [materials.crewneck_inside, insideAo]);
+  }, [materials.crewneck_inside, insideAoTex]);
 
   return (
-    <LayoutsModalStructure {...props} layerConfigs={layerConfigs} pbrTexturePaths={PBR_TEXTURE_PATHS}>
+    <LayoutsModalStructure {...props} layerConfigs={layerConfigs} pbrTexturePaths={pbrTexturePaths}>
       <mesh geometry={nodes.Mesh002.geometry} material={insideMat} />
       <mesh geometry={nodes.crewneck_collar.geometry} material={neckMat} />
       <mesh geometry={nodes.Mesh002_1.geometry} material={materials.sweatband} />
@@ -88,6 +89,6 @@ const CrewneckModel = (props: ThreeElements['group']) => {
   );
 };
 
-useGLTF.preload(MODEL_PATH);
+useGLTF.preload(gltf);
 
 export { CrewneckModel };

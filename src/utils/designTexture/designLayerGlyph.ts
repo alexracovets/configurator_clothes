@@ -5,8 +5,13 @@ import { TEXTURE_SIZE_EDITOR } from './textureConstants';
 
 const FONT_SCALE = 2.0;
 
-const serialiseLayerStyle = (layer: DesignLayer): string =>
-  JSON.stringify({
+const measureCtx: CanvasRenderingContext2D | null = typeof document !== 'undefined' ? document.createElement('canvas').getContext('2d') : null;
+
+type LayerStyleKeys = 'text' | 'font' | 'fontSize' | 'textColor' | 'strokeColor' | 'strokeWidth' | 'type' | 'visible';
+type LayerStyle = Pick<DesignLayer, LayerStyleKeys>;
+
+const serialiseLayerStyle = (layer: DesignLayer): string => {
+  const style: LayerStyle = {
     text: layer.text,
     font: layer.font,
     fontSize: layer.fontSize,
@@ -15,12 +20,12 @@ const serialiseLayerStyle = (layer: DesignLayer): string =>
     strokeWidth: layer.strokeWidth,
     type: layer.type,
     visible: layer.visible,
-  });
+  };
+  return JSON.stringify(style);
+};
 
 const serialiseLayersTransform = (layers: DesignLayer[]): string =>
   JSON.stringify(layers.map((l) => ({ id: l.id, x: l.x, y: l.y, rotation: l.rotation, zone: l.zone, visible: l.visible })));
-
-const serialiseGizmo = (selectedId: string | null): string => selectedId ?? '';
 
 const getDesignLayers = (layers: DesignLayer[]): DesignLayer[] => layers.filter((l) => l.visible && (l.type === 'text' || l.type === 'number'));
 
@@ -29,10 +34,8 @@ const renderLayerGlyph = (layer: DesignLayer, atlasSize: number): LayerGlyph => 
   const font = fontCanvasName(layer.font ?? '--font-oswald');
   const fontSize = Math.round((layer.fontSize ?? 128) * FONT_SCALE * (atlasSize / TEXTURE_SIZE_EDITOR));
   const strokeWidth = (layer.strokeWidth ?? 4) * FONT_SCALE * (atlasSize / TEXTURE_SIZE_EDITOR);
-  const measureCanvas = document.createElement('canvas');
-  const mCtx = measureCanvas.getContext('2d')!;
-  mCtx.font = `bold ${fontSize}px "${font}"`;
-  const metrics = mCtx.measureText(text);
+  measureCtx!.font = `bold ${fontSize}px "${font}"`;
+  const metrics = measureCtx!.measureText(text);
   const textW = metrics.width;
   const textH = fontSize * 1.1;
   const pad = strokeWidth + 4;
@@ -66,4 +69,4 @@ const drawLayerFromGlyph = (ctx: CanvasRenderingContext2D, layer: DesignLayer, g
   ctx.restore();
 };
 
-export { drawLayerFromGlyph, getDesignLayers, renderLayerGlyph, serialiseGizmo, serialiseLayersTransform, serialiseLayerStyle };
+export { drawLayerFromGlyph, getDesignLayers, renderLayerGlyph, serialiseLayersTransform, serialiseLayerStyle };

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 
 import { PopoverAtom, PopoverAtomContent, PopoverAtomTrigger } from '@atoms';
 
@@ -18,17 +18,30 @@ const ColorPicker = ({ color, onChange, trigger }: ColorPickerProps) => {
   const safeColor = isValidHex(color) ? color : '#000000';
   const [wheelHsva, setWheelHsva] = useState({ ...hexToHsva(safeColor), v: 100 });
   const [brightness, setBrightness] = useState(hexToHsva(safeColor).v);
+  const rafRef = useRef<number | null>(null);
+  const pendingRef = useRef<string | null>(null);
+
+  const flushColor = (hex: string) => {
+    pendingRef.current = hex;
+    if (rafRef.current !== null) return;
+    rafRef.current = requestAnimationFrame(() => {
+      rafRef.current = null;
+      if (pendingRef.current !== null) onChange(pendingRef.current);
+    });
+  };
 
   const handleWheelChange = (newColor: { hsva: { h: number; s: number; v: number; a: number } }) => {
     const next = { ...newColor.hsva, v: 100 };
     setWheelHsva(next);
-    onChange(hsvaToHex({ ...next, v: brightness }));
+    flushColor(hsvaToHex({ ...next, v: brightness }));
   };
 
   const handleShadeChange = (newShade: { v: number }) => {
     setBrightness(newShade.v);
-    onChange(hsvaToHex({ ...wheelHsva, v: newShade.v }));
+    flushColor(hsvaToHex({ ...wheelHsva, v: newShade.v }));
   };
+
+  const liveHsva = { ...wheelHsva, v: brightness };
 
   return (
     <PopoverAtom>
@@ -41,8 +54,8 @@ const ColorPicker = ({ color, onChange, trigger }: ColorPickerProps) => {
             .w-color-interactive {left: 0!important; top: -20%!important;}
           `}
         </style>
-        <Wheel color={{ ...wheelHsva, v: brightness }} onChange={handleWheelChange} width={241} height={241} />
-        <ShadeSlider hsva={{ ...wheelHsva, v: brightness }} onChange={handleShadeChange} style={{ width: '100%', height: 12 }} />
+        <Wheel color={liveHsva} onChange={handleWheelChange} width={241} height={241} />
+        <ShadeSlider hsva={liveHsva} onChange={handleShadeChange} style={{ width: '100%', height: 12 }} />
       </PopoverAtomContent>
     </PopoverAtom>
   );

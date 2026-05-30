@@ -34,7 +34,8 @@
       "@hooks": ["./src/hooks"],
       "@providers": ["./src/providers"],
       "@shaders": ["./src/shaders"],
-      "@constants": ["./src/constants"]
+      "@constants": ["./src/constants"],
+      "@data": ["./src/data"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", ".next/dev/types/**/*.ts", "**/*.mts"],

@@ -1,8 +1,15 @@
-﻿import { create } from 'zustand';
+import { create } from 'zustand';
 
 import { useSelectionStore } from '@store';
-import { DEFAULT_PART_COLOR } from '@constants';
+import { PALETTE_COLORS } from '@constants';
 import type { PartColors, ShirtPart } from '@types';
+
+import { crewneckStyle } from '@data';
+
+const shirtConfig = crewneckStyle.garments.shirt!;
+const defaultColor = PALETTE_COLORS[0];
+
+const defaultPartColors = Object.fromEntries(shirtConfig.parts.map(({ key }) => [key, defaultColor])) as PartColors;
 
 interface ColorStore {
   partColors: PartColors;
@@ -11,22 +18,16 @@ interface ColorStore {
 }
 
 const useColorStore = create<ColorStore>((set) => ({
-  partColors: {
-    front: DEFAULT_PART_COLOR,
-    back: DEFAULT_PART_COLOR,
-    sleeve_left: DEFAULT_PART_COLOR,
-    sleeve_right: DEFAULT_PART_COLOR,
-  },
+  partColors: { ...defaultPartColors },
 
-  setColorForSelected: (color) =>
-    set(({ partColors }) => {
-      const { selectedParts } = useSelectionStore.getState();
-      const updates: Partial<PartColors> = {};
-      selectedParts.forEach((part) => {
-        updates[part] = color;
-      });
-      return { partColors: { ...partColors, ...updates } };
-    }),
+  setColorForSelected: (color) => {
+    const { selectedParts } = useSelectionStore.getState();
+    const updates: Partial<PartColors> = {};
+    selectedParts.forEach((part) => {
+      updates[part] = color;
+    });
+    set(({ partColors }) => ({ partColors: { ...partColors, ...updates } }));
+  },
 
   setPartColor: (part, color) => set(({ partColors }) => ({ partColors: { ...partColors, [part]: color } })),
 }));

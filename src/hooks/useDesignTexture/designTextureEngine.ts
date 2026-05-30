@@ -1,13 +1,13 @@
 import * as THREE from 'three';
 
 import { useConfiguratorStore } from '@store';
+import type { PositionSlot } from '@utils';
 import {
   applyTextureUploadMode,
   compositeZone,
   createCanvasTexture,
   getDesignLayers,
   renderLayerGlyph,
-  serialiseGizmo,
   serialiseLayersTransform,
   serialiseLayerStyle,
   TEXTURE_SIZE_DRAG,
@@ -16,92 +16,62 @@ import {
 import type { DesignLayer, LayerGlyph, PrintZoneKey } from '@types';
 
 const PRINT_ZONE_KEYS = Object.keys(UV0_BOUNDS) as PrintZoneKey[];
-const DRAG_REDRAW_MS = 33;
 
 interface ZoneTarget {
   canvas: HTMLCanvasElement;
   texture: THREE.CanvasTexture;
 }
 
-type DragPreview = Partial<Omit<DesignLayer, 'id'>> & { id: string };
-
 class DesignTextureEngine {
   private readonly zoneTargets = new Map<PrintZoneKey, ZoneTarget>();
   private readonly glyphMap = new Map<string, LayerGlyph>();
   private rafId: number | null = null;
-  private dragPreview: DragPreview | null = null;
-  private interacting = false;
   private lastStyleSerial = '';
   private lastTransformSerial = '';
-  private lastGizmoSerial = '';
-  private lastInteracting = false;
-  private readonly editorSize: number;
-  private canvasSize: number;
-  private lastRedrawAt = 0;
-  private redrawRafId: number | null = null;
+  private readonly zoneSlots = new Map<PrintZoneKey, PositionSlot[]>();
+  private interacting = false;
+  private currentSize: number;
 
   constructor(
-    size: number,
+    private readonly editorSize: number,
     private readonly onTexturesUpdated: () => void = () => {},
   ) {
-    this.editorSize = size;
-    this.canvasSize = size;
-    for (const zone of PRINT_ZONE_KEYS) this.zoneTargets.set(zone, createCanvasTexture(size));
+    this.currentSize = editorSize;
+    for (const zone of PRINT_ZONE_KEYS) this.zoneTargets.set(zone, createCanvasTexture(editorSize));
     this.redraw();
-  }
-
-  private setCanvasResolution(size: number) {
-    if (this.canvasSize === size) return;
-    this.canvasSize = size;
-    for (const { canvas } of this.zoneTargets.values()) {
-      canvas.width = size;
-      canvas.height = size;
-    }
-    this.glyphMap.clear();
-    this.lastStyleSerial = '';
   }
 
   getTexture(zone: PrintZoneKey): THREE.CanvasTexture {
     return this.zoneTargets.get(zone)!.texture;
   }
 
-  setDragPreview(preview: DragPreview | null) {
-    this.dragPreview = preview;
+  setInteracting(active: boolean): void {
+    if (this.interacting === active) return;
+    this.interacting = active;
+    const size = active ? TEXTURE_SIZE_DRAG : this.editorSize;
+    if (size !== this.currentSize) {
+      this.currentSize = size;
+      for (const { canvas } of this.zoneTargets.values()) {
+        canvas.width = size;
+        canvas.height = size;
+      }
+      this.glyphMap.clear();
+      this.lastStyleSerial = '';
+    }
+    for (const { texture } of this.zoneTargets.values()) applyTextureUploadMode(texture, active);
     this.scheduleRedraw();
   }
 
-  setInteracting(active: boolean) {
-    if (this.interacting === active) return;
-    this.interacting = active;
-    this.setCanvasResolution(active ? TEXTURE_SIZE_DRAG : this.editorSize);
-    for (const { texture } of this.zoneTargets.values()) applyTextureUploadMode(texture, active);
+  setSlots(zone: PrintZoneKey, slots: PositionSlot[]): void {
+    this.zoneSlots.set(zone, slots);
     this.lastTransformSerial = '';
     this.scheduleRedraw();
   }
 
-  private getEffectiveLayers(): DesignLayer[] {
-    const base = getDesignLayers(useConfiguratorStore.getState().layers);
-    if (!this.dragPreview) return base;
-    const { id, ...patch } = this.dragPreview;
-    return base.map((l) => (l.id === id ? { ...l, ...patch } : l));
-  }
-
   scheduleRedraw() {
-    if (this.interacting) {
-      const elapsed = performance.now() - this.lastRedrawAt;
-      if (elapsed < DRAG_REDRAW_MS) {
-        if (this.redrawRafId !== null) return;
-        this.redrawRafId = window.setTimeout(() => {
-          this.redrawRafId = null;
-          this.scheduleRedraw();
-        }, DRAG_REDRAW_MS - elapsed);
-        return;
-      }
-    }
     if (this.rafId !== null) return;
     this.rafId = requestAnimationFrame(() => {
       this.rafId = null;
-      this.lastRedrawAt = performance.now();
       this.redraw();
     });
   }
@@ -119,61 +89,48 @@ class DesignTextureEngine {
       const styleSerial = serialiseLayerStyle(layer);
       const cached = this.glyphMap.get(layer.id);
       if (cached && cached.styleSerial === styleSerial) continue;
-      this.glyphMap.set(layer.id, renderLayerGlyph(layer, this.canvasSize));
+      this.glyphMap.set(layer.id, renderLayerGlyph(layer, this.currentSize));
       styleChanged = true;
     }
     return styleChanged;
   }
 
   redraw(): void {
-    const state = useConfiguratorStore.getState();
-    const layers = this.getEffectiveLayers();
-    const selectedId = state.selectedId;
+    const layers = getDesignLayers(useConfiguratorStore.getState().layers);
     const styleSerial = layers.map((l) => `${l.id}:${serialiseLayerStyle(l)}`).join('|');
     const transformSerial = serialiseLayersTransform(layers);
-    const gizmoSerial = serialiseGizmo(selectedId);
-    const styleDirty = styleSerial !== this.lastStyleSerial;
-    const transformDirty = transformSerial !== this.lastTransformSerial;
-    const gizmoDirty = gizmoSerial !== this.lastGizmoSerial;
-    const interactingDirty = this.interacting !== this.lastInteracting;
-    if (!styleDirty && !transformDirty && !gizmoDirty && !interactingDirty) return;
-    if (styleDirty) {
+    if (styleSerial === this.lastStyleSerial && transformSerial === this.lastTransformSerial) return;
+    if (styleSerial !== this.lastStyleSerial) {
       this.syncGlyphs(layers);
       this.lastStyleSerial = styleSerial;
     }
-    if (styleDirty || transformDirty || gizmoDirty || interactingDirty) {
-      const zonesToDraw = new Set(layers.map((l) => l.zone));
-      const fast = this.interacting;
-      for (const zone of zonesToDraw) {
-        const zoneLayers = layers.filter((l) => l.zone === zone);
-        const target = this.zoneTargets.get(zone)!;
-        const zoneSelected = !fast && selectedId && zoneLayers.some((l) => l.id === selectedId) ? selectedId : null;
-        compositeZone(target.canvas, zoneLayers, this.glyphMap, zoneSelected, { showGizmo: !fast, fast });
-        target.texture.needsUpdate = true;
+    const zonesToDraw = new Set(layers.map((l) => l.zone));
+    for (const [zone, target] of this.zoneTargets) {
+      const zoneLayers = layers.filter((l) => l.zone === zone);
+      if (!zonesToDraw.has(zone)) {
+        const ctx = target.canvas.getContext('2d');
+        if (ctx) ctx.clearRect(0, 0, target.canvas.width, target.canvas.height);
+      } else {
+        compositeZone(target.canvas, zoneLayers, this.glyphMap, this.zoneSlots.get(zone) ?? []);
       }
-      this.lastTransformSerial = transformSerial;
-      this.lastGizmoSerial = gizmoSerial;
-      this.lastInteracting = this.interacting;
-      this.onTexturesUpdated();
+      target.texture.needsUpdate = true;
     }
+    this.lastTransformSerial = transformSerial;
+    this.onTexturesUpdated();
   }
 
   invalidate() {
     this.lastStyleSerial = '';
     this.lastTransformSerial = '';
-    this.lastGizmoSerial = '';
     this.redraw();
   }
 
   dispose() {
     if (this.rafId !== null) cancelAnimationFrame(this.rafId);
-    if (this.redrawRafId !== null) clearTimeout(this.redrawRafId);
     for (const { texture } of this.zoneTargets.values()) texture.dispose();
     this.zoneTargets.clear();
     this.glyphMap.clear();
-    this.dragPreview = null;
   }
 }
 
-export type { DragPreview };
 export { DesignTextureEngine };

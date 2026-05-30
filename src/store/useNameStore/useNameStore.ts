@@ -1,20 +1,22 @@
-﻿import { create } from 'zustand';
+import { create } from 'zustand';
 
-import { clampDecalScale, decalWidthToFontSize, fontSizeToDecalScale } from '@utils';
 import { DEFAULT_NAME_TEXT, FONTS } from '@constants';
-import type { NameInstance } from '@types';
+import type { NameInstance, NamePosition } from '@types';
 
-const createDefaultInstance = (id: string): NameInstance => ({
+const POSITIONS: { value: NamePosition; label: string }[] = [
+  { value: 'top', label: 'Top Back' },
+  { value: 'bottom', label: 'Bottom Back' },
+];
+
+const createDefaultInstance = (id: string, position: NamePosition): NameInstance => ({
   id,
+  position,
   text: DEFAULT_NAME_TEXT,
   font: FONTS[0].value,
   fontSize: 64,
   textColor: '#FFFFFF',
   strokeColor: '#1A2744',
   strokeWidth: 4,
-  decalPosition: [0, 1.37, -0.063],
-  decalRotation: [Math.PI, 0, Math.PI],
-  decalScale: fontSizeToDecalScale(64),
 });
 
 const newId = () => (typeof crypto !== 'undefined' && crypto.randomUUID ? crypto.randomUUID() : `name-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`);
@@ -23,14 +25,16 @@ interface NameStore {
   isVisible: boolean;
   instances: NameInstance[];
   activeId: string | null;
+  pendingPosition: boolean;
 
+  setPendingPosition: (pending: boolean) => void;
+  addInstance: (position: NamePosition) => void;
   setVisible: (visible: boolean) => void;
   setActiveId: (id: string) => void;
   updateInstance: (id: string, patch: Partial<Omit<NameInstance, 'id'>>) => void;
   updateActive: (patch: Partial<Omit<NameInstance, 'id'>>) => void;
   duplicateInstance: (id: string) => void;
   removeInstance: (id: string) => void;
-
   getActive: () => NameInstance | undefined;
 }
 
@@ -38,47 +42,35 @@ const useNameStore = create<NameStore>((set, get) => ({
   isVisible: false,
   instances: [],
   activeId: null,
+  pendingPosition: false,
 
   getActive: () => {
     const { instances, activeId } = get();
     return instances.find(({ id }) => id === activeId);
   },
 
+  setPendingPosition: (pending) => set({ pendingPosition: pending }),
+
+  addInstance: (position) => {
+    const { instances } = get();
+    if (instances.some((i) => i.position === position)) return;
+    const id = newId();
+    set({ isVisible: true, instances: [...instances, createDefaultInstance(id, position)], activeId: id, pendingPosition: false });
+  },
+
   setVisible: (visible) => {
     if (!visible) {
-      set({ isVisible: false, instances: [], activeId: null });
+      set({ isVisible: false, instances: [], activeId: null, pendingPosition: false });
       return;
     }
-
-    const { instances } = get();
-
-    if (instances.length > 0) {
-      set({ isVisible: true });
-      return;
-    }
-
-    const id = newId();
-    set({ isVisible: true, instances: [createDefaultInstance(id)], activeId: id });
+    set({ isVisible: true });
   },
 
   setActiveId: (id) => set({ activeId: id }),
 
   updateInstance: (id, patch) =>
     set(({ instances }) => ({
-      instances: instances.map((inst) => {
-        if (inst.id !== id) return inst;
-
-        const next = { ...inst, ...patch };
-
-        if (patch.fontSize !== undefined) {
-          next.decalScale = fontSizeToDecalScale(patch.fontSize);
-        } else if (patch.decalScale !== undefined) {
-          next.decalScale = clampDecalScale(patch.decalScale[0]);
-          next.fontSize = decalWidthToFontSize(next.decalScale[0]);
-        }
-
-        return next;
-      }),
+      instances: instances.map((inst) => (inst.id === id ? { ...inst, ...patch } : inst)),
     })),
 
   updateActive: (patch) => {
@@ -90,26 +82,18 @@ const useNameStore = create<NameStore>((set, get) => ({
   duplicateInstance: (id) => {
     const source = get().instances.find((inst) => inst.id === id);
     if (!source) return;
-
-    const newInstId = newId();
-    const copy: NameInstance = {
-      ...source,
-      id: newInstId,
-      decalPosition: [source.decalPosition[0] + 0.12, source.decalPosition[1] - 0.06, source.decalPosition[2]],
-    };
-
-    set(({ instances }) => ({ instances: [...instances, copy], activeId: newInstId }));
+    const newInstanceId = newId();
+    set(({ instances }) => ({ instances: [...instances, { ...source, id: newInstanceId }], activeId: newInstanceId }));
   },
 
   removeInstance: (id) =>
     set(({ instances: prev, activeId: prevActiveId }) => {
       const instances = prev.filter((inst) => inst.id !== id);
       const activeId = prevActiveId === id ? (instances[instances.length - 1]?.id ?? null) : prevActiveId;
-
       return { instances, activeId, isVisible: instances.length > 0 };
     }),
 }));
 
 const useActiveNameInstance = () => useNameStore(({ instances, activeId }) => instances.find(({ id }) => id === activeId));
 
-export { useActiveNameInstance, useNameStore };
+export { POSITIONS, useActiveNameInstance, useNameStore };

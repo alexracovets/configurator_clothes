@@ -5,7 +5,7 @@ import * as THREE from 'three';
 import { useConfiguratorStore } from '@store';
 import { TEXTURE_SIZE_EDITOR } from '@utils';
 
-import { DesignTextureEngine, type DragPreview } from './designTextureEngine';
+import { DesignTextureEngine } from './designTextureEngine';
 
 const threeInvalidators = new Set<() => void>();
 
@@ -19,7 +19,7 @@ const requestThreeRender = () => {
 };
 
 let storeSubscribed = false;
-let designDragActive = false;
+let storeUnsubscribe: (() => void) | null = null;
 let engine: DesignTextureEngine | null = null;
 let engineRefCount = 0;
 const engineListeners = new Set<() => void>();
@@ -36,10 +36,7 @@ const subscribeDesignEngine = (onStoreChange: () => void): (() => void) => {
 const ensureStoreSubscription = () => {
   if (storeSubscribed || typeof document === 'undefined') return;
   storeSubscribed = true;
-  useConfiguratorStore.subscribe(() => {
-    if (designDragActive) return;
-    engine?.scheduleRedraw();
-  });
+  storeUnsubscribe = useConfiguratorStore.subscribe(() => engine?.scheduleRedraw());
 };
 
 const initEngine = (): DesignTextureEngine => {
@@ -51,18 +48,12 @@ const initEngine = (): DesignTextureEngine => {
   return engine;
 };
 
-const setDesignDragPreview = (preview: DragPreview | null): void => {
-  designDragActive = preview !== null;
-  initEngine().setDragPreview(preview);
+const setDesignSlots = (zone: Parameters<DesignTextureEngine['setSlots']>[0], slots: Parameters<DesignTextureEngine['setSlots']>[1]): void => {
+  initEngine().setSlots(zone, slots);
 };
 
 const setDesignInteracting = (active: boolean): void => {
   initEngine().setInteracting(active);
-};
-
-const clearDesignDragPreview = (): void => {
-  designDragActive = false;
-  engine?.setDragPreview(null);
 };
 
 const acquireDesignEngine = (): void => {
@@ -74,9 +65,11 @@ const acquireDesignEngine = (): void => {
 const releaseDesignEngine = (): void => {
   engineRefCount = Math.max(0, engineRefCount - 1);
   if (engineRefCount === 0) {
+    storeUnsubscribe?.();
+    storeUnsubscribe = null;
+    storeSubscribed = false;
     engine?.dispose();
     engine = null;
-    storeSubscribed = false;
   }
   notifyDesignEngineListeners();
 };
@@ -87,13 +80,12 @@ const getDesignEngineTexture = (zone: Parameters<DesignTextureEngine['getTexture
 
 export {
   acquireDesignEngine,
-  clearDesignDragPreview,
   getDesignEngineTexture,
   initEngine,
   registerDesignRenderInvalidate,
   releaseDesignEngine,
   requestThreeRender,
-  setDesignDragPreview,
   setDesignInteracting,
+  setDesignSlots,
   subscribeDesignEngine,
 };

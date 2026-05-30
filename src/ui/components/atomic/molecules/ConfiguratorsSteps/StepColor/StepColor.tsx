@@ -7,9 +7,9 @@ import { SHIRT_PARTS, useColorStore } from '@store';
 const StepColor = () => {
   const { partColors, setPartColor } = useColorStore();
 
-  const items = SHIRT_PARTS.map(({ key, italianLabel }) => ({
+  const items = SHIRT_PARTS.map(({ key, name }) => ({
     value: key,
-    trigger: <PartColorSwitch label={italianLabel} color={partColors[key]} />,
+    trigger: <PartColorSwitch label={name} color={partColors[key]} />,
     content: <ColorControl activeColor={partColors[key]} onSelect={(color) => setPartColor(key, color)} />,
   }));
   return (

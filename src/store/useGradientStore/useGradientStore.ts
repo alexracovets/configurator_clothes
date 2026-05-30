@@ -1,7 +1,11 @@
-﻿import { create } from 'zustand';
+import { create } from 'zustand';
 
 import { useSelectionStore } from '@store';
 import type { PartGradient, PartGradients, ShirtPart } from '@types';
+
+import { crewneckStyle } from '@data';
+
+const shirtConfig = crewneckStyle.garments.shirt!;
 
 const DEFAULT_GRADIENT: PartGradient = {
   enabled: false,
@@ -12,6 +16,8 @@ const DEFAULT_GRADIENT: PartGradient = {
   opacity: 100,
 };
 
+const defaultPartGradients = Object.fromEntries(shirtConfig.parts.map(({ key }) => [key, { ...DEFAULT_GRADIENT }])) as PartGradients;
+
 interface GradientStore {
   partGradients: PartGradients;
   setGradientForSelected: (gradient: Partial<PartGradient>) => void;
@@ -19,22 +25,18 @@ interface GradientStore {
 }
 
 const useGradientStore = create<GradientStore>((set) => ({
-  partGradients: {
-    front: { ...DEFAULT_GRADIENT },
-    back: { ...DEFAULT_GRADIENT },
-    sleeve_left: { ...DEFAULT_GRADIENT },
-    sleeve_right: { ...DEFAULT_GRADIENT },
-  },
+  partGradients: { ...defaultPartGradients },
 
-  setGradientForSelected: (gradient) =>
+  setGradientForSelected: (gradient) => {
+    const { selectedParts } = useSelectionStore.getState();
     set(({ partGradients }) => {
-      const { selectedParts } = useSelectionStore.getState();
       const next = { ...partGradients };
       selectedParts.forEach((part) => {
         next[part] = { ...next[part], ...gradient };
       });
       return { partGradients: next };
-    }),
+    });
+  },
 
   setPartGradient: (part, gradient) => set(({ partGradients }) => ({ partGradients: { ...partGradients, [part]: { ...partGradients[part], ...gradient } } })),
 }));

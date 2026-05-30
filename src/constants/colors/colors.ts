@@ -1,6 +1,3 @@
-export const NECK_DEFAULT_COLOR = '#111111';
-export const DEFAULT_PART_COLOR = '#ffffff';
-
 export const PALETTE_COLORS = [
   '#FFFFFF',
   '#000000',

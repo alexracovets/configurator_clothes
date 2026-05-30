@@ -1,1 +1,1 @@
-export { useActiveNameInstance, useNameStore } from './useNameStore';
+export { POSITIONS, useActiveNameInstance, useNameStore } from './useNameStore';

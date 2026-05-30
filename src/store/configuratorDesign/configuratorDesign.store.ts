@@ -7,10 +7,8 @@ const MAX_HISTORY = 50;
 
 interface ConfiguratorState {
   layers: DesignLayer[];
-  selectedId: string | null;
   activeZone: PrintZoneKey;
   textureSettings: TextureSettings;
-  isInteracting: boolean;
   _past: DesignLayer[][];
   _future: DesignLayer[][];
 }
@@ -19,8 +17,6 @@ interface ConfiguratorActions {
   addLayer: (layer: Omit<DesignLayer, 'id'>, options?: { select?: boolean }) => string;
   updateLayer: (id: string, patch: Partial<Omit<DesignLayer, 'id'>>) => void;
   removeLayer: (id: string) => void;
-  duplicateLayer: (id: string) => void;
-  selectLayer: (id: string | null) => void;
   setActiveZone: (zone: PrintZoneKey) => void;
   toggleVisible: (id: string) => void;
   toggleLocked: (id: string) => void;
@@ -31,7 +27,6 @@ interface ConfiguratorActions {
   canUndo: () => boolean;
   canRedo: () => boolean;
   setTextureSettings: (patch: Partial<TextureSettings>) => void;
-  setInteracting: (interacting: boolean) => void;
   getLayer: (id: string) => DesignLayer | undefined;
   getLayersForZone: (zone: PrintZoneKey) => DesignLayer[];
 }
@@ -55,10 +50,8 @@ const pushHistory = (state: ConfiguratorState): Pick<ConfiguratorState, '_past' 
 
 export const useConfiguratorStore = create<ConfiguratorStore>((set, get) => ({
   layers: [],
-  selectedId: null,
   activeZone: 'front',
   textureSettings: { resolution: TEXTURE_SIZE_EDITOR, transparentBackground: true },
-  isInteracting: false,
   _past: [],
   _future: [],
 
@@ -66,7 +59,7 @@ export const useConfiguratorStore = create<ConfiguratorStore>((set, get) => ({
     const id = newId();
     const centre = zoneCentre(layer.zone);
     const full: DesignLayer = Object.assign({ x: centre.x, y: centre.y, scaleX: 0.2, scaleY: 0.1, rotation: 0, visible: true, locked: false }, layer, { id });
-    set((s) => ({ ...pushHistory(s), layers: [...s.layers, full], selectedId: options?.select === false ? s.selectedId : id }));
+    set((s) => ({ ...pushHistory(s), layers: [...s.layers, full] }));
     return id;
   },
 
@@ -75,17 +68,9 @@ export const useConfiguratorStore = create<ConfiguratorStore>((set, get) => ({
   },
 
   removeLayer: (id) => {
-    set((s) => ({ ...pushHistory(s), layers: s.layers.filter((l) => l.id !== id), selectedId: s.selectedId === id ? null : s.selectedId }));
+    set((s) => ({ ...pushHistory(s), layers: s.layers.filter((l) => l.id !== id) }));
   },
 
-  duplicateLayer: (id) => {
-    const source = get().layers.find((l) => l.id === id);
-    if (!source) return;
-    const newLayer: DesignLayer = { ...source, id: newId(), x: Math.min(1, source.x + 0.03), y: Math.min(1, source.y + 0.03) };
-    set((s) => ({ ...pushHistory(s), layers: [...s.layers, newLayer], selectedId: newLayer.id }));
-  },
-
-  selectLayer: (id) => set({ selectedId: id }),
   setActiveZone: (zone) => set({ activeZone: zone }),
 
   toggleVisible: (id) => set((s) => ({ layers: s.layers.map((l) => (l.id === id ? { ...l, visible: !l.visible } : l)) })),
@@ -131,7 +116,6 @@ export const useConfiguratorStore = create<ConfiguratorStore>((set, get) => ({
   canRedo: () => get()._future.length > 0,
 
   setTextureSettings: (patch) => set((s) => ({ textureSettings: { ...s.textureSettings, ...patch } })),
-  setInteracting: (interacting) => set({ isInteracting: interacting }),
 
   getLayer: (id) => get().layers.find((l) => l.id === id),
   getLayersForZone: (zone) => get().layers.filter((l) => l.zone === zone && l.visible),

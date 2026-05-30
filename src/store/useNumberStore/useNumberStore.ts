@@ -1,6 +1,5 @@
 ﻿import { create } from 'zustand';
 
-import { clampDecalScale, decalWidthToFontSize, fontSizeToDecalScale } from '@utils';
 import { DEFAULT_NUMBER_TEXT, FONTS } from '@constants';
 import type { NumberInstance } from '@types';
 
@@ -11,9 +10,6 @@ const createDefaultInstance = (): NumberInstance => ({
   textColor: '#FFFFFF',
   strokeColor: '#1A2744',
   strokeWidth: 4,
-  decalPosition: [0, 1.1, 0.063],
-  decalRotation: [0, 0, 0],
-  decalScale: fontSizeToDecalScale(64),
 });
 
 interface NumberStore {
@@ -41,14 +37,7 @@ const useNumberStore = create<NumberStore>((set) => ({
   update: (patch) =>
     set(({ instance }) => {
       if (!instance) return {};
-      const next = { ...instance, ...patch };
-      if (patch.fontSize !== undefined) {
-        next.decalScale = fontSizeToDecalScale(patch.fontSize);
-      } else if (patch.decalScale !== undefined) {
-        next.decalScale = clampDecalScale(patch.decalScale[0]);
-        next.fontSize = decalWidthToFontSize(next.decalScale[0]);
-      }
-      return { instance: next };
+      return { instance: { ...instance, ...patch } };
     }),
 }));
 
