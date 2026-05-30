@@ -14,24 +14,25 @@ interface RangeControlProps {
   unit?: string;
 }
 
+const clamp = (v: number, safeMin: number, safeMax: number) => Math.min(Math.max(v, safeMin), safeMax);
+
 const RangeControl = ({ label, value, onChange, min = 0, max = 100, unit = '' }: RangeControlProps) => {
   const safeMin = Math.min(min, max);
   const safeMax = Math.max(min, max);
-  const clamp = (v: number) => Math.min(Math.max(v, safeMin), safeMax);
 
-  const [localValue, setLocalValue] = useState(() => clamp(value));
+  const [localValue, setLocalValue] = useState(() => clamp(value, safeMin, safeMax));
   const isDragging = useRef(false);
 
   useEffect(() => {
-    if (!isDragging.current) setLocalValue(clamp(value));
-  }, [value]);
+    if (!isDragging.current) setLocalValue(clamp(value, safeMin, safeMax));
+  }, [value, safeMin, safeMax]);
 
   const percent = ((localValue - safeMin) / (safeMax - safeMin)) * 100;
   const hideMin = percent < 12;
   const hideMax = percent > 83;
 
   const handleChange = (values: number | readonly number[]) => {
-    const next = clamp(([] as number[]).concat(values as number[])[0]);
+    const next = clamp(([] as number[]).concat(values as number[])[0], safeMin, safeMax);
     if (!isDragging.current) {
       isDragging.current = true;
       setDesignInteracting(true);
