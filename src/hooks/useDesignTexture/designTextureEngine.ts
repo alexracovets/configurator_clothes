@@ -28,6 +28,7 @@ class DesignTextureEngine {
   private rafId: number | null = null;
   private lastStyleSerial = '';
   private lastTransformSerial = '';
+  private lastSlotsSerial = '';
   private readonly zoneSlots = new Map<PrintZoneKey, PositionSlot[]>();
   private interacting = false;
   private currentSize: number;
@@ -64,7 +65,7 @@ class DesignTextureEngine {
 
   setSlots(zone: PrintZoneKey, slots: PositionSlot[]): void {
     this.zoneSlots.set(zone, slots);
-    this.lastTransformSerial = '';
+    this.lastSlotsSerial = '';
     this.scheduleRedraw();
   }
 
@@ -99,29 +100,38 @@ class DesignTextureEngine {
     const layers = getDesignLayers(useConfiguratorStore.getState().layers);
     const styleSerial = layers.map((l) => `${l.id}:${serialiseLayerStyle(l)}`).join('|');
     const transformSerial = serialiseLayersTransform(layers);
-    if (styleSerial === this.lastStyleSerial && transformSerial === this.lastTransformSerial) return;
+    const slotsSerial = [...this.zoneSlots.entries()].map(([z, s]) => `${z}:${s.length}`).join('|');
+    if (styleSerial === this.lastStyleSerial && transformSerial === this.lastTransformSerial && slotsSerial === this.lastSlotsSerial) return;
     if (styleSerial !== this.lastStyleSerial) {
       this.syncGlyphs(layers);
       this.lastStyleSerial = styleSerial;
     }
     const zonesToDraw = new Set(layers.map((l) => l.zone));
     for (const [zone, target] of this.zoneTargets) {
-      const zoneLayers = layers.filter((l) => l.zone === zone);
-      if (!zonesToDraw.has(zone)) {
+      const slots = this.zoneSlots.get(zone) ?? [];
+      const hasContent = zonesToDraw.has(zone) || slots.length > 0;
+      if (!hasContent) {
         const ctx = target.canvas.getContext('2d');
         if (ctx) ctx.clearRect(0, 0, target.canvas.width, target.canvas.height);
       } else {
-        compositeZone(target.canvas, zoneLayers, this.glyphMap, this.zoneSlots.get(zone) ?? []);
+        compositeZone(
+          target.canvas,
+          layers.filter((l) => l.zone === zone),
+          this.glyphMap,
+          slots,
+        );
       }
       target.texture.needsUpdate = true;
     }
     this.lastTransformSerial = transformSerial;
+    this.lastSlotsSerial = slotsSerial;
     this.onTexturesUpdated();
   }
 
   invalidate() {
     this.lastStyleSerial = '';
     this.lastTransformSerial = '';
+    this.lastSlotsSerial = '';
     this.redraw();
   }
 

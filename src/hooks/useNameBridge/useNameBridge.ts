@@ -3,7 +3,7 @@
 import { useEffect, useRef } from 'react';
 
 import { useConfiguratorStore, useNameStore } from '@store';
-import { setDesignSlots } from '@hooks';
+import { registerStepSlots } from '@hooks';
 import type { NameInstance, NamePosition } from '@types';
 
 import { crewneckStyle } from '@data';
@@ -28,10 +28,7 @@ const useNameBridge = () => {
   const idMap = useRef<Map<string, string>>(new Map());
   const prevInstancesRef = useRef<Map<string, NameInstance>>(new Map());
 
-  useEffect(() => {
-    setDesignSlots(BACK_ZONE, NAME_SLOTS);
-    return () => setDesignSlots(BACK_ZONE, []);
-  }, []);
+  useEffect(() => registerStepSlots('name', BACK_ZONE, NAME_SLOTS), []);
 
   useEffect(() => {
     const sync = () => {
@@ -60,26 +57,23 @@ const useNameBridge = () => {
         const existing = idMap.current.get(inst.id);
 
         if (!existing) {
-          const configId = addLayer(
-            {
-              type: 'text',
-              zone: BACK_ZONE,
-              x: pos.uv.x,
-              y: pos.uv.y,
-              rotation: pos.rotation,
-              scaleX: 0.5,
-              scaleY: 0.08,
-              visible: true,
-              locked: true,
-              text: inst.text,
-              font: inst.font,
-              fontSize: pos.fontSize,
-              textColor: inst.textColor,
-              strokeColor: inst.strokeColor,
-              strokeWidth: inst.strokeWidth,
-            },
-            { select: false },
-          );
+          const configId = addLayer({
+            type: 'text',
+            zone: BACK_ZONE,
+            x: pos.uv.x,
+            y: pos.uv.y,
+            rotation: pos.rotation,
+            scaleX: 0.5,
+            scaleY: 0.08,
+            visible: true,
+            locked: true,
+            text: inst.text,
+            font: inst.font,
+            fontSize: pos.fontSize,
+            textColor: inst.textColor,
+            strokeColor: inst.strokeColor,
+            strokeWidth: inst.strokeWidth,
+          });
           idMap.current.set(inst.id, configId);
           prevInstancesRef.current.set(inst.id, inst);
         } else {

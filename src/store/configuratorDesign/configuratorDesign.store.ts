@@ -14,7 +14,7 @@ interface ConfiguratorState {
 }
 
 interface ConfiguratorActions {
-  addLayer: (layer: Omit<DesignLayer, 'id'>, options?: { select?: boolean }) => string;
+  addLayer: (layer: Omit<DesignLayer, 'id'>) => string;
   updateLayer: (id: string, patch: Partial<Omit<DesignLayer, 'id'>>) => void;
   removeLayer: (id: string) => void;
   setActiveZone: (zone: PrintZoneKey) => void;
@@ -55,7 +55,7 @@ export const useConfiguratorStore = create<ConfiguratorStore>((set, get) => ({
   _past: [],
   _future: [],
 
-  addLayer: (layer, options) => {
+  addLayer: (layer) => {
     const id = newId();
     const centre = zoneCentre(layer.zone);
     const full: DesignLayer = Object.assign({ x: centre.x, y: centre.y, scaleX: 0.2, scaleY: 0.1, rotation: 0, visible: true, locked: false }, layer, { id });
