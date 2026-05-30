@@ -92,6 +92,7 @@ export {
   initEngine,
   registerDesignRenderInvalidate,
   releaseDesignEngine,
+  requestThreeRender,
   setDesignDragPreview,
   setDesignInteracting,
   subscribeDesignEngine,

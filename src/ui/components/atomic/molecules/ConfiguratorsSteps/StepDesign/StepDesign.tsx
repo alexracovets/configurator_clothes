@@ -1,10 +1,16 @@
 'use client';
 
+import { useEffect } from 'react';
+
 import { ColorControl, RangeControl } from '@molecules';
 import { AtomImage, Button, Flex, Grid } from '@atoms';
 import { PATTERNS, usePatternStore } from '@store';
+import { preloadSvgTextures } from '@hooks';
 
 const StepDesign = () => {
+  useEffect(() => {
+    preloadSvgTextures(PATTERNS.map((p) => p.url));
+  }, []);
   const { partPatterns, patternOpacity, patternColor, setPatternForAll, setPatternOpacity, setPatternColor } = usePatternStore();
 
   const activePatterUrl = partPatterns.front;

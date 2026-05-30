@@ -20,7 +20,7 @@ const accordionItemVariants = cva('', {
 const accordionTriggerVariants = cva('', {
   variants: {
     variant: {
-      default: cn('py-3 color-gray-30', 'transition-all duration-200 ease-in-out'),
+      default: cn('pb-3 color-gray-30', 'transition-all duration-200 ease-in-out'),
     },
   },
   defaultVariants: {

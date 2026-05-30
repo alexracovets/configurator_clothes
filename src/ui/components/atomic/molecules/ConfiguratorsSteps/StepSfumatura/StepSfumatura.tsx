@@ -38,7 +38,7 @@ const StepSfumatura = () => {
 
   return (
     <Flex variant="step_design">
-      <AcordionAtom items={items} defaultValue={['front']} />
+      <AcordionAtom items={items} defaultValue={['front']} className="gap-3" />
     </Flex>
   );
 };

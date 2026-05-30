@@ -7,4 +7,4 @@ export * from './useNumberBridge';
 export { usePBRMaps } from './usePBRMaps';
 export { useShirtMaterial } from './useShirtMaterial';
 export { useSlidingIndicator } from './useSlidingIndicator';
-export { useSvgTexture } from './useSvgTexture';
+export { preloadSvgTextures, useSvgTexture } from './useSvgTexture';

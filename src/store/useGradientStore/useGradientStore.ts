@@ -6,9 +6,9 @@ import type { PartGradient, PartGradients, ShirtPart } from '@types';
 const DEFAULT_GRADIENT: PartGradient = {
   enabled: false,
   color2: '#111111',
-  rotation: 180,
-  position: 50,
-  softness: 20,
+  rotation: 0,
+  position: 100,
+  softness: 100,
   opacity: 100,
 };
 

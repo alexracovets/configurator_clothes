@@ -1,1 +1,1 @@
-export { useSvgTexture } from './useSvgTexture';
+export { preloadSvgTextures, useSvgTexture } from './useSvgTexture';
