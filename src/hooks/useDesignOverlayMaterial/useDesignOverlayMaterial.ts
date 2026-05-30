@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import { useLayoutEffect, useMemo, useRef } from 'react';
 
