@@ -30,6 +30,7 @@ export interface NamePositionConfig {
   slotHeight: number;
   slotOffsetX?: number;
   slotOffsetY?: number;
+  interactive: boolean;
 }
 
 export interface NumberPositionConfig {
@@ -39,6 +40,24 @@ export interface NumberPositionConfig {
   uv: { x: number; y: number };
   rotation: number;
   fontSize: number;
+  slotWidth: number;
+  slotHeight: number;
+  slotOffsetX?: number;
+  slotOffsetY?: number;
+  interactive: boolean;
+}
+
+export interface LogoPositionConfig {
+  position: string;
+  label: string;
+  zone: 'front' | 'back' | 'full';
+  uv: { x: number; y: number };
+  rotation: number;
+  defaultSrc: string;
+  default: boolean;
+  interactive: boolean;
+  scaleX: number;
+  scaleY: number;
   slotWidth: number;
   slotHeight: number;
   slotOffsetX?: number;
@@ -65,6 +84,7 @@ export interface GarmentConfig {
   patterns: PatternConfig[];
   namePositions: NamePositionConfig[];
   numberPositions: NumberPositionConfig[];
+  logoPositions: LogoPositionConfig[];
   neckColor: string;
   fabricRepeat: number;
 }

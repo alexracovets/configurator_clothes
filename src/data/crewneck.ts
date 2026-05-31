@@ -11,12 +11,12 @@ const crewneckStyle: StyleConfig = {
       name: 'Maglia',
 
       modelPaths: {
-        gltf: '/models/pbr/crewneck.gltf',
-        bakeNormal: '/models/pbr/bake_normal.jpg',
-        bakeAoRoughness: '/models/pbr/bake_ao-bake_roughness.jpg',
-        fabricNormal: '/models/pbr/cotton_jersey_nor_gl.jpg',
-        fabricRoughness: '/models/pbr/cotton_jersey_rough.jpg',
-        insideAo: '/models/pbr/inside_ao.jpg',
+        gltf: '/models/crewneck/crewneck/crewneck.gltf',
+        bakeNormal: '/models/crewneck/crewneck//bake_normal.jpg',
+        bakeAoRoughness: '/models/crewneck/crewneck//bake_ao-bake_roughness.jpg',
+        fabricNormal: '/models/crewneck/crewneck//cotton_jersey_nor_gl.jpg',
+        fabricRoughness: '/models/crewneck/crewneck//cotton_jersey_rough.jpg',
+        insideAo: '/models/crewneck/crewneck//inside_ao.jpg',
       },
 
       parts: [
@@ -26,10 +26,7 @@ const crewneckStyle: StyleConfig = {
         { key: 'sleeve_right', label: 'Right Sleeve', name: 'Manica 2' },
       ],
 
-      patterns: [
-        { id: 'design_0', label: 'Design 0', url: '/models/crewneck/designs/design_0.svg' },
-        { id: 'design_01', label: 'Design 1', url: '/models/crewneck/designs/design_01.png' },
-      ],
+      patterns: [{ id: 'design_0', label: 'Design 0', url: '/models/crewneck/designs/design_0.svg' }],
 
       namePositions: [
         {
@@ -41,6 +38,7 @@ const crewneckStyle: StyleConfig = {
           slotWidth: 0.56,
           slotHeight: 0.12,
           slotOffsetX: 0.008,
+          interactive: false,
         },
         {
           position: 'bottom',
@@ -51,6 +49,7 @@ const crewneckStyle: StyleConfig = {
           slotWidth: 0.56,
           slotHeight: 0.12,
           slotOffsetX: 0.008,
+          interactive: false,
         },
       ],
 
@@ -65,6 +64,7 @@ const crewneckStyle: StyleConfig = {
           slotWidth: 0.16,
           slotHeight: 0.14,
           slotOffsetX: -0.01,
+          interactive: false,
         },
         {
           position: 'front_right',
@@ -76,6 +76,7 @@ const crewneckStyle: StyleConfig = {
           slotWidth: 0.16,
           slotHeight: 0.14,
           slotOffsetX: -0.01,
+          interactive: false,
         },
         {
           position: 'back',
@@ -87,6 +88,66 @@ const crewneckStyle: StyleConfig = {
           slotWidth: 0.39,
           slotHeight: 0.36,
           slotOffsetX: 0.04,
+          interactive: false,
+        },
+      ],
+
+      logoPositions: [
+        {
+          position: 'logo_front',
+          label: 'Logo Front',
+          zone: 'full',
+          uv: { x: 0.66, y: 0.55 },
+          default: true,
+          rotation: 0,
+          defaultSrc: '/logo/logo_1.png',
+          scaleX: 0.05,
+          scaleY: 0.05,
+          slotWidth: 0.07,
+          slotHeight: 0.07,
+          interactive: false,
+        },
+        {
+          position: 'logo_back',
+          label: 'Logo Back',
+          zone: 'full',
+          uv: { x: 0.16, y: 0.35 },
+          default: true,
+          rotation: 0,
+          defaultSrc: '/logo/logo.png',
+          scaleX: 0.1,
+          scaleY: 0.1,
+          slotWidth: 0.07,
+          slotHeight: 0.07,
+          interactive: false,
+        },
+        {
+          position: 'logo_sleeve',
+          label: 'Logo Manica',
+          zone: 'full',
+          uv: { x: 0.78, y: 0.35 },
+          default: false,
+          rotation: 0,
+          defaultSrc: '',
+          scaleX: 0.08,
+          scaleY: 0.08,
+          slotWidth: 0.07,
+          slotHeight: 0.07,
+          interactive: true,
+        },
+        {
+          position: 'logo_chest',
+          label: 'Logo Petto',
+          zone: 'full',
+          uv: { x: 0.58, y: 0.55 },
+          default: false,
+          rotation: 0,
+          defaultSrc: '',
+          scaleX: 0.08,
+          scaleY: 0.08,
+          slotWidth: 0.07,
+          slotHeight: 0.07,
+          interactive: true,
         },
       ],
 

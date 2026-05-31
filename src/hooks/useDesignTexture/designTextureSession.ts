@@ -4,10 +4,10 @@ import * as THREE from 'three';
 
 import { useConfiguratorStore, useStepsStore } from '@store';
 import type { PositionSlot } from '@utils';
-import { TEXTURE_SIZE_EDITOR } from '@utils';
+import { isLayerEditableOnStep, TEXTURE_SIZE_EDITOR } from '@utils';
 import type { StepValue } from '@constants';
 
-import { DesignTextureEngine } from './designTextureEngine';
+import { DesignTextureEngine, type DragPreview } from './designTextureEngine';
 
 type PrintZoneKey = Parameters<DesignTextureEngine['setSlots']>[0];
 
@@ -25,6 +25,7 @@ const requestThreeRender = () => {
 let storeSubscribed = false;
 let storeUnsubscribe: (() => void) | null = null;
 let stepsUnsubscribe: (() => void) | null = null;
+let designDragActive = false;
 let engine: DesignTextureEngine | null = null;
 let engineRefCount = 0;
 const engineListeners = new Set<() => void>();
@@ -46,7 +47,6 @@ const applyActiveStepSlots = (): void => {
   const activeStep = useStepsStore.getState().currentStepValue;
   const activeSlots = stepSlotsRegistry.get(activeStep);
 
-  // Collect all zones that have registered slots across all steps
   const allZones = new Set<PrintZoneKey>();
   for (const zoneMap of stepSlotsRegistry.values()) {
     for (const zone of zoneMap.keys()) allZones.add(zone);
@@ -58,11 +58,27 @@ const applyActiveStepSlots = (): void => {
   }
 };
 
+const onStepChange = (): void => {
+  applyActiveStepSlots();
+  const step = useStepsStore.getState().currentStepValue;
+  const { selectedId, layers, selectLayer } = useConfiguratorStore.getState();
+  if (selectedId) {
+    const layer = layers.find((l) => l.id === selectedId);
+    if (layer && !isLayerEditableOnStep(layer, step)) {
+      selectLayer(null);
+    }
+  }
+  engine?.scheduleRedraw();
+};
+
 const ensureStoreSubscription = () => {
   if (storeSubscribed || typeof document === 'undefined') return;
   storeSubscribed = true;
-  storeUnsubscribe = useConfiguratorStore.subscribe(() => engine?.scheduleRedraw());
-  stepsUnsubscribe = useStepsStore.subscribe(applyActiveStepSlots);
+  storeUnsubscribe = useConfiguratorStore.subscribe(() => {
+    if (designDragActive) return;
+    engine?.scheduleRedraw();
+  });
+  stepsUnsubscribe = useStepsStore.subscribe(onStepChange);
 };
 
 const initEngine = (): DesignTextureEngine => {
@@ -84,6 +100,17 @@ const registerStepSlots = (step: StepValue, zone: PrintZoneKey, slots: PositionS
     if (stepSlotsRegistry.get(step)?.size === 0) stepSlotsRegistry.delete(step);
     applyActiveStepSlots();
   };
+};
+
+const setDesignDragPreview = (preview: DragPreview | null): void => {
+  designDragActive = preview !== null;
+  initEngine().setDragPreview(preview);
+  // engine calls onTexturesUpdated → requestThreeRender after RAF redraw
+};
+
+const clearDesignDragPreview = (): void => {
+  designDragActive = false;
+  engine?.setDragPreview(null);
 };
 
 const setDesignInteracting = (active: boolean): void => {
@@ -120,12 +147,14 @@ const getDesignEngineTexture = (zone: Parameters<DesignTextureEngine['getTexture
 
 export {
   acquireDesignEngine,
+  clearDesignDragPreview,
   getDesignEngineTexture,
   initEngine,
   registerDesignRenderInvalidate,
   registerStepSlots,
   releaseDesignEngine,
   requestThreeRender,
+  setDesignDragPreview,
   setDesignInteracting,
   setDesignSlots,
   subscribeDesignEngine,

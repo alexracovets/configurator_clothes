@@ -5,10 +5,10 @@ import { useLayoutEffect, useRef } from 'react';
 import * as THREE from 'three';
 
 import { useDesignOverlayMaterial } from '@hooks';
-import type { ShirtPart } from '@types';
+import type { PrintZoneKey } from '@types';
 
 interface DesignOverlayLayerProps {
-  part: ShirtPart;
+  part: PrintZoneKey;
   geometry: THREE.BufferGeometry;
   designTexture: THREE.CanvasTexture;
   renderOrder?: number;

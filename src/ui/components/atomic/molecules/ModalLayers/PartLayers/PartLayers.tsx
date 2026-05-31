@@ -1,7 +1,7 @@
-﻿'use client';
+'use client';
 
 import { ColorLayer, DesignOverlayLayer, PatternLayer } from '@molecules';
-import { useColorStore, useGradientStore, usePatternStore } from '@store';
+import { useColorStore, useGradientStore, useLogoStore, usePatternStore } from '@store';
 import { useBaseColorTexture, useDesignTexture, useSvgTexture } from '@hooks';
 import { getPartRenderOrder } from '@utils';
 import { PALETTE_COLORS } from '@constants';
@@ -25,7 +25,9 @@ const PartLayers = ({ layer, maps }: PartLayersProps) => {
   const patternTexture = useSvgTexture(effectivePatternUrl);
   const partRenderOrder = getPartRenderOrder(layer.part);
 
+  const hasLogos = useLogoStore((s) => s.instances.some((i) => i.visible && i.src));
   const { texture: designTexture } = useDesignTexture(layer.part as PrintZoneKey);
+  const { texture: logoTexture } = useDesignTexture('full');
 
   return (
     <>
@@ -47,6 +49,9 @@ const PartLayers = ({ layer, maps }: PartLayersProps) => {
         />
       )}
       <DesignOverlayLayer part={layer.part} geometry={layer.geometry} designTexture={designTexture} renderOrder={partRenderOrder + 2} />
+      {hasLogos && (layer.part === 'front' || layer.part === 'back') && (
+        <DesignOverlayLayer part="full" geometry={layer.geometry} designTexture={logoTexture} renderOrder={partRenderOrder + 3} />
+      )}
     </>
   );
 };

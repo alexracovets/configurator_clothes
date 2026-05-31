@@ -10,25 +10,31 @@ import type { DesignLayer } from '@types';
 interface BridgeInstance {
   id: string;
   position?: string;
-  text: string;
-  font: string;
-  textColor: string;
-  strokeColor: string;
-  strokeWidth: number;
+  text?: string;
+  font?: string;
+  textColor?: string;
+  strokeColor?: string;
+  strokeWidth?: number;
+  src?: string;
+  scale?: number;
+  rotation?: number;
+  visible?: boolean;
 }
 
 interface BridgeStore {
   instances: BridgeInstance[];
 }
 
-type LayerPatch = Pick<BridgeInstance, 'text' | 'font' | 'textColor' | 'strokeColor' | 'strokeWidth'>;
-
 const hasChanged = (prev: BridgeInstance, next: BridgeInstance): boolean =>
   prev.text !== next.text ||
   prev.font !== next.font ||
   prev.textColor !== next.textColor ||
   prev.strokeColor !== next.strokeColor ||
-  prev.strokeWidth !== next.strokeWidth;
+  prev.strokeWidth !== next.strokeWidth ||
+  prev.src !== next.src ||
+  prev.scale !== next.scale ||
+  prev.rotation !== next.rotation ||
+  prev.visible !== next.visible;
 
 const useLayerBridge = <T extends BridgeStore>(
   store: UseBoundStore<StoreApi<T>>,
@@ -37,6 +43,11 @@ const useLayerBridge = <T extends BridgeStore>(
 ) => {
   const idMap = useRef<Map<string, string>>(new Map());
   const prevInstancesRef = useRef<Map<string, BridgeInstance>>(new Map());
+  const buildLayerRef = useRef(buildLayer);
+
+  useEffect(() => {
+    buildLayerRef.current = buildLayer;
+  }, [buildLayer]);
 
   useEffect(() => {
     const sync = () => {
@@ -64,20 +75,13 @@ const useLayerBridge = <T extends BridgeStore>(
       for (const inst of instances) {
         const existing = idMap.current.get(inst.id);
         if (!existing) {
-          const configId = addLayer(buildLayer(inst));
+          const configId = addLayer(buildLayerRef.current(inst));
           idMap.current.set(inst.id, configId);
           prevInstancesRef.current.set(inst.id, inst);
         } else {
           const prev = prevInstancesRef.current.get(inst.id);
           if (prev && !hasChanged(prev, inst)) continue;
-          const patch: LayerPatch = {
-            text: inst.text,
-            font: inst.font,
-            textColor: inst.textColor,
-            strokeColor: inst.strokeColor,
-            strokeWidth: inst.strokeWidth,
-          };
-          updateLayer(existing, patch);
+          updateLayer(existing, buildLayerRef.current(inst));
           prevInstancesRef.current.set(inst.id, inst);
         }
       }

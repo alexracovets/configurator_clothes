@@ -1,0 +1,1 @@
+export { StepLogo } from './StepLogo';

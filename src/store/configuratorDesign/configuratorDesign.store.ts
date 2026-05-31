@@ -7,8 +7,10 @@ const MAX_HISTORY = 50;
 
 interface ConfiguratorState {
   layers: DesignLayer[];
+  selectedId: string | null;
   activeZone: PrintZoneKey;
   textureSettings: TextureSettings;
+  isInteracting: boolean;
   _past: DesignLayer[][];
   _future: DesignLayer[][];
 }
@@ -17,6 +19,9 @@ interface ConfiguratorActions {
   addLayer: (layer: Omit<DesignLayer, 'id'>) => string;
   updateLayer: (id: string, patch: Partial<Omit<DesignLayer, 'id'>>) => void;
   removeLayer: (id: string) => void;
+  duplicateLayer: (id: string) => void;
+  selectLayer: (id: string | null) => void;
+  setInteracting: (interacting: boolean) => void;
   setActiveZone: (zone: PrintZoneKey) => void;
   toggleVisible: (id: string) => void;
   toggleLocked: (id: string) => void;
@@ -50,8 +55,10 @@ const pushHistory = (state: ConfiguratorState): Pick<ConfiguratorState, '_past' 
 
 export const useConfiguratorStore = create<ConfiguratorStore>((set, get) => ({
   layers: [],
+  selectedId: null,
   activeZone: 'front',
   textureSettings: { resolution: TEXTURE_SIZE_EDITOR, transparentBackground: true },
+  isInteracting: false,
   _past: [],
   _future: [],
 
@@ -68,8 +75,18 @@ export const useConfiguratorStore = create<ConfiguratorStore>((set, get) => ({
   },
 
   removeLayer: (id) => {
-    set((s) => ({ ...pushHistory(s), layers: s.layers.filter((l) => l.id !== id) }));
+    set((s) => ({ ...pushHistory(s), layers: s.layers.filter((l) => l.id !== id), selectedId: s.selectedId === id ? null : s.selectedId }));
   },
+
+  duplicateLayer: (id) => {
+    const source = get().layers.find((l) => l.id === id);
+    if (!source) return;
+    const newLayer: DesignLayer = { ...source, id: newId(), x: Math.min(1, source.x + 0.03), y: Math.min(1, source.y + 0.03) };
+    set((s) => ({ ...pushHistory(s), layers: [...s.layers, newLayer], selectedId: newLayer.id }));
+  },
+
+  selectLayer: (id) => set({ selectedId: id }),
+  setInteracting: (interacting) => set({ isInteracting: interacting }),
 
   setActiveZone: (zone) => set({ activeZone: zone }),
 

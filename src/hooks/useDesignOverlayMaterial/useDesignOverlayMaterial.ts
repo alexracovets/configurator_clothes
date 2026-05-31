@@ -6,7 +6,7 @@ import * as THREE from 'three';
 
 import { UV0_BOUNDS } from '@utils';
 import { shirtFragmentUniforms, shirtVertexUvParsVertex, shirtVertexUvVertex } from '@shaders';
-import type { PrintZoneKey, ShirtPart } from '@types';
+import type { PrintZoneKey } from '@types';
 
 const OVERLAY_FRAG_UNIFORMS = /* glsl */ `
   uniform sampler2D uDesignMap;
@@ -26,8 +26,8 @@ const OVERLAY_FRAG_MAIN = /* glsl */ `
   }
 `;
 
-const useDesignOverlayMaterial = (part: ShirtPart, designTexture: THREE.CanvasTexture): THREE.MeshBasicMaterial => {
-  const bounds = UV0_BOUNDS[part as PrintZoneKey] ?? { minX: 0, minY: 0, maxX: 1, maxY: 1 };
+const useDesignOverlayMaterial = (part: PrintZoneKey, designTexture: THREE.CanvasTexture): THREE.MeshBasicMaterial => {
+  const bounds = UV0_BOUNDS[part] ?? { minX: 0, minY: 0, maxX: 1, maxY: 1 };
 
   const designUniforms = useRef({
     uDesignMap: { value: designTexture as THREE.Texture },

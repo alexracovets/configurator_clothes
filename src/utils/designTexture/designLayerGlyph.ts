@@ -21,15 +21,51 @@ const serialiseLayerStyle = (layer: DesignLayer): string => {
     type: layer.type,
     visible: layer.visible,
   };
-  return JSON.stringify(style);
+  // include src so logo image changes are detected
+  return JSON.stringify(style) + (layer.src ?? '');
 };
 
 const serialiseLayersTransform = (layers: DesignLayer[]): string =>
-  JSON.stringify(layers.map((l) => ({ id: l.id, x: l.x, y: l.y, rotation: l.rotation, zone: l.zone, visible: l.visible })));
+  JSON.stringify(
+    layers.map((l) => ({
+      id: l.id,
+      x: l.x,
+      y: l.y,
+      rotation: l.rotation,
+      zone: l.zone,
+      visible: l.visible,
+      scaleX: l.scaleX,
+      scaleY: l.scaleY,
+    })),
+  );
 
-const getDesignLayers = (layers: DesignLayer[]): DesignLayer[] => layers.filter((l) => l.visible && (l.type === 'text' || l.type === 'number'));
+const serialiseGizmo = (selectedId: string | null): string => selectedId ?? '';
+
+const getDesignLayers = (layers: DesignLayer[]): DesignLayer[] =>
+  layers.filter((l) => l.visible && (l.type === 'text' || l.type === 'number' || l.type === 'logo'));
+
+// Image cache for logo layers
+const imageCache = new Map<string, HTMLImageElement>();
+
+const getOrLoadImage = (src: string, onLoad: () => void): HTMLImageElement | null => {
+  const cached = imageCache.get(src);
+  if (cached) return cached.complete ? cached : null;
+  const img = new Image();
+  img.onload = onLoad;
+  img.onerror = onLoad;
+  img.src = src;
+  imageCache.set(src, img);
+  return null;
+};
 
 const renderLayerGlyph = (layer: DesignLayer, atlasSize: number): LayerGlyph => {
+  // logos are drawn directly in compositeZone — no glyph needed
+  if (layer.type === 'logo') {
+    const c = document.createElement('canvas');
+    c.width = 2;
+    c.height = 2;
+    return { canvas: c, halfW: 1, halfH: 1, styleSerial: serialiseLayerStyle(layer) };
+  }
   const text = layer.text ?? (layer.type === 'number' ? '9' : 'NAME');
   const font = fontCanvasName(layer.font ?? '--font-oswald');
   const fontSize = Math.round((layer.fontSize ?? 128) * FONT_SCALE * (atlasSize / TEXTURE_SIZE_EDITOR));
@@ -69,4 +105,4 @@ const drawLayerFromGlyph = (ctx: CanvasRenderingContext2D, layer: DesignLayer, g
   ctx.restore();
 };
 
-export { drawLayerFromGlyph, getDesignLayers, renderLayerGlyph, serialiseLayersTransform, serialiseLayerStyle };
+export { drawLayerFromGlyph, getDesignLayers, getOrLoadImage, imageCache, renderLayerGlyph, serialiseGizmo, serialiseLayersTransform, serialiseLayerStyle };

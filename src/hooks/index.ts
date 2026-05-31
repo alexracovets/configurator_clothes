@@ -3,6 +3,7 @@ export { useControlledState } from './useControlledState';
 export { useDesignOverlayMaterial } from './useDesignOverlayMaterial';
 export * from './useDesignTexture';
 export { useLayerBridge } from './useLayerBridge';
+export * from './useLogoBridge';
 export * from './useNameBridge';
 export * from './useNumberBridge';
 export { usePBRMaps } from './usePBRMaps';

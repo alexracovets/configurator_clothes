@@ -13,6 +13,7 @@ export interface DesignLayer {
   scaleY: number;
   visible: boolean;
   locked: boolean;
+  interactive?: boolean;
   text?: string;
   font?: string;
   fontSize?: number;

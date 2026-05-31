@@ -5,6 +5,7 @@ export type { DesignLayer, TextureSettings } from './DesignLayer';
 export type { IndicatorStyle } from './IndicatorStyle';
 export type { LayerConfig } from './LayerConfig';
 export type { LayerGlyph } from './LayerLayout';
+export type { LogoInstance, LogoPosition } from './LogoInstance';
 export type { NameInstance, NamePosition } from './NameInstance';
 export type { NumberInstance, NumberPosition } from './NumberInstance';
 export type { PartGradient, PartGradients } from './PartGradient';

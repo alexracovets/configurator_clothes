@@ -1,0 +1,1 @@
+export { useLogoBridge } from './useLogoBridge';
