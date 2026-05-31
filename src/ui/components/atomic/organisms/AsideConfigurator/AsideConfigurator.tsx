@@ -10,14 +10,13 @@ import type { StepValue } from '@constants';
 import { AsideName } from './AsideName';
 import { AsidePrice } from './AsidePrice';
 
-const STEP_PANEL_MAP: Record<StepValue, React.ComponentType | null> = {
-  color: StepColor,
-  design: StepDesign,
-  shading: StepSfumatura,
-  name: StepName,
-  number: StepNumber,
-  logo: null,
-};
+const STEP_PANELS: { step: StepValue; Component: React.ComponentType }[] = [
+  { step: 'color', Component: StepColor },
+  { step: 'design', Component: StepDesign },
+  { step: 'shading', Component: StepSfumatura },
+  { step: 'name', Component: StepName },
+  { step: 'number', Component: StepNumber },
+];
 
 const AsideConfigurator = () => {
   const currentStepValue = useStepsStore(({ currentStepValue }) => currentStepValue);
@@ -31,7 +30,7 @@ const AsideConfigurator = () => {
     id: 0,
   };
 
-  const StepPanel = STEP_PANEL_MAP[currentStepValue] ?? null;
+  const hasPanel = STEP_PANELS.some((p) => p.step === currentStepValue);
 
   return (
     <Grid variant="aside_configurator" asChild>
@@ -40,10 +39,14 @@ const AsideConfigurator = () => {
           <AsideName name={data.name} min_buy={data.min_buy} id={data.id} />
           <AsidePrice price={data.price} bounus_count={data.bounus_count} bonus_discount={data.bonus_discount} />
         </Flex>
-        {StepPanel && (
+        {hasPanel && (
           <Flex variant="aside_configurator_content">
             <ScrollArea>
-              <StepPanel />
+              {STEP_PANELS.map(({ step, Component }) => (
+                <div key={step} hidden={currentStepValue !== step}>
+                  <Component />
+                </div>
+              ))}
             </ScrollArea>
           </Flex>
         )}
