@@ -4,6 +4,7 @@ import { useEffect, useRef } from 'react';
 
 import { useConfiguratorStore, useNameStore } from '@store';
 import { registerStepSlots } from '@hooks';
+import { buildPositionSlots } from '@utils';
 import type { NameInstance, NamePosition } from '@types';
 
 import { crewneckStyle } from '@data';
@@ -16,13 +17,7 @@ const POSITION_CONFIG = Object.fromEntries(shirtConfig.namePositions.map((p) => 
   (typeof shirtConfig.namePositions)[number]
 >;
 
-const NAME_SLOTS = shirtConfig.namePositions.map((p) => ({
-  x: p.uv.x + 0.008,
-  y: p.uv.y,
-  rotation: p.rotation,
-  widthFraction: 0.56,
-  heightFraction: 0.12,
-}));
+const NAME_SLOTS = buildPositionSlots(shirtConfig.namePositions);
 
 const useNameBridge = () => {
   const idMap = useRef<Map<string, string>>(new Map());

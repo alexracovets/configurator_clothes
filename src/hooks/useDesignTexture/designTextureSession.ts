@@ -90,6 +90,10 @@ const setDesignInteracting = (active: boolean): void => {
   initEngine().setInteracting(active);
 };
 
+const setDesignSlots = (zone: PrintZoneKey, slots: PositionSlot[]): void => {
+  initEngine().setSlots(zone, slots);
+};
+
 const acquireDesignEngine = (): void => {
   engineRefCount++;
   initEngine();
@@ -123,5 +127,6 @@ export {
   releaseDesignEngine,
   requestThreeRender,
   setDesignInteracting,
+  setDesignSlots,
   subscribeDesignEngine,
 };

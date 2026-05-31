@@ -4,69 +4,105 @@ import { useEffect, useRef } from 'react';
 
 import { useConfiguratorStore, useNumberStore } from '@store';
 import { registerStepSlots } from '@hooks';
+import { buildPositionSlots } from '@utils';
+import type { NumberInstance, NumberPosition } from '@types';
 
-const FRONT_ZONE = 'front' as const;
-const DEFAULT_UV = { x: 0.5, y: 0.45 };
+import { crewneckStyle } from '@data';
 
-const NUMBER_SLOTS = [{ x: DEFAULT_UV.x, y: DEFAULT_UV.y, rotation: 0, widthFraction: 0.28, heightFraction: 0.32 }];
+const shirtConfig = crewneckStyle.garments.shirt!;
+const POSITION_CONFIG = Object.fromEntries(shirtConfig.numberPositions.map((p) => [p.position, p])) as Record<
+  NumberPosition,
+  (typeof shirtConfig.numberPositions)[number]
+>;
+
+const FRONT_SLOTS = buildPositionSlots(shirtConfig.numberPositions.filter((p) => p.zone === 'front'));
+const BACK_SLOTS = buildPositionSlots(shirtConfig.numberPositions.filter((p) => p.zone === 'back'));
 
 const useNumberBridge = () => {
-  const configIdRef = useRef<string | null>(null);
+  const idMap = useRef<Map<string, string>>(new Map());
+  const prevInstancesRef = useRef<Map<string, NumberInstance>>(new Map());
 
-  useEffect(() => registerStepSlots('number', FRONT_ZONE, NUMBER_SLOTS), []);
+  useEffect(() => {
+    const unsubFront = registerStepSlots('number', 'front', FRONT_SLOTS);
+    const unsubBack = registerStepSlots('number', 'back', BACK_SLOTS);
+    return () => {
+      unsubFront();
+      unsubBack();
+    };
+  }, []);
 
   useEffect(() => {
     const sync = () => {
-      const { instance, isVisible } = useNumberStore.getState();
+      const { instances } = useNumberStore.getState();
       const { addLayer, removeLayer, updateLayer } = useConfiguratorStore.getState();
 
-      if (!isVisible || !instance) {
-        if (configIdRef.current) {
-          removeLayer(configIdRef.current);
-          configIdRef.current = null;
+      const currentIds = new Set(instances.map((i) => i.id));
+
+      for (const [numberId, configId] of idMap.current) {
+        if (!currentIds.has(numberId)) {
+          removeLayer(configId);
+          idMap.current.delete(numberId);
+          prevInstancesRef.current.delete(numberId);
         }
-        return;
       }
 
-      if (!configIdRef.current) {
-        const id = addLayer({
-          type: 'number',
-          zone: FRONT_ZONE,
-          x: DEFAULT_UV.x,
-          y: DEFAULT_UV.y,
-          rotation: 0,
-          scaleX: 0.25,
-          scaleY: 0.25,
-          visible: true,
-          locked: false,
-          text: instance.text,
-          font: instance.font,
-          fontSize: instance.fontSize,
-          textColor: instance.textColor,
-          strokeColor: instance.strokeColor,
-          strokeWidth: instance.strokeWidth,
-        });
-        configIdRef.current = id;
-      } else {
-        updateLayer(configIdRef.current, {
-          text: instance.text,
-          font: instance.font,
-          fontSize: instance.fontSize,
-          textColor: instance.textColor,
-          strokeColor: instance.strokeColor,
-          strokeWidth: instance.strokeWidth,
-        });
+      for (const inst of instances) {
+        const pos = POSITION_CONFIG[inst.position];
+        const existing = idMap.current.get(inst.id);
+
+        if (!existing) {
+          const configId = addLayer({
+            type: 'number',
+            zone: pos.zone,
+            x: pos.uv.x,
+            y: pos.uv.y,
+            rotation: pos.rotation,
+            scaleX: 0.25,
+            scaleY: 0.25,
+            visible: true,
+            locked: true,
+            text: inst.text,
+            font: inst.font,
+            fontSize: pos.fontSize,
+            textColor: inst.textColor,
+            strokeColor: inst.strokeColor,
+            strokeWidth: inst.strokeWidth,
+          });
+          idMap.current.set(inst.id, configId);
+          prevInstancesRef.current.set(inst.id, inst);
+        } else {
+          const prev = prevInstancesRef.current.get(inst.id);
+          if (
+            prev &&
+            prev.text === inst.text &&
+            prev.font === inst.font &&
+            prev.textColor === inst.textColor &&
+            prev.strokeColor === inst.strokeColor &&
+            prev.strokeWidth === inst.strokeWidth
+          )
+            continue;
+          updateLayer(existing, {
+            text: inst.text,
+            font: inst.font,
+            textColor: inst.textColor,
+            strokeColor: inst.strokeColor,
+            strokeWidth: inst.strokeWidth,
+          });
+          prevInstancesRef.current.set(inst.id, inst);
+        }
       }
     };
 
     sync();
     const unsub = useNumberStore.subscribe(sync);
+    const map = idMap.current;
+    const prevMap = prevInstancesRef.current;
     return () => {
       unsub();
-      if (configIdRef.current) {
-        useConfiguratorStore.getState().removeLayer(configIdRef.current);
-        configIdRef.current = null;
-      }
+      const { removeLayer } = useConfiguratorStore.getState();
+      for (const [, configId] of map) removeLayer(configId);
+      map.clear();
+      prevMap.clear();
     };
   }, []);
 };

@@ -1,1 +1,1 @@
-export { useNumberStore } from './useNumberStore';
+export { useActiveNumberInstance, useNumberStore } from './useNumberStore';

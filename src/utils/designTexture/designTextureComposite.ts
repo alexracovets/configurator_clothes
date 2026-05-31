@@ -10,6 +10,24 @@ export interface PositionSlot {
   heightFraction: number;
 }
 
+interface PositionConfig {
+  uv: { x: number; y: number };
+  rotation: number;
+  slotWidth: number;
+  slotHeight: number;
+  slotOffsetX?: number;
+  slotOffsetY?: number;
+}
+
+export const buildPositionSlots = (positions: PositionConfig[]): PositionSlot[] =>
+  positions.map((p) => ({
+    x: p.uv.x + (p.slotOffsetX ?? 0),
+    y: p.uv.y + (p.slotOffsetY ?? 0),
+    rotation: p.rotation,
+    widthFraction: p.slotWidth,
+    heightFraction: p.slotHeight,
+  }));
+
 const drawPositionSlot = (ctx: CanvasRenderingContext2D, slot: PositionSlot, size: number): void => {
   const cx = slot.x * size;
   const cy = slot.y * size;

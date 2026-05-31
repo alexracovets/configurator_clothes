@@ -6,7 +6,7 @@ export type { IndicatorStyle } from './IndicatorStyle';
 export type { LayerConfig } from './LayerConfig';
 export type { LayerGlyph } from './LayerLayout';
 export type { NameInstance, NamePosition } from './NameInstance';
-export type { NumberInstance } from './NumberInstance';
+export type { NumberInstance, NumberPosition } from './NumberInstance';
 export type { PartGradient, PartGradients } from './PartGradient';
 export type { PatternItem } from './PatternItem';
 export type { PBRMaps } from './PBRMaps';

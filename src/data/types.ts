@@ -1,4 +1,4 @@
-import type { NamePosition } from '@types';
+import type { NamePosition, NumberPosition } from '@types';
 
 // ─── Garment types ────────────────────────────────────────────────────────────
 
@@ -26,6 +26,23 @@ export interface NamePositionConfig {
   uv: { x: number; y: number };
   rotation: number;
   fontSize: number;
+  slotWidth: number;
+  slotHeight: number;
+  slotOffsetX?: number;
+  slotOffsetY?: number;
+}
+
+export interface NumberPositionConfig {
+  position: NumberPosition;
+  label: string;
+  zone: 'front' | 'back';
+  uv: { x: number; y: number };
+  rotation: number;
+  fontSize: number;
+  slotWidth: number;
+  slotHeight: number;
+  slotOffsetX?: number;
+  slotOffsetY?: number;
 }
 
 export interface ModelPaths {
@@ -47,6 +64,7 @@ export interface GarmentConfig {
   parts: PartConfig[];
   patterns: PatternConfig[];
   namePositions: NamePositionConfig[];
+  numberPositions: NumberPositionConfig[];
   neckColor: string;
   fabricRepeat: number;
 }
