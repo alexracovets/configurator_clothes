@@ -1,4 +1,4 @@
-export interface AcordionItem {
+export interface AccordionItem {
   value: string;
   trigger: React.ReactNode;
   content: React.ReactNode;

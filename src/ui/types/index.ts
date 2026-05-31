@@ -1,4 +1,4 @@
-export type { AcordionItem } from './AcordionItem';
+export type { AccordionItem } from './AccordionItem';
 export type { ChildrenType } from './ChildrenType';
 export type { ColorTab } from './ColorTab';
 export type { DesignLayer, TextureSettings } from './DesignLayer';

@@ -1,4 +1,4 @@
-export * from './Acordion';
+export * from './Accordion';
 export { Input } from './Input';
 export * from './Popover';
 export { ScrollArea } from './ScrollArea';

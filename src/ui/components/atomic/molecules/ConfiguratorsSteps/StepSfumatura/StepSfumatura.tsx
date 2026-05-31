@@ -1,7 +1,7 @@
 'use client';
 
 import { ColorControl, PartColorSwitch, RangeControl, ToggleControl } from '@molecules';
-import { AcordionAtom, Flex } from '@atoms';
+import { AccordionAtom, Flex } from '@atoms';
 import { SHIRT_PARTS, useColorStore, useGradientStore } from '@store';
 
 const StepSfumatura = () => {
@@ -38,7 +38,7 @@ const StepSfumatura = () => {
 
   return (
     <Flex variant="step_design">
-      <AcordionAtom items={items} defaultValue={['front']} className="gap-3" />
+      <AccordionAtom items={items} defaultValue={['front']} className="gap-3" />
     </Flex>
   );
 };

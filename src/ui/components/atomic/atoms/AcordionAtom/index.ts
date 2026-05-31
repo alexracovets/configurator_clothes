@@ -1,1 +1,0 @@
-export { AcordionAtom } from './AcordionAtom';

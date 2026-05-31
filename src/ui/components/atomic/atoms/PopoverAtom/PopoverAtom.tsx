@@ -17,7 +17,7 @@ import { cn } from '@utils';
 const popoverContentVariants = cva('z-50 rounded-xl border border-gray-30 shadow-lg outline-none', {
   variants: {
     variant: {
-      default: '',
+      default: 'bg-white',
       color_picker: 'flex items-center flex-col justify-center w-auto translate-x-full bg-white p-4 gap-4',
     },
     gap: {

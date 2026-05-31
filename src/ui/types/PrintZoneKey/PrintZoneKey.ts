@@ -1,1 +1,3 @@
-export type PrintZoneKey = 'back' | 'front' | 'sleeve_left' | 'sleeve_right';
+import type { ShirtPart } from '@types';
+
+export type PrintZoneKey = ShirtPart;

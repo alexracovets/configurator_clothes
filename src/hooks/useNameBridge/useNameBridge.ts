@@ -1,11 +1,11 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 
-import { useConfiguratorStore, useNameStore } from '@store';
-import { registerStepSlots } from '@hooks';
+import { useNameStore } from '@store';
+import { registerStepSlots, useLayerBridge } from '@hooks';
 import { buildPositionSlots } from '@utils';
-import type { NameInstance, NamePosition } from '@types';
+import type { NamePosition } from '@types';
 
 import { crewneckStyle } from '@data';
 
@@ -20,93 +20,32 @@ const POSITION_CONFIG = Object.fromEntries(shirtConfig.namePositions.map((p) => 
 const NAME_SLOTS = buildPositionSlots(shirtConfig.namePositions);
 
 const useNameBridge = () => {
-  const idMap = useRef<Map<string, string>>(new Map());
-  const prevInstancesRef = useRef<Map<string, NameInstance>>(new Map());
-
   useEffect(() => registerStepSlots('name', BACK_ZONE, NAME_SLOTS), []);
 
-  useEffect(() => {
-    const sync = () => {
-      const { instances, isVisible } = useNameStore.getState();
-      const { addLayer, removeLayer, updateLayer } = useConfiguratorStore.getState();
-
-      if (!isVisible) {
-        for (const [, configId] of idMap.current) removeLayer(configId);
-        idMap.current.clear();
-        prevInstancesRef.current.clear();
-        return;
-      }
-
-      const currentIds = new Set(instances.map((i) => i.id));
-
-      for (const [nameId, configId] of idMap.current) {
-        if (!currentIds.has(nameId)) {
-          removeLayer(configId);
-          idMap.current.delete(nameId);
-          prevInstancesRef.current.delete(nameId);
-        }
-      }
-
-      for (const inst of instances) {
-        const pos = POSITION_CONFIG[inst.position];
-        const existing = idMap.current.get(inst.id);
-
-        if (!existing) {
-          const configId = addLayer({
-            type: 'text',
-            zone: BACK_ZONE,
-            x: pos.uv.x,
-            y: pos.uv.y,
-            rotation: pos.rotation,
-            scaleX: 0.5,
-            scaleY: 0.08,
-            visible: true,
-            locked: true,
-            text: inst.text,
-            font: inst.font,
-            fontSize: pos.fontSize,
-            textColor: inst.textColor,
-            strokeColor: inst.strokeColor,
-            strokeWidth: inst.strokeWidth,
-          });
-          idMap.current.set(inst.id, configId);
-          prevInstancesRef.current.set(inst.id, inst);
-        } else {
-          const prev = prevInstancesRef.current.get(inst.id);
-          if (
-            prev &&
-            prev.text === inst.text &&
-            prev.font === inst.font &&
-            prev.textColor === inst.textColor &&
-            prev.strokeColor === inst.strokeColor &&
-            prev.strokeWidth === inst.strokeWidth
-          ) {
-            continue;
-          }
-          updateLayer(existing, {
-            text: inst.text,
-            font: inst.font,
-            textColor: inst.textColor,
-            strokeColor: inst.strokeColor,
-            strokeWidth: inst.strokeWidth,
-          });
-          prevInstancesRef.current.set(inst.id, inst);
-        }
-      }
-    };
-
-    sync();
-    const unsub = useNameStore.subscribe(sync);
-    const map = idMap.current;
-    const prevMap = prevInstancesRef.current;
-    return () => {
-      unsub();
-      const { removeLayer } = useConfiguratorStore.getState();
-      for (const [, configId] of map) removeLayer(configId);
-      map.clear();
-      prevMap.clear();
-    };
-  }, []);
+  useLayerBridge(
+    useNameStore,
+    (inst) => {
+      const pos = POSITION_CONFIG[inst.position as NamePosition];
+      return {
+        type: 'text',
+        zone: BACK_ZONE,
+        x: pos.uv.x,
+        y: pos.uv.y,
+        rotation: pos.rotation,
+        scaleX: 0.5,
+        scaleY: 0.08,
+        visible: true,
+        locked: true,
+        text: inst.text,
+        font: inst.font,
+        fontSize: pos.fontSize,
+        textColor: inst.textColor,
+        strokeColor: inst.strokeColor,
+        strokeWidth: inst.strokeWidth,
+      };
+    },
+    (state) => state.isVisible,
+  );
 };
 
 export { useNameBridge };

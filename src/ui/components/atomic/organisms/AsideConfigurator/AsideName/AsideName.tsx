@@ -2,7 +2,7 @@
 
 import { Grid, Text } from '@atoms';
 
-import { BageProduct } from './BageProduct';
+import { BadgeProduct } from './BageProduct';
 
 interface AsideNameProps {
   name: string;
@@ -16,7 +16,7 @@ const AsideName = ({ name, min_buy, id }: AsideNameProps) => {
       <Text variant="product_name" asChild>
         <h3>{name}</h3>
       </Text>
-      <BageProduct min_buy={min_buy} number={id} />
+      <BadgeProduct min_buy={min_buy} number={id} />
     </Grid>
   );
 };

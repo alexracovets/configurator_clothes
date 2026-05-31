@@ -4,7 +4,7 @@ import { cva, type VariantProps } from 'class-variance-authority';
 
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@shared';
 import { cn } from '@utils';
-import type { AcordionItem } from '@types';
+import type { AccordionItem as AccordionItemConfig } from '@types';
 
 const accordionItemVariants = cva('', {
   variants: {
@@ -42,14 +42,14 @@ const accordionContentVariants = cva('', {
   },
 });
 
-interface AcordionAtomProps extends VariantProps<typeof accordionItemVariants> {
-  items: AcordionItem[];
+interface AccordionAtomProps extends VariantProps<typeof accordionItemVariants> {
+  items: AccordionItemConfig[];
   className?: string;
   defaultValue?: string[];
   multiple?: boolean;
 }
 
-const AcordionAtom = ({ items, variant = 'default', className, defaultValue, multiple = false }: AcordionAtomProps) => {
+const AccordionAtom = ({ items, variant = 'default', className, defaultValue, multiple = false }: AccordionAtomProps) => {
   return (
     <Accordion className={cn(className)} multiple={multiple} defaultValue={defaultValue}>
       {items.map(({ value, trigger, content }) => (
@@ -62,4 +62,4 @@ const AcordionAtom = ({ items, variant = 'default', className, defaultValue, mul
   );
 };
 
-export { AcordionAtom };
+export { AccordionAtom };

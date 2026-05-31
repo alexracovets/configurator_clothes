@@ -1,4 +1,4 @@
-export { AcordionAtom } from './AcordionAtom';
+export { AccordionAtom } from './AccordionAtom';
 export { AtomImage } from './AtomImage';
 export { AtomInput, inputVariants } from './AtomInput';
 export { AtomSelect } from './AtomSelect';
