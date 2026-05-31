@@ -12,11 +12,11 @@ const crewneckStyle: StyleConfig = {
 
       modelPaths: {
         gltf: '/models/crewneck/crewneck/crewneck.gltf',
-        bakeNormal: '/models/crewneck/crewneck//bake_normal.jpg',
-        bakeAoRoughness: '/models/crewneck/crewneck//bake_ao-bake_roughness.jpg',
-        fabricNormal: '/models/crewneck/crewneck//cotton_jersey_nor_gl.jpg',
-        fabricRoughness: '/models/crewneck/crewneck//cotton_jersey_rough.jpg',
-        insideAo: '/models/crewneck/crewneck//inside_ao.jpg',
+        bakeNormal: '/models/crewneck/crewneck/bake_normal.jpg',
+        bakeAoRoughness: '/models/crewneck/crewneck/bake_ao-bake_roughness.jpg',
+        fabricNormal: '/models/crewneck/crewneck/cotton_jersey_nor_gl.jpg',
+        fabricRoughness: '/models/crewneck/crewneck/cotton_jersey_rough.jpg',
+        insideAo: '/models/crewneck/crewneck/inside_ao.jpg',
       },
 
       parts: [
@@ -26,7 +26,108 @@ const crewneckStyle: StyleConfig = {
         { key: 'sleeve_right', label: 'Right Sleeve', name: 'Manica 2' },
       ],
 
-      patterns: [{ id: 'design_0', label: 'Design 0', url: '/models/crewneck/designs/design_0.svg' }],
+      patterns: [
+        {
+          id: 'design_0',
+          label: 'Design 0',
+          url: '/models/crewneck/crewneck/designs/crewneck_design_1.svg',
+        },
+        {
+          id: 'design_01',
+          label: 'Design 1',
+          url: '/models/crewneck/crewneck/designs/crewneck_design_2_color_1.svg',
+        },
+        {
+          id: 'design_02',
+          label: 'Design 2',
+          url: '/models/crewneck/crewneck/designs/crewneck_design_2_color_2.svg',
+        },
+        {
+          id: 'design_03',
+          label: 'Design 3',
+          url: '/models/crewneck/crewneck/designs/crewneck_design_3_color_1.svg',
+        },
+        {
+          id: 'design_04',
+          label: 'Design 4',
+          url: '/models/crewneck/crewneck/designs/crewneck_design_3_color_2.svg',
+        },
+        {
+          id: 'design_05',
+          label: 'Design 5',
+          url: '/models/crewneck/crewneck/designs/crewneck_design_4_color_1.svg',
+        },
+        {
+          id: 'design_06',
+          label: 'Design 6',
+          url: '/models/crewneck/crewneck/designs/crewneck_design_4_color_2.svg',
+        },
+        {
+          id: 'design_07',
+          label: 'Design 7',
+          url: '/models/crewneck/crewneck/designs/crewneck_design_5_color_1.svg',
+        },
+        {
+          id: 'design_08',
+          label: 'Design 8',
+          url: '/models/crewneck/crewneck/designs/crewneck_design_5_color_2.svg',
+        },
+        {
+          id: 'design_09',
+          label: 'Design 9',
+          url: '/models/crewneck/crewneck/designs/crewneck_design_6_color_1.svg',
+        },
+        {
+          id: 'design_10',
+          label: 'Design 10',
+          url: '/models/crewneck/crewneck/designs/crewneck_design_6_color_2.svg',
+        },
+        {
+          id: 'design_11',
+          label: 'Design 11',
+          url: '/models/crewneck/crewneck/designs/crewneck_design_7.svg',
+        },
+        {
+          id: 'design_12',
+          label: 'Design 12',
+          url: '/models/crewneck/crewneck/designs/crewneck_design_8_color_1.svg',
+        },
+        {
+          id: 'design_13',
+          label: 'Design 13',
+          url: '/models/crewneck/crewneck/designs/crewneck_design_8_color_2.svg',
+        },
+        {
+          id: 'design_14',
+          label: 'Design 14',
+          url: '/models/crewneck/crewneck/designs/crewneck_design_9_color_1.svg',
+        },
+        {
+          id: 'design_15',
+          label: 'Design 15',
+          url: '/models/crewneck/crewneck/designs/crewneck_design_9_color_2.svg',
+        },
+        {
+          id: 'design_16',
+          label: 'Design 16',
+          url: '/models/crewneck/crewneck/designs/crewneck_design_10_color_1.svg',
+        },
+        {
+          id: 'design_17',
+          label: 'Design 17',
+          url: '/models/crewneck/crewneck/designs/crewneck_design_10_color_2.svg',
+        },
+        // {
+        //   id: 'design_18',
+        //   label: 'Design 18',
+        //   url: '/models/crewneck/crewneck/designs/crewneck_logos.svg',
+        // },
+        // {
+        //   id: 'design_19',
+        //   label: 'Design 19',
+        //   url: '/models/crewneck/crewneck/designs/crewneck_raw_pattern.svg',
+        // },
+      ],
 
       namePositions: [
         {
