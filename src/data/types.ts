@@ -79,6 +79,7 @@ export interface GarmentConfig {
   type: GarmentType;
   label: string;
   name: string;
+  previewUrl?: string;
   modelPaths: ModelPaths;
   parts: PartConfig[];
   patterns: PatternConfig[];

@@ -9,7 +9,7 @@ const StepsControl = () => {
   const { currentStep, prevStep, nextStep } = useStepsStore();
 
   return (
-    <Flex className="absolute right-0 top-0 h-full w-[253px] pointer-events-auto items-start justify-between">
+    <Flex className="absolute right-0 top-0 h-full w-[253px] pointer-events-auto items-start justify-between gap-2">
       <Button size="sm" onClick={prevStep} disabled={currentStep === 0}>
         <IoMdUndo className="size-4" />
         Annulla

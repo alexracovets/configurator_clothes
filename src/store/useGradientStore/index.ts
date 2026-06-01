@@ -1,1 +1,1 @@
-export { useGradientStore } from './useGradientStore';
+export { useActivePartGradients, useGradientStore } from './useGradientStore';

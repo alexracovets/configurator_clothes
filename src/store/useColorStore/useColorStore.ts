@@ -1,35 +1,60 @@
 import { create } from 'zustand';
 
-import { useSelectionStore } from '@store';
 import { PALETTE_COLORS } from '@constants';
-import type { PartColors, ShirtPart } from '@types';
+import type { PartColors } from '@types';
 
-import { crewneckStyle } from '@data';
+import { type GarmentType, getGarmentConfig, getGarmentsForStyle, type StyleId } from '@data';
 
-const shirtConfig = crewneckStyle.garments.shirt!;
+import { useGarmentStore } from '../useGarmentStore';
+import { useSelectionStore } from '../useSelectionStore';
+
+const STYLE_ID: StyleId = 'crewneck';
 const defaultColor = PALETTE_COLORS[0];
 
-const defaultPartColors = Object.fromEntries(shirtConfig.parts.map(({ key }) => [key, defaultColor])) as PartColors;
+const createDefaultPartColors = (garment: GarmentType): PartColors => {
+  const parts = getGarmentConfig(STYLE_ID, garment).parts;
+  return Object.fromEntries(parts.map(({ key }) => [key, defaultColor]));
+};
+
+const garments = getGarmentsForStyle(STYLE_ID);
+const defaultColorsByGarment = Object.fromEntries(garments.map((g) => [g, createDefaultPartColors(g)])) as Record<GarmentType, PartColors>;
 
 interface ColorStore {
-  partColors: PartColors;
+  colorsByGarment: Record<GarmentType, PartColors>;
   setColorForSelected: (color: string) => void;
-  setPartColor: (part: ShirtPart, color: string) => void;
+  setPartColor: (part: string, color: string) => void;
 }
 
 const useColorStore = create<ColorStore>((set) => ({
-  partColors: { ...defaultPartColors },
+  colorsByGarment: { ...defaultColorsByGarment },
 
   setColorForSelected: (color) => {
-    const { selectedParts } = useSelectionStore.getState();
-    const updates: Partial<PartColors> = {};
-    selectedParts.forEach((part) => {
-      updates[part] = color;
+    const activeGarment = useGarmentStore.getState().activeGarment;
+    const { selectedByGarment } = useSelectionStore.getState();
+    const selectedParts = selectedByGarment[activeGarment];
+    set(({ colorsByGarment }) => {
+      const partColors = { ...colorsByGarment[activeGarment] };
+      selectedParts.forEach((part) => {
+        partColors[part] = color;
+      });
+      return { colorsByGarment: { ...colorsByGarment, [activeGarment]: partColors } };
     });
-    set(({ partColors }) => ({ partColors: { ...partColors, ...updates } }));
   },
 
-  setPartColor: (part, color) => set(({ partColors }) => ({ partColors: { ...partColors, [part]: color } })),
+  setPartColor: (part, color) => {
+    const activeGarment = useGarmentStore.getState().activeGarment;
+    set(({ colorsByGarment }) => ({
+      colorsByGarment: {
+        ...colorsByGarment,
+        [activeGarment]: { ...colorsByGarment[activeGarment], [part]: color },
+      },
+    }));
+  },
 }));
 
-export { useColorStore };
+const useActivePartColors = (): PartColors => {
+  const activeGarment = useGarmentStore((s) => s.activeGarment);
+  return useColorStore((s) => s.colorsByGarment[activeGarment]);
+};
+
+export { useActivePartColors, useColorStore };

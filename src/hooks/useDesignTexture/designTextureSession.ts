@@ -2,7 +2,7 @@
 
 import * as THREE from 'three';
 
-import { useConfiguratorStore, useStepsStore } from '@store';
+import { useColorStore, useConfiguratorStore, useGarmentStore, useGradientStore, usePatternStore, useStepsStore } from '@store';
 import type { PositionSlot } from '@utils';
 import { isLayerEditableOnStep, TEXTURE_SIZE_EDITOR } from '@utils';
 import type { StepValue } from '@constants';
@@ -25,6 +25,7 @@ const requestThreeRender = () => {
 let storeSubscribed = false;
 let storeUnsubscribe: (() => void) | null = null;
 let stepsUnsubscribe: (() => void) | null = null;
+let visualUnsubscribes: (() => void)[] = [];
 let designDragActive = false;
 let engine: DesignTextureEngine | null = null;
 let engineRefCount = 0;
@@ -71,14 +72,25 @@ const onStepChange = (): void => {
   engine?.scheduleRedraw();
 };
 
+const scheduleEngineRedraw = (): void => {
+  engine?.scheduleRedraw();
+  notifyDesignEngineListeners();
+};
+
 const ensureStoreSubscription = () => {
   if (storeSubscribed || typeof document === 'undefined') return;
   storeSubscribed = true;
   storeUnsubscribe = useConfiguratorStore.subscribe(() => {
     if (designDragActive) return;
-    engine?.scheduleRedraw();
+    scheduleEngineRedraw();
   });
   stepsUnsubscribe = useStepsStore.subscribe(onStepChange);
+  visualUnsubscribes = [
+    useGarmentStore.subscribe(scheduleEngineRedraw),
+    useColorStore.subscribe(scheduleEngineRedraw),
+    useGradientStore.subscribe(scheduleEngineRedraw),
+    usePatternStore.subscribe(scheduleEngineRedraw),
+  ];
 };
 
 const initEngine = (): DesignTextureEngine => {
@@ -111,6 +123,7 @@ const setDesignDragPreview = (preview: DragPreview | null): void => {
 const clearDesignDragPreview = (): void => {
   designDragActive = false;
   engine?.setDragPreview(null);
+  engine?.redraw();
 };
 
 const setDesignInteracting = (active: boolean): void => {
@@ -132,6 +145,8 @@ const releaseDesignEngine = (): void => {
   if (engineRefCount === 0) {
     storeUnsubscribe?.();
     stepsUnsubscribe?.();
+    for (const unsub of visualUnsubscribes) unsub();
+    visualUnsubscribes = [];
     storeUnsubscribe = null;
     stepsUnsubscribe = null;
     storeSubscribed = false;

@@ -2,13 +2,16 @@
 
 import { ColorControl, PartColorSwitch, RangeControl, ToggleControl } from '@molecules';
 import { AccordionAtom, Flex } from '@atoms';
-import { SHIRT_PARTS, useColorStore, useGradientStore } from '@store';
+import { useActivePartColors, useActivePartGradients, useGradientStore } from '@store';
+import { useGarmentParts } from '@hooks';
 
 const StepSfumatura = () => {
-  const { partGradients, setPartGradient } = useGradientStore();
-  const { partColors } = useColorStore();
+  const partGradients = useActivePartGradients();
+  const partColors = useActivePartColors();
+  const { setPartGradient } = useGradientStore();
+  const garmentParts = useGarmentParts();
 
-  const items = SHIRT_PARTS.map(({ key, name }) => {
+  const items = garmentParts.map(({ key, name }) => {
     const gradient = partGradients[key];
     const color1 = partColors[key];
     const previewGrad = gradient.enabled ? `linear-gradient(${gradient.rotation}deg, ${color1} ${gradient.position}%, ${gradient.color2})` : color1;
@@ -38,7 +41,7 @@ const StepSfumatura = () => {
 
   return (
     <Flex variant="step_design">
-      <AccordionAtom items={items} defaultValue={['front']} className="gap-3" />
+      <AccordionAtom items={items} defaultValue={[garmentParts[0]?.key ?? 'front']} className="gap-3" />
     </Flex>
   );
 };

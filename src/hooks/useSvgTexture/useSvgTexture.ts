@@ -48,6 +48,13 @@ const preloadSvgTextures = (urls: string[]): void => {
   for (const url of urls) loadSvgTexture(url);
 };
 
+const getSvgCanvas = (url: string): HTMLCanvasElement | null => {
+  const tex = textureCache.get(url);
+  if (!tex?.image) return null;
+  const img = tex.image;
+  return img instanceof HTMLCanvasElement ? img : null;
+};
+
 const useSvgTexture = (url: string): THREE.Texture | null => {
   const [texture, setTexture] = useState<{ url: string; tex: THREE.Texture } | null>(() => {
     const cached = textureCache.get(url);
@@ -73,4 +80,4 @@ const useSvgTexture = (url: string): THREE.Texture | null => {
   return texture?.url === url ? texture.tex : null;
 };
 
-export { preloadSvgTextures, useSvgTexture };
+export { getSvgCanvas, loadSvgTexture, preloadSvgTextures, useSvgTexture };

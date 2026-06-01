@@ -1,9 +1,9 @@
 ﻿import * as THREE from 'three';
 
-import type { ShirtPart } from '@types';
+import type { ConfiguratorPart } from '@types';
 
 export interface LayerConfig {
-  part: ShirtPart;
+  part: ConfiguratorPart;
   geometry: THREE.BufferGeometry;
   defaultPatternUrl?: string;
 }

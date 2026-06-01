@@ -1,11 +1,13 @@
 import { create } from 'zustand';
 
-import { useSelectionStore } from '@store';
-import type { PartGradient, PartGradients, ShirtPart } from '@types';
+import type { PartGradient, PartGradients } from '@types';
 
-import { crewneckStyle } from '@data';
+import { type GarmentType, getGarmentConfig, getGarmentsForStyle, type StyleId } from '@data';
 
-const shirtConfig = crewneckStyle.garments.shirt!;
+import { useGarmentStore } from '../useGarmentStore';
+import { useSelectionStore } from '../useSelectionStore';
+
+const STYLE_ID: StyleId = 'crewneck';
 
 const DEFAULT_GRADIENT: PartGradient = {
   enabled: false,
@@ -16,29 +18,53 @@ const DEFAULT_GRADIENT: PartGradient = {
   opacity: 100,
 };
 
-const defaultPartGradients = Object.fromEntries(shirtConfig.parts.map(({ key }) => [key, { ...DEFAULT_GRADIENT }])) as PartGradients;
+const createDefaultPartGradients = (garment: GarmentType): PartGradients => {
+  const parts = getGarmentConfig(STYLE_ID, garment).parts;
+  return Object.fromEntries(parts.map(({ key }) => [key, { ...DEFAULT_GRADIENT }]));
+};
+
+const garments = getGarmentsForStyle(STYLE_ID);
+const defaultGradientsByGarment = Object.fromEntries(garments.map((g) => [g, createDefaultPartGradients(g)])) as Record<GarmentType, PartGradients>;
 
 interface GradientStore {
-  partGradients: PartGradients;
+  gradientsByGarment: Record<GarmentType, PartGradients>;
   setGradientForSelected: (gradient: Partial<PartGradient>) => void;
-  setPartGradient: (part: ShirtPart, gradient: Partial<PartGradient>) => void;
+  setPartGradient: (part: string, gradient: Partial<PartGradient>) => void;
 }
 
 const useGradientStore = create<GradientStore>((set) => ({
-  partGradients: { ...defaultPartGradients },
+  gradientsByGarment: { ...defaultGradientsByGarment },
 
   setGradientForSelected: (gradient) => {
-    const { selectedParts } = useSelectionStore.getState();
-    set(({ partGradients }) => {
-      const next = { ...partGradients };
+    const activeGarment = useGarmentStore.getState().activeGarment;
+    const { selectedByGarment } = useSelectionStore.getState();
+    const selectedParts = selectedByGarment[activeGarment];
+    set(({ gradientsByGarment }) => {
+      const partGradients = { ...gradientsByGarment[activeGarment] };
       selectedParts.forEach((part) => {
-        next[part] = { ...next[part], ...gradient };
+        partGradients[part] = { ...partGradients[part], ...gradient };
       });
-      return { partGradients: next };
+      return { gradientsByGarment: { ...gradientsByGarment, [activeGarment]: partGradients } };
     });
   },
 
-  setPartGradient: (part, gradient) => set(({ partGradients }) => ({ partGradients: { ...partGradients, [part]: { ...partGradients[part], ...gradient } } })),
+  setPartGradient: (part, gradient) => {
+    const activeGarment = useGarmentStore.getState().activeGarment;
+    set(({ gradientsByGarment }) => ({
+      gradientsByGarment: {
+        ...gradientsByGarment,
+        [activeGarment]: {
+          ...gradientsByGarment[activeGarment],
+          [part]: { ...gradientsByGarment[activeGarment][part], ...gradient },
+        },
+      },
+    }));
+  },
 }));
 
-export { useGradientStore };
+const useActivePartGradients = (): PartGradients => {
+  const activeGarment = useGarmentStore((s) => s.activeGarment);
+  return useGradientStore((s) => s.gradientsByGarment[activeGarment]);
+};
+
+export { useActivePartGradients, useGradientStore };

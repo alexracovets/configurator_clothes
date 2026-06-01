@@ -1,1 +1,1 @@
-export { useColorStore } from './useColorStore';
+export { useActivePartColors, useColorStore } from './useColorStore';

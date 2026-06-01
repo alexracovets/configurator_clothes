@@ -1,9 +1,10 @@
 export * from './configuratorDesign';
-export { useColorStore } from './useColorStore';
-export { useGradientStore } from './useGradientStore';
+export { useActivePartColors, useColorStore } from './useColorStore';
+export { useGarmentStore } from './useGarmentStore';
+export { useActivePartGradients, useGradientStore } from './useGradientStore';
 export { useActiveLogoInstance, useLogoStore, useUserLogoInstances } from './useLogoStore';
 export { POSITIONS, useActiveNameInstance, useNameStore } from './useNameStore';
 export { useActiveNumberInstance, useNumberStore } from './useNumberStore';
-export { PATTERNS, SHIRT_PARTS, usePatternStore } from './usePatternStore';
+export { useActivePatternState, usePatternStore } from './usePatternStore';
 export { useSelectionStore } from './useSelectionStore';
 export { useStepsStore } from './useStepsStore';

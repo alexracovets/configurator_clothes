@@ -1,3 +1,3 @@
-import type { ShirtPart } from '@types';
+import type { ConfiguratorPart } from '@types';
 
-export type PrintZoneKey = ShirtPart | 'full';
+export type PrintZoneKey = ConfiguratorPart | 'full';

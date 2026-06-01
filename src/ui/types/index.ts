@@ -1,6 +1,7 @@
 export type { AccordionItem } from './AccordionItem';
 export type { ChildrenType } from './ChildrenType';
 export type { ColorTab } from './ColorTab';
+export type { ConfiguratorPart } from './ConfiguratorPart';
 export type { DesignLayer, TextureSettings } from './DesignLayer';
 export type { IndicatorStyle } from './IndicatorStyle';
 export type { LayerConfig } from './LayerConfig';
@@ -14,5 +15,6 @@ export type { PBRMaps } from './PBRMaps';
 export type { PBRTexturePaths } from './PBRTexturePaths';
 export type { PrintZoneKey } from './PrintZoneKey';
 export type { MeshRefs, PartColors, ShirtPart } from './ShirtPart';
+export type { ShortsPart } from './ShortsPart';
 export type { SvgIconName } from './SvgIconName';
 export type { UseSlidingIndicatorReturn } from './UseSlidingIndicatorReturn';

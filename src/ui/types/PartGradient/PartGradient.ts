@@ -1,4 +1,4 @@
-import type { ShirtPart } from '@types';
+export type PartGradients = Record<string, PartGradient>;
 
 export interface PartGradient {
   enabled: boolean;
@@ -8,5 +8,3 @@ export interface PartGradient {
   softness: number;
   opacity: number;
 }
-
-export type PartGradients = Record<ShirtPart, PartGradient>;

@@ -1,36 +1,70 @@
 import { create } from 'zustand';
 
-import type { PatternItem, ShirtPart } from '@types';
+import { type GarmentType, getGarmentsForStyle, type StyleId } from '@data';
 
-import { crewneckStyle } from '@data';
+import { useGarmentStore } from '../useGarmentStore';
 
-const shirtConfig = crewneckStyle.garments.shirt!;
+const STYLE_ID: StyleId = 'crewneck';
 
-const SHIRT_PARTS: { key: ShirtPart; label: string; name: string }[] = shirtConfig.parts.map(({ key, label, name }) => ({
-  key: key as ShirtPart,
-  label,
-  name,
-}));
-
-const PATTERNS: PatternItem[] = shirtConfig.patterns.map(({ id, label, url }) => ({ id, label, url }));
-
-interface PatternStore {
+interface PatternState {
   patternUrl: string | null;
   patternOpacity: number;
   patternColor: string;
+}
+
+const createDefaultPatternState = (): PatternState => ({
+  patternUrl: null,
+  patternOpacity: 0.8,
+  patternColor: '#000000',
+});
+
+const garments = getGarmentsForStyle(STYLE_ID);
+const defaultPatternByGarment = Object.fromEntries(garments.map((g) => [g, createDefaultPatternState()])) as Record<GarmentType, PatternState>;
+
+interface PatternStore {
+  patternByGarment: Record<GarmentType, PatternState>;
   setPattern: (url: string | null) => void;
   setPatternOpacity: (value: number) => void;
   setPatternColor: (color: string) => void;
 }
 
 const usePatternStore = create<PatternStore>((set) => ({
-  patternUrl: null,
-  patternOpacity: 0.8,
-  patternColor: '#000000',
+  patternByGarment: { ...defaultPatternByGarment },
 
-  setPattern: (url) => set({ patternUrl: url }),
-  setPatternOpacity: (value) => set({ patternOpacity: value }),
-  setPatternColor: (color) => set({ patternColor: color }),
+  setPattern: (url) => {
+    const activeGarment = useGarmentStore.getState().activeGarment;
+    set(({ patternByGarment }) => ({
+      patternByGarment: {
+        ...patternByGarment,
+        [activeGarment]: { ...patternByGarment[activeGarment], patternUrl: url },
+      },
+    }));
+  },
+
+  setPatternOpacity: (value) => {
+    const activeGarment = useGarmentStore.getState().activeGarment;
+    set(({ patternByGarment }) => ({
+      patternByGarment: {
+        ...patternByGarment,
+        [activeGarment]: { ...patternByGarment[activeGarment], patternOpacity: value },
+      },
+    }));
+  },
+
+  setPatternColor: (color) => {
+    const activeGarment = useGarmentStore.getState().activeGarment;
+    set(({ patternByGarment }) => ({
+      patternByGarment: {
+        ...patternByGarment,
+        [activeGarment]: { ...patternByGarment[activeGarment], patternColor: color },
+      },
+    }));
+  },
 }));
 
-export { PATTERNS, SHIRT_PARTS, usePatternStore };
+const useActivePatternState = (): PatternState => {
+  const activeGarment = useGarmentStore((s) => s.activeGarment);
+  return usePatternStore((s) => s.patternByGarment[activeGarment]);
+};
+
+export { useActivePatternState, usePatternStore };

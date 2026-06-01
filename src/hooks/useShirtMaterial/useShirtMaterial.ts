@@ -12,9 +12,9 @@ import {
   shirtVertexUvVertex,
 } from '@shaders';
 import { FABRIC_REPEAT } from '@constants';
-import type { PartGradient, PBRMaps, ShirtPart } from '@types';
+import type { ConfiguratorPart, PartGradient, PBRMaps } from '@types';
 
-const PART_POLYGON_OFFSET: Partial<Record<ShirtPart, { factor: number; units: number }>> = {
+const PART_POLYGON_OFFSET: Partial<Record<ConfiguratorPart, { factor: number; units: number }>> = {
   sleeve_left: { factor: -1, units: -1 },
   sleeve_right: { factor: -1, units: -1 },
 };
@@ -53,7 +53,12 @@ const createFabricRoughnessMap = (fabricRoughness: THREE.Texture): THREE.Texture
   return tex;
 };
 
-const useShirtMaterial = (baseColorTexture: THREE.CanvasTexture, maps: PBRMaps, gradient: PartGradient, part?: ShirtPart): THREE.MeshStandardMaterial => {
+const useShirtMaterial = (
+  baseColorTexture: THREE.CanvasTexture,
+  maps: PBRMaps,
+  gradient: PartGradient,
+  part?: ConfiguratorPart,
+): THREE.MeshStandardMaterial => {
   const material = useMemo(() => {
     const offset = part ? PART_POLYGON_OFFSET[part] : undefined;
 

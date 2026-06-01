@@ -31,6 +31,8 @@ const zoneFromName = (name: string): PrintZoneKey | null => {
   if (n.includes('front')) return 'front';
   if (n.includes('sleeve_left') || (n.includes('sleeve') && n.includes('left'))) return 'sleeve_left';
   if (n.includes('sleeve_right') || (n.includes('sleeve') && n.includes('right'))) return 'sleeve_right';
+  if (n.includes('_left') || n.endsWith('left')) return 'left';
+  if (n.includes('_right') || n.endsWith('right')) return 'right';
   return null;
 };
 

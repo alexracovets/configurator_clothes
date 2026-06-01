@@ -4,14 +4,18 @@ import { useEffect } from 'react';
 
 import { ColorControl, RangeControl } from '@molecules';
 import { AtomImage, Button, Flex, Grid } from '@atoms';
-import { PATTERNS, usePatternStore } from '@store';
-import { preloadSvgTextures } from '@hooks';
+import { useActivePatternState, useGarmentStore, usePatternStore } from '@store';
+import { preloadSvgTextures, useGarmentPatterns } from '@hooks';
 
 const StepDesign = () => {
+  const patterns = useGarmentPatterns();
+  const activeGarment = useGarmentStore((s) => s.activeGarment);
+  const { patternUrl, patternOpacity, patternColor } = useActivePatternState();
+  const { setPattern, setPatternOpacity, setPatternColor } = usePatternStore();
+
   useEffect(() => {
-    preloadSvgTextures(PATTERNS.map((p) => p.url));
-  }, []);
-  const { patternUrl, patternOpacity, patternColor, setPattern, setPatternOpacity, setPatternColor } = usePatternStore();
+    preloadSvgTextures(patterns.map((p) => p.url));
+  }, [patterns, activeGarment]);
 
   return (
     <Flex variant="step_design">
@@ -23,7 +27,7 @@ const StepDesign = () => {
           </svg>
           Nessuno
         </Button>
-        {PATTERNS.map((pattern) => {
+        {patterns.map((pattern) => {
           const isActive = patternUrl === pattern.url;
           return (
             <Button key={pattern.id} variant="select_part" title={pattern.label} data-active={isActive} onClick={() => setPattern(pattern.url)}>

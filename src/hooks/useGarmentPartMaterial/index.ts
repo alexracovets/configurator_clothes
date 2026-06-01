@@ -1,0 +1,1 @@
+export { useGarmentPartMaterial } from './useGarmentPartMaterial';

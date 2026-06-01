@@ -46,7 +46,7 @@ const AsideConfigurator = () => {
     <Grid variant="aside_configurator" asChild>
       <aside ref={asideRef} className="pointer-events-auto">
         <Flex className="flex-col items-start shrink-0">
-          <AsideName name={data.name} min_buy={data.min_buy} id={data.id} />
+          <AsideName min_buy={data.min_buy} id={data.id} />
           <AsidePrice price={data.price} bounus_count={data.bounus_count} bonus_discount={data.bonus_discount} />
         </Flex>
         {hasPanel && (

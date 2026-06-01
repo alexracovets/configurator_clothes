@@ -9,6 +9,7 @@ const crewneckStyle: StyleConfig = {
       type: 'shirt',
       label: 'Shirt',
       name: 'Maglia',
+      previewUrl: '/models/crewneck/crewneck/designs/crewneck_design_1.svg',
 
       modelPaths: {
         gltf: '/models/crewneck/crewneck/crewneck.gltf',
@@ -251,6 +252,47 @@ const crewneckStyle: StyleConfig = {
           interactive: true,
         },
       ],
+
+      neckColor: '#111111',
+      fabricRepeat: 10,
+    },
+
+    shorts: {
+      type: 'shorts',
+      label: 'Shorts',
+      name: 'Pantaloncini',
+      previewUrl: '/models/crewneck/mans_shorts/designs/mans_shorts_raw_pattern.svg',
+
+      modelPaths: {
+        gltf: '/models/crewneck/mans_shorts/mans_shorts.gltf',
+        bakeNormal: '/models/crewneck/mans_shorts/outer_normal.png.jpg',
+        bakeAoRoughness: '/models/crewneck/mans_shorts/outer_ao.png-outer_roughness.png.jpg',
+        fabricNormal: '/models/crewneck/mans_shorts/outer_normal.png.jpg',
+        fabricRoughness: '/models/crewneck/mans_shorts/outer_ao.png-outer_roughness.png.jpg',
+        insideAo: '/models/crewneck/mans_shorts/inside_ao-inside_roughness.jpg',
+      },
+
+      parts: [
+        { key: 'left', label: 'Left', name: 'Sinistro' },
+        { key: 'right', label: 'Right', name: 'Destro' },
+      ],
+
+      patterns: [
+        {
+          id: 'shorts_pattern',
+          label: 'Pattern',
+          url: '/models/crewneck/mans_shorts/designs/mans_shorts_raw_pattern.svg',
+        },
+        {
+          id: 'shorts_logo',
+          label: 'Logo',
+          url: '/models/crewneck/mans_shorts/designs/mans_shorts_logo.svg',
+        },
+      ],
+
+      namePositions: [],
+      numberPositions: [],
+      logoPositions: [],
 
       neckColor: '#111111',
       fabricRepeat: 10,

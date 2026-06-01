@@ -5,10 +5,10 @@ import { useLayoutEffect, useRef } from 'react';
 import * as THREE from 'three';
 
 import { useShirtMaterial } from '@hooks';
-import type { PartGradient, PBRMaps, ShirtPart } from '@types';
+import type { ConfiguratorPart, PartGradient, PBRMaps } from '@types';
 
 interface ColorLayerProps {
-  part: ShirtPart;
+  part: ConfiguratorPart;
   geometry: THREE.BufferGeometry;
   baseColorTexture: THREE.CanvasTexture;
   gradient: PartGradient;

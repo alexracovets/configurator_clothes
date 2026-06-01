@@ -1,22 +1,27 @@
 'use client';
 
 import { Grid, Text } from '@atoms';
+import { useGarmentStore } from '@store';
 
-import { BadgeProduct } from './BageProduct';
+import { getGarmentConfig } from '@data';
+
+import { GarmentPicker } from './GarmentPicker';
 
 interface AsideNameProps {
-  name: string;
   min_buy: number;
   id: number;
 }
 
-const AsideName = ({ name, min_buy, id }: AsideNameProps) => {
+const AsideName = ({ min_buy, id }: AsideNameProps) => {
+  const { styleId, activeGarment } = useGarmentStore();
+  const garmentConfig = getGarmentConfig(styleId, activeGarment);
+
   return (
     <Grid className="grid-cols-[1fr_auto] gap-3">
       <Text variant="product_name" asChild>
-        <h3>{name}</h3>
+        <h3>{garmentConfig.name}</h3>
       </Text>
-      <BadgeProduct min_buy={min_buy} number={id} />
+      <GarmentPicker min_buy={min_buy} number={id} />
     </Grid>
   );
 };

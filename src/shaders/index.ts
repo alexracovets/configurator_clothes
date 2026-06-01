@@ -1,3 +1,4 @@
+export { garmentPartMapFragment } from './garmentPartMapFragment';
 export { shirtFragmentUniforms } from './shirtFragmentUniforms';
 export { shirtGradientFragment } from './shirtGradientFragment';
 export { shirtNormalFragment } from './shirtNormalFragment';
