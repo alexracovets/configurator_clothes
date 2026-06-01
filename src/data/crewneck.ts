@@ -118,16 +118,16 @@ const crewneckStyle: StyleConfig = {
           label: 'Design 17',
           url: '/models/crewneck/crewneck/designs/crewneck_design_10_color_2.svg',
         },
-        // {
-        //   id: 'design_18',
-        //   label: 'Design 18',
-        //   url: '/models/crewneck/crewneck/designs/crewneck_logos.svg',
-        // },
-        // {
-        //   id: 'design_19',
-        //   label: 'Design 19',
-        //   url: '/models/crewneck/crewneck/designs/crewneck_raw_pattern.svg',
-        // },
+        {
+          id: 'design_18',
+          label: 'Design 18',
+          url: '/models/crewneck/crewneck/designs/crewneck_logos.svg',
+        },
+        {
+          id: 'design_19',
+          label: 'Design 19',
+          url: '/models/crewneck/crewneck/designs/crewneck_raw_pattern.svg',
+        },
       ],
 
       namePositions: [
